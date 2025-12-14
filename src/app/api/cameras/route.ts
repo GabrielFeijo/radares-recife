@@ -39,14 +39,12 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
         const cachedCameras = await getCachedData<CameraData[]>(CACHE_KEYS.CAMERAS);
 
         if (cachedCameras) {
-            console.log('Dados de câmeras servidos do cache');
             return NextResponse.json({
                 success: true,
                 data: cachedCameras
             });
         }
 
-        console.log('Cache expirado ou não encontrado, buscando dados da API');
         const cameras = await fetchCamerasFromAPI();
 
         await setCachedData(CACHE_KEYS.CAMERAS, cameras, CACHE_TTL);
@@ -62,7 +60,6 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
         try {
             const fallbackData = await getCachedData<CameraData[]>(CACHE_KEYS.CAMERAS);
             if (fallbackData) {
-                console.log('Servindo dados de cache como fallback');
                 return NextResponse.json({
                     success: true,
                     data: fallbackData
