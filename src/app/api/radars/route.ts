@@ -47,14 +47,12 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
         const cachedRadars = await getCachedData<RadarData[]>(CACHE_KEYS.RADARS);
 
         if (cachedRadars) {
-            console.log('Dados de radares servidos do cache');
             return NextResponse.json({
                 success: true,
                 data: cachedRadars
             });
         }
 
-        console.log('Cache expirado ou não encontrado, buscando dados da API');
         const radars = await fetchRadarsFromAPI();
 
         await setCachedData(CACHE_KEYS.RADARS, radars, CACHE_TTL);
@@ -70,7 +68,6 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
         try {
             const fallbackData = await getCachedData<RadarData[]>(CACHE_KEYS.RADARS);
             if (fallbackData) {
-                console.log('Servindo dados de cache como fallback');
                 return NextResponse.json({
                     success: true,
                     data: fallbackData
