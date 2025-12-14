@@ -48,17 +48,15 @@ const MapComponent: React.FC<MapProps> = ({
 			<div className='absolute top-4 right-4 z-[999] space-x-2'>
 				<button
 					onClick={() => setShowRadars(!showRadars)}
-					className={`bg-black text-white px-4 py-2 rounded border-2 border-white hover:bg-white hover:text-black hover:border-black transition-colors duration-300 ${
-						!showRadars && 'bg-opacity-50'
-					}`}
+					className={`bg-black text-white px-4 py-2 rounded border-2 border-white hover:bg-white hover:text-black hover:border-black transition-colors duration-300 ${!showRadars && 'bg-opacity-50'
+						}`}
 				>
 					<PiTrafficSignalFill size={24} />
 				</button>
 				<button
 					onClick={() => setShowCameras(!showCameras)}
-					className={`bg-black text-white px-4 py-2 rounded border-2 border-white hover:bg-white hover:text-black hover:border-black transition-colors duration-300 ${
-						!showCameras && 'bg-opacity-50'
-					}`}
+					className={`bg-black text-white px-4 py-2 rounded border-2 border-white hover:bg-white hover:text-black hover:border-black transition-colors duration-300 ${!showCameras && 'bg-opacity-50'
+						}`}
 				>
 					<PiSecurityCameraFill size={24} />
 				</button>
