@@ -58,7 +58,7 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
         try {
             const response = await fetch(
                 `https://nominatim.openstreetmap.org/search?` +
-                `q=${encodeURIComponent(searchQuery)},Pernambuco,Brazil` +
+                `q=${encodeURIComponent(searchQuery)},Recife,Pernambuco,Brazil` +
                 `&format=json` +
                 `&limit=5` +
                 `&addressdetails=1`,
@@ -104,7 +104,7 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onFocus={() => results.length > 0 && setShowResults(true)}
-                    placeholder="Buscar endereço em Pernambuco..."
+                    placeholder="Buscar endereço em Recife..."
                     className="w-full px-4 py-3 pr-20 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:outline-none text-gray-800 placeholder-gray-500"
                 />
                 <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
