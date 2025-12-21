@@ -111,7 +111,7 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
                     {query && (
                         <button
                             onClick={handleClear}
-                            className="p-1.5 hover:bg-gray-200 rounded-full transition-colors"
+                            className="p-1.5 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"
                             title="Limpar busca"
                         >
                             <FiX size={18} className="text-gray-600" />
@@ -119,7 +119,7 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
                     )}
                     <button
                         onClick={() => query.length >= 3 && searchAddress(query)}
-                        className="p-1.5 hover:bg-blue-100 rounded-full transition-colors"
+                        className="p-1.5 hover:bg-blue-100 rounded-full transition-colors cursor-pointer"
                         disabled={isLoading || query.length < 3}
                         title="Buscar"
                     >
