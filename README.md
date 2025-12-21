@@ -12,7 +12,7 @@ Este é um projeto que utiliza a API do Google Maps e dados fornecidos pela Pref
 
 ## 👾 Experimente
 
-Para acessar o projeto, clique no link: [Radares-Recife](https://radares-recife.vercel.app/).
+Para acessar o projeto, clique no link: [Radares-Recife](https://radaresrecife.vercel.app/).
 
 ## 🚀 Começo
 
