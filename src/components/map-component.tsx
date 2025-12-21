@@ -86,12 +86,12 @@ const MapComponent: React.FC<MapProps> = ({
 	};
 
 	return (
-		<>
-			<div className='absolute top-4 left-1/2 -translate-x-1/2 z-[999] w-[90%] md:w-auto'>
+		<div className='overflow-hidden'>
+			<div className='absolute top-4 left-1/2 -translate-x-1/2 z-[999] w-[90%] md:w-auto md:block hidden'>
 				<AddressSearch onLocationSelect={handleLocationSelect} />
 			</div>
 
-			<div className='absolute top-20 right-4 z-[999] space-x-2'>
+			<div className='absolute top-4 right-4 z-[999] space-x-2'>
 				<button
 					onClick={() => setShowRadars(!showRadars)}
 					className={`bg-black text-white px-4 py-2 rounded border-2 border-white hover:bg-white hover:text-black hover:border-black transition-colors duration-300 ${!showRadars && 'bg-opacity-50'
@@ -253,7 +253,7 @@ const MapComponent: React.FC<MapProps> = ({
 						</Marker>
 					))}
 			</MapContainer>
-		</>
+		</div>
 	);
 };
 
