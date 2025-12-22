@@ -1,6 +1,6 @@
 'use client';
-import { useState, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Tooltip, useMap } from 'react-leaflet';
+import { useState, useEffect } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, Tooltip, useMap, ZoomControl } from 'react-leaflet';
 import { PiSecurityCameraFill, PiTrafficSignalFill } from 'react-icons/pi';
 import { FiMapPin } from 'react-icons/fi';
 import 'leaflet/dist/leaflet.css';
@@ -32,6 +32,10 @@ const defaultCenter = {
 
 function MapController({ center, zoom }: { center: [number, number]; zoom: number }) {
 	const map = useMap();
+
+	useEffect(() => {
+		map.zoomControl.setPosition('bottomright');
+	}, [map]);
 
 	const flyTo = () => {
 		map.flyTo(center, zoom, {
@@ -87,14 +91,14 @@ const MapComponent: React.FC<MapProps> = ({
 
 	return (
 		<div className='overflow-hidden'>
-			<div className='absolute top-4 left-1/2 -translate-x-1/2 z-[999] w-[90%] md:w-auto md:block hidden'>
+			<div className='absolute top-4 left-4 z-[999] w-[90%] md:w-auto md:block hidden'>
 				<AddressSearch onLocationSelect={handleLocationSelect} />
 			</div>
 
 			<div className='absolute top-4 right-4 z-[999] space-x-2'>
 				<button
 					onClick={() => setShowRadars(!showRadars)}
-					className={`bg-black text-white px-4 py-2 rounded border-2 border-white hover:bg-white hover:text-black hover:border-black transition-colors duration-300 ${!showRadars && 'bg-opacity-50'
+					className={`px-4 py-2 border border-gray-300 bg-white bg-opacity-90 text-gray-800 rounded shadow-lg hover:bg-gray-50 transition-colors duration-300 ${!showRadars && 'bg-opacity-50 text-gray-500'
 						}`}
 					title="Mostrar/Ocultar Radares"
 				>
@@ -102,7 +106,7 @@ const MapComponent: React.FC<MapProps> = ({
 				</button>
 				<button
 					onClick={() => setShowCameras(!showCameras)}
-					className={`bg-black text-white px-4 py-2 rounded border-2 border-white hover:bg-white hover:text-black hover:border-black transition-colors duration-300 ${!showCameras && 'bg-opacity-50'
+					className={`px-4 py-2 border border-gray-300 bg-white bg-opacity-90 text-gray-800 rounded shadow-lg hover:bg-gray-50 transition-colors duration-300 ${!showCameras && 'bg-opacity-50 text-gray-500'
 						}`}
 					title="Mostrar/Ocultar Câmeras"
 				>

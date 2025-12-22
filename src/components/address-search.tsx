@@ -1,4 +1,3 @@
-'use client';
 import { useState, useEffect, useRef } from 'react';
 import { FiSearch, FiX } from 'react-icons/fi';
 
@@ -105,7 +104,7 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
                     onChange={(e) => setQuery(e.target.value)}
                     onFocus={() => results.length > 0 && setShowResults(true)}
                     placeholder="Buscar endereço em Recife..."
-                    className="w-full px-4 py-3 pr-20 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:outline-none text-gray-800 placeholder-gray-500"
+                    className="w-full px-4 py-3 pr-20 border border-gray-300 focus:border-gray-500 focus:outline-none text-gray-800 placeholder-gray-500 bg-white bg-opacity-90 rounded shadow-lg"
                 />
                 <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
                     {query && (
@@ -114,27 +113,27 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
                             className="p-1.5 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"
                             title="Limpar busca"
                         >
-                            <FiX size={18} className="text-gray-600" />
+                            <FiX size={18} strokeWidth={2.5} className="text-gray-600" />
                         </button>
                     )}
                     <button
                         onClick={() => query.length >= 3 && searchAddress(query)}
-                        className="p-1.5 hover:bg-blue-100 rounded-full transition-colors cursor-pointer"
+                        className="p-1.5 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
                         disabled={isLoading || query.length < 3}
                         title="Buscar"
                     >
-                        <FiSearch size={18} className={isLoading ? 'text-gray-400' : 'text-blue-600'} />
+                        <FiSearch size={18} strokeWidth={2.5} className={isLoading ? 'text-gray-400' : 'text-gray-600'} />
                     </button>
                 </div>
             </div>
 
             {showResults && results.length > 0 && (
-                <div className="absolute top-full mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200 max-h-80 overflow-y-auto z-[1000]">
+                <div className="absolute top-full mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200 max-h-80 overflow-y-auto">
                     {results.map((result) => (
                         <button
                             key={result.place_id}
                             onClick={() => handleSelectResult(result)}
-                            className="w-full px-4 py-3 text-left hover:bg-blue-50 transition-colors border-b border-gray-100 last:border-0 cursor-pointer"
+                            className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0 cursor-pointer"
                         >
                             <p className="text-sm text-gray-800 line-clamp-2">
                                 {result.display_name}
@@ -145,7 +144,7 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
             )}
 
             {showResults && query.length >= 3 && results.length === 0 && !isLoading && (
-                <div className="absolute top-full mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200 p-4 z-[1000]">
+                <div className="absolute top-full mt-2 w-full border border-gray-200 p-4 bg-white bg-opacity-90 rounded shadow-lg">
                     <p className="text-sm text-gray-600 text-center">
                         Nenhum resultado encontrado para "{query}"
                     </p>
@@ -153,9 +152,9 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
             )}
 
             {isLoading && (
-                <div className="absolute top-full mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200 p-4 z-[1000]">
+                <div className="absolute top-full mt-2 w-full border border-gray-200 p-4 bg-white bg-opacity-90 rounded shadow-lg">
                     <p className="text-sm text-gray-600 text-center flex items-center justify-center gap-2">
-                        <span className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></span>
+                        <span className="w-4 h-4 border-2 border-gray-600 border-t-transparent rounded-full animate-spin"></span>
                         Buscando...
                     </p>
                 </div>
