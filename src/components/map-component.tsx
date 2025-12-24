@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Tooltip, useMap, ZoomControl } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Tooltip, useMap } from 'react-leaflet';
 import { PiSecurityCameraFill, PiTrafficSignalFill } from 'react-icons/pi';
 import { FiMapPin } from 'react-icons/fi';
 import 'leaflet/dist/leaflet.css';
@@ -22,12 +22,12 @@ interface SearchLocation {
 }
 
 const defaults = {
-	zoom: 15,
+	zoom: 14,
 };
 
 const defaultCenter = {
-	lat: -8.052643905437522,
-	lng: -34.88519751855592,
+	lat: -8.0807288,
+	lng: -34.9063466,
 };
 
 function MapController({ center, zoom }: { center: [number, number]; zoom: number }) {
@@ -98,19 +98,31 @@ const MapComponent: React.FC<MapProps> = ({
 			<div className='absolute top-4 right-4 z-[999] space-x-2'>
 				<button
 					onClick={() => setShowRadars(!showRadars)}
-					className={`px-4 py-2 border border-gray-300 bg-white bg-opacity-90 text-gray-800 rounded shadow-lg hover:bg-gray-50 transition-colors duration-300 ${!showRadars && 'bg-opacity-50 text-gray-500'
-						}`}
+					className={`px-4 py-2 border border-gray-300 bg-white bg-opacity-90 text-gray-800 rounded shadow-lg hover:bg-gray-50 transition-colors duration-300`}
 					title="Mostrar/Ocultar Radares"
 				>
-					<PiTrafficSignalFill size={24} />
+					<div className="relative">
+						<PiTrafficSignalFill size={24} />
+						{!showRadars && (
+							<div className="absolute inset-0 flex items-center justify-center">
+								<div className="w-full h-0.5 bg-red-500 transform rotate-45"></div>
+							</div>
+						)}
+					</div>
 				</button>
 				<button
 					onClick={() => setShowCameras(!showCameras)}
-					className={`px-4 py-2 border border-gray-300 bg-white bg-opacity-90 text-gray-800 rounded shadow-lg hover:bg-gray-50 transition-colors duration-300 ${!showCameras && 'bg-opacity-50 text-gray-500'
-						}`}
+					className={`px-4 py-2 border border-gray-300 bg-white bg-opacity-90 text-gray-800 rounded shadow-lg hover:bg-gray-50 transition-colors duration-300`}
 					title="Mostrar/Ocultar Câmeras"
 				>
-					<PiSecurityCameraFill size={24} />
+					<div className="relative">
+						<PiSecurityCameraFill size={24} />
+						{!showCameras && (
+							<div className="absolute inset-0 flex items-center justify-center">
+								<div className="w-full h-0.5 bg-red-500 transform rotate-45"></div>
+							</div>
+						)}
+					</div>
 				</button>
 			</div>
 

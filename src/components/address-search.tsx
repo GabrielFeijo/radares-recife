@@ -127,7 +127,7 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
                 </div>
             </div>
 
-            {showResults && results.length > 0 && (
+            {showResults && results.length > 0 && !isLoading && (
                 <div className="absolute top-full mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200 max-h-80 overflow-y-auto">
                     {results.map((result) => (
                         <button
