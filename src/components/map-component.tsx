@@ -30,20 +30,20 @@ const defaultCenter = {
 	lng: -34.9063466,
 };
 
-function MapController({ center, zoom }: { center: [number, number]; zoom: number }) {
+function MapController({ center, zoom, searchLocation }: { center: [number, number]; zoom: number; searchLocation: SearchLocation | null }) {
 	const map = useMap();
 
 	useEffect(() => {
 		map.zoomControl.setPosition('bottomright');
 	}, [map]);
 
-	const flyTo = () => {
-		map.flyTo(center, zoom, {
-			duration: 1.5,
-		});
-	};
-
-	flyTo();
+	useEffect(() => {
+		if (searchLocation) {
+			map.flyTo(center, zoom, {
+				duration: 1.5,
+			});
+		}
+	}, [searchLocation, center, zoom, map]);
 
 	return null;
 }
@@ -142,7 +142,7 @@ const MapComponent: React.FC<MapProps> = ({
 				scrollWheelZoom={true}
 				attributionControl={false}
 			>
-				<MapController center={mapCenter} zoom={mapZoom} />
+				<MapController center={mapCenter} zoom={mapZoom} searchLocation={searchLocation} />
 				<TileLayer url='https://www.google.cn/maps/vt?lyrs=m@221097413,traffic&x={x}&y={y}&z={z}' />
 
 				{searchLocation && (
