@@ -39,6 +39,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
         const cachedCameras = await getCachedData<CameraData[]>(CACHE_KEYS.CAMERAS);
 
         if (cachedCameras) {
+            console.log('Returning cached cameras data');
             return NextResponse.json({
                 success: true,
                 data: cachedCameras
@@ -56,18 +57,6 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
 
     } catch (error) {
         console.error('Erro ao buscar dados de câmeras:', error);
-
-        try {
-            const fallbackData = await getCachedData<CameraData[]>(CACHE_KEYS.CAMERAS);
-            if (fallbackData) {
-                return NextResponse.json({
-                    success: true,
-                    data: fallbackData
-                });
-            }
-        } catch (cacheError) {
-            console.error('Erro ao buscar dados de fallback do cache:', cacheError);
-        }
 
         return NextResponse.json({
             success: false,

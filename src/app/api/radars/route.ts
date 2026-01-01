@@ -35,8 +35,11 @@ async function fetchRadarsFromAPI(): Promise<RadarData[]> {
     });
 
     if (!response.ok) {
+        console.error('Failed to fetch radars data:', response.statusText);
         throw new Error(`HTTP error! status: ${response.status}`);
     }
+
+    console.log('Fetched radars data from API');
 
     const csvText = await response.text();
     return parseCSVToRadars(csvText);
@@ -47,6 +50,7 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
         const cachedRadars = await getCachedData<RadarData[]>(CACHE_KEYS.RADARS);
 
         if (cachedRadars) {
+            console.log('Returning cached radars data');
             return NextResponse.json({
                 success: true,
                 data: cachedRadars
@@ -64,18 +68,6 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
 
     } catch (error) {
         console.error('Erro ao buscar dados de radares:', error);
-
-        try {
-            const fallbackData = await getCachedData<RadarData[]>(CACHE_KEYS.RADARS);
-            if (fallbackData) {
-                return NextResponse.json({
-                    success: true,
-                    data: fallbackData
-                });
-            }
-        } catch (cacheError) {
-            console.error('Erro ao buscar dados de fallback do cache:', cacheError);
-        }
 
         return NextResponse.json({
             success: false,
