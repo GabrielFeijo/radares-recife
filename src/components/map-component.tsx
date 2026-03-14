@@ -61,7 +61,7 @@ const MapComponent: React.FC<MapProps> = ({
 	const [mapZoom, setMapZoom] = useState(zoom);
 
 	const radarIcon = new L.Icon({
-		iconUrl: '/icon.webp',
+		iconUrl: '/radar.png',
 		iconSize: [30, 30],
 	});
 
