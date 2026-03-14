@@ -64,6 +64,7 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
                 {
                     headers: {
                         'Accept': 'application/json',
+                        'User-Agent': 'Mozilla/5.0 (compatible; RecifeRadaresApp/1.0)'
                     },
                 }
             );

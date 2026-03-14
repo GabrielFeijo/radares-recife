@@ -7,6 +7,9 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import type { RadarData, CameraData } from '@/types';
 import AddressSearch from './address-search';
+import { MapControlButton } from './map-control-button';
+import { RadarMarker } from './radar-marker';
+import { CameraMarker } from './camera-marker';
 
 interface MapProps {
 	radars: RadarData[];
@@ -48,6 +51,19 @@ function MapController({ center, zoom, searchLocation }: { center: [number, numb
 	return null;
 }
 
+
+const searchIcon = new L.Icon({
+	iconUrl: 'data:image/svg+xml;base64,' + btoa(`
+		<svg xmlns="http://www.w3.org/2000/svg" width="40" height="50" viewBox="0 0 40 50">
+			<path fill="#ef4444" stroke="#991b1b" stroke-width="2" d="M20 1 C9 1 1 9 1 20 C1 31 20 49 20 49 S39 31 39 20 C39 9 31 1 20 1 Z"/>
+			<circle cx="20" cy="20" r="8" fill="white"/>
+		</svg>
+	`),
+	iconSize: [30, 40],
+	iconAnchor: [20, 50],
+	popupAnchor: [0, -50],
+});
+
 const MapComponent: React.FC<MapProps> = ({
 	radars,
 	cameras,
@@ -59,28 +75,6 @@ const MapComponent: React.FC<MapProps> = ({
 	const [searchLocation, setSearchLocation] = useState<SearchLocation | null>(null);
 	const [mapCenter, setMapCenter] = useState<[number, number]>([defaultCenter.lat, defaultCenter.lng]);
 	const [mapZoom, setMapZoom] = useState(zoom);
-
-	const radarIcon = new L.Icon({
-		iconUrl: '/radar.png',
-		iconSize: [30, 30],
-	});
-
-	const cameraIcon = new L.Icon({
-		iconUrl: '/camera.png',
-		iconSize: [30, 30],
-	});
-
-	const searchIcon = new L.Icon({
-		iconUrl: 'data:image/svg+xml;base64,' + btoa(`
-			<svg xmlns="http://www.w3.org/2000/svg" width="40" height="50" viewBox="0 0 40 50">
-				<path fill="#ef4444" stroke="#991b1b" stroke-width="2" d="M20 1 C9 1 1 9 1 20 C1 31 20 49 20 49 S39 31 39 20 C39 9 31 1 20 1 Z"/>
-				<circle cx="20" cy="20" r="8" fill="white"/>
-			</svg>
-		`),
-		iconSize: [30, 40],
-		iconAnchor: [20, 50],
-		popupAnchor: [0, -50],
-	});
 
 	const handleLocationSelect = (lat: number, lon: number, address: string) => {
 		setSearchLocation({ lat, lon, address });
@@ -95,35 +89,19 @@ const MapComponent: React.FC<MapProps> = ({
 				<AddressSearch onLocationSelect={handleLocationSelect} />
 			</div>
 
-			<div className='absolute top-4 right-4 z-[999] space-x-2'>
-				<button
+			<div className='absolute top-4 right-4 z-[999] space-x-2 flex'>
+				<MapControlButton
 					onClick={() => setShowRadars(!showRadars)}
-					className={`px-4 py-2 border border-gray-300 bg-white bg-opacity-90 text-gray-800 rounded shadow-lg hover:bg-gray-50 transition-colors duration-300`}
+					isActive={showRadars}
+					icon={<PiTrafficSignalFill size={24} />}
 					title="Mostrar/Ocultar Radares"
-				>
-					<div className="relative">
-						<PiTrafficSignalFill size={24} />
-						{!showRadars && (
-							<div className="absolute inset-0 flex items-center justify-center">
-								<div className="w-full h-0.5 bg-red-500 transform rotate-45"></div>
-							</div>
-						)}
-					</div>
-				</button>
-				<button
+				/>
+				<MapControlButton
 					onClick={() => setShowCameras(!showCameras)}
-					className={`px-4 py-2 border border-gray-300 bg-white bg-opacity-90 text-gray-800 rounded shadow-lg hover:bg-gray-50 transition-colors duration-300`}
+					isActive={showCameras}
+					icon={<PiSecurityCameraFill size={24} />}
 					title="Mostrar/Ocultar Câmeras"
-				>
-					<div className="relative">
-						<PiSecurityCameraFill size={24} />
-						{!showCameras && (
-							<div className="absolute inset-0 flex items-center justify-center">
-								<div className="w-full h-0.5 bg-red-500 transform rotate-45"></div>
-							</div>
-						)}
-					</div>
-				</button>
+				/>
 			</div>
 
 			<div className='absolute bottom-4 left-4 z-[999] bg-white bg-opacity-90 p-3 rounded shadow-lg'>
@@ -186,87 +164,23 @@ const MapComponent: React.FC<MapProps> = ({
 				)}
 
 				{showRadars &&
-					radars.map((radar, index) => (
-						<Marker
-							key={`radar-${index}`}
-							position={[radar.latitude, radar.longitude]}
-							title={radar.installation_location}
-							icon={radarIcon}
-							eventHandlers={{
-								mousedown: () => {
-									setActiveMarker(`radar-${index}`);
-								},
-							}}
-						>
-							<Tooltip
-								offset={[15, 0]}
-								opacity={1}
-								permanent
-								className='font-bold'
-							>
-								{radar.monitored_speed}
-							</Tooltip>
-							{activeMarker === `radar-${index}` && (
-								<Popup autoClose>
-									<section className='text-black max-w-52 space-y-2 font-poppins'>
-										<h2 className="font-bold">Local: {radar.installation_location}</h2>
-										<p><strong>Faixas Fiscalizadas:</strong> {radar.monitored_lanes}</p>
-										<p><strong>Sentido:</strong> {radar.monitoring_direction}</p>
-										<p><strong>Identificação:</strong> {radar.equipment_identification}</p>
-										<p><strong>Tipo:</strong> {radar.equipment_type}</p>
-										<p><strong>Velocidade:</strong> {radar.monitored_speed}</p>
-										<p><strong>VMD:</strong> {radar.vmd.toLocaleString()} veículos/dia</p>
-										<p><strong>Período VMD:</strong> {radar.vmd_period}</p>
-										<p>
-											<strong>Ver no Maps:</strong>{' '}
-											<a
-												href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${radar.latitude},${radar.longitude}`}
-												target='_blank'
-												rel='noreferrer'
-												className="text-blue-600 hover:text-blue-800 underline"
-											>
-												Clique Aqui
-											</a>
-										</p>
-									</section>
-								</Popup>
-							)}
-						</Marker>
+					radars.map((radar) => (
+						<RadarMarker
+							key={`radar-${radar.id}`}
+							radar={radar}
+							isActive={activeMarker === `radar-${radar.id}`}
+							onClick={() => setActiveMarker(`radar-${radar.id}`)}
+						/>
 					))}
 
 				{showCameras &&
-					cameras.map((camera, index) => (
-						<Marker
-							key={`camera-${index}`}
-							position={[camera.latitude, camera.longitude]}
-							title={camera.address}
-							icon={cameraIcon}
-							eventHandlers={{
-								mousedown: () => {
-									setActiveMarker(`camera-${index}`);
-								},
-							}}
-						>
-							{activeMarker === `camera-${index}` && (
-								<Popup autoClose>
-									<section className='text-black max-w-52 space-y-2 font-poppins'>
-										<h2 className="font-bold">Câmera: {camera.name}</h2>
-										<p><strong>Local:</strong> {camera.address}</p>
-										<p>
-											<strong>Ver no Maps:</strong>{' '}
-											<a
-												href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${camera.latitude},${camera.longitude}`}
-												target='_blank'
-												rel='noreferrer'
-												className="text-blue-600 hover:text-blue-800 underline"
-											>
-												Clique Aqui
-											</a>
-										</p>
-									</section>
-								</Popup>
-							)}
-						</Marker>
+					cameras.map((camera) => (
+						<CameraMarker
+							key={`camera-${camera.id}`}
+							camera={camera}
+							isActive={activeMarker === `camera-${camera.id}`}
+							onClick={() => setActiveMarker(`camera-${camera.id}`)}
+						/>
 					))}
 			</MapContainer>
 		</div>

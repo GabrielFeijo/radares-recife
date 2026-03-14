@@ -1,42 +1,7 @@
 import dynamic from 'next/dynamic';
 import { useMemo } from 'react';
-import type { RadarData, CameraData } from '@/types';
-
-async function fetchRadarsData(): Promise<RadarData[]> {
-	try {
-		const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/radars`, {
-			cache: 'no-store',
-		});
-
-		if (!response.ok) {
-			throw new Error('Erro ao buscar radares');
-		}
-
-		const data = await response.json();
-		return data.success ? data.data : [];
-	} catch (error) {
-		console.error('Erro ao buscar radares:', error);
-		return [];
-	}
-}
-
-async function fetchCamerasData(): Promise<CameraData[]> {
-	try {
-		const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/cameras`, {
-			cache: 'no-store',
-		});
-
-		if (!response.ok) {
-			throw new Error('Erro ao buscar câmeras');
-		}
-
-		const data = await response.json();
-		return data.success ? data.data : [];
-	} catch (error) {
-		console.error('Erro ao buscar câmeras:', error);
-		return [];
-	}
-}
+import { getRadars } from '@/services/radar-service';
+import { getCameras } from '@/services/camera-service';
 
 export default async function Home() {
 	const MapComponent = useMemo(
@@ -54,8 +19,8 @@ export default async function Home() {
 	);
 
 	const [radarsData, camerasData] = await Promise.all([
-		fetchRadarsData(),
-		fetchCamerasData()
+		getRadars(),
+		getCameras()
 	]);
 
 	return (
