@@ -1,16 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { FiSearch, FiX } from 'react-icons/fi';
-
-interface SearchResult {
-    place_id: number;
-    display_name: string;
-    lat: string;
-    lon: string;
-}
-
-interface AddressSearchProps {
-    onLocationSelect: (lat: number, lon: number, address: string) => void;
-}
+import { SearchResult, PhotonResponse, PhotonFeature, AddressSearchProps } from '@/types';
 
 const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
     const [query, setQuery] = useState('');
@@ -56,22 +46,45 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
         setIsLoading(true);
         try {
             const response = await fetch(
-                `https://nominatim.openstreetmap.org/search?` +
-                `q=${encodeURIComponent(searchQuery)},Recife,Pernambuco,Brazil` +
-                `&format=json` +
-                `&limit=5` +
-                `&addressdetails=1`,
-                {
-                    headers: {
-                        'Accept': 'application/json',
-                        'User-Agent': 'Mozilla/5.0 (compatible; RecifeRadaresApp/1.0)'
-                    },
-                }
+                `https://photon.komoot.io/api/?q=${encodeURIComponent(searchQuery)}&bbox=-35.05,-8.18,-34.85,-7.90&limit=5`
             );
 
             if (response.ok) {
-                const data = await response.json();
-                setResults(data);
+                const data: PhotonResponse = await response.json();
+                
+                const formattedResults: SearchResult[] = data.features.map((feature: PhotonFeature) => {
+                    const props = feature.properties;
+                    const coords = feature.geometry.coordinates;
+                    
+                    const parts: string[] = [];
+                    if (props.name) {
+                        parts.push(props.name);
+                    }
+                    if (props.street) {
+                        const streetStr = props.housenumber ? `${props.street}, ${props.housenumber}` : props.street;
+                        parts.push(streetStr);
+                    }
+                    if (!props.street && props.city && !props.name) {
+                        parts.push(props.city);
+                    }
+                    if (props.district) {
+                        parts.push(props.district);
+                    }
+                    if (props.city && props.state) {
+                        parts.push(`${props.city} - ${props.state}`);
+                    }
+                    
+                    const uniqueParts = Array.from(new Set(parts));
+
+                    return {
+                        place_id: props.osm_id || Math.floor(Math.random() * 10000000),
+                        display_name: uniqueParts.join(', '),
+                        lat: coords[1].toString(),
+                        lon: coords[0].toString()
+                    };
+                });
+
+                setResults(formattedResults);
                 setShowResults(true);
             }
         } catch (error) {
