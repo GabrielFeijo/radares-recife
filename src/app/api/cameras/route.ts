@@ -2,27 +2,33 @@ import { NextRequest, NextResponse } from 'next/server';
 import type { CameraData, ApiResponse } from '@/types';
 import { getCachedData, setCachedData, CACHE_KEYS, CACHE_TTL } from '@/lib/redis';
 
-const CAMERAS_CSV_URL = 'http://dados.recife.pe.gov.br/dataset/a511fbb8-c339-4618-be9e-8aa1fe880f5b/resource/5f31c2b8-b292-47ee-8443-647619dcbbcf/download/monitoramentocttu.csv';
+const CAMERAS_API_URL = 'https://dados.recife.pe.gov.br/api/action/datastore_search';
 
-function parseCSVToCameras(csvText: string): CameraData[] {
-    const lines = csvText.trim().split('\n');
+interface CKANCameraRecord {
+    _id: number;
+    nome: number | string;
+    endereco: string;
+    latitude: number | string;
+    longitude: number | string;
+}
 
-    return lines.slice(1).map(line => {
-        const values = line.split(',');
-        return {
-            name: values[0] || '',
-            address: values[1] || '',
-            latitude: parseFloat(values[2]) || 0,
-            longitude: parseFloat(values[3]) || 0
-        };
-    }).filter(camera => camera.latitude !== 0 && camera.longitude !== 0);
+interface CKANResponse {
+    success: boolean;
+    result: {
+        records: CKANCameraRecord[];
+    };
 }
 
 async function fetchCamerasFromAPI(): Promise<CameraData[]> {
-    const response = await fetch(CAMERAS_CSV_URL, {
+    const response = await fetch(CAMERAS_API_URL, {
+        method: 'POST',
         headers: {
+            'Content-Type': 'application/json',
             'User-Agent': 'Mozilla/5.0 (compatible; RecifeRadaresApp/1.0)',
         },
+        body: JSON.stringify({
+            resource_id: '3d9a7f0d-cb38-48ee-9e10-d9b83284ae28',
+        }),
         cache: 'no-store'
     });
 
@@ -30,8 +36,23 @@ async function fetchCamerasFromAPI(): Promise<CameraData[]> {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const csvText = await response.text();
-    return parseCSVToCameras(csvText);
+    const data: CKANResponse = await response.json();
+
+    if (!data.success || !data.result || !data.result.records) {
+        throw new Error('Invalid data format from CKAN API');
+    }
+
+    return data.result.records.map(record => {
+        const lat = typeof record.latitude === 'number' ? record.latitude : parseFloat(String(record.latitude));
+        const lng = typeof record.longitude === 'number' ? record.longitude : parseFloat(String(record.longitude));
+        
+        return {
+            name: String(record.nome || ''),
+            address: record.endereco || '',
+            latitude: lat || 0,
+            longitude: lng || 0
+        };
+    }).filter(camera => camera.latitude !== 0 && camera.longitude !== 0 && !isNaN(camera.latitude) && !isNaN(camera.longitude));
 }
 
 export async function GET(request: NextRequest): Promise<NextResponse<ApiResponse<CameraData>>> {
@@ -39,7 +60,6 @@ export async function GET(request: NextRequest): Promise<NextResponse<ApiRespons
         const cachedCameras = await getCachedData<CameraData[]>(CACHE_KEYS.CAMERAS);
 
         if (cachedCameras) {
-            console.log('Returning cached cameras data');
             return NextResponse.json({
                 success: true,
                 data: cachedCameras
