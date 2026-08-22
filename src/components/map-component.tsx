@@ -2,6 +2,7 @@
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
 import {
+	FiCheckCircle,
 	FiCrosshair,
 	FiExternalLink,
 	FiFilter,
@@ -168,8 +169,7 @@ const MapComponent: React.FC<MapProps> = ({
 				setActiveMarker("user-location");
 				setIsLocating(false);
 			},
-			(error) => {
-				console.warn("Erro ao obter geolocalização:", error.message);
+			() => {
 				alert(
 					"Não foi possível obter sua localização atual. Verifique as permissões do seu navegador.",
 				);
@@ -326,7 +326,10 @@ const MapComponent: React.FC<MapProps> = ({
 			<div className="absolute bottom-4 left-3 z-[999] bg-white/95 backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl border border-slate-200/80 text-xs">
 				<div className="flex items-center gap-3 font-semibold text-slate-800">
 					<span className="flex items-center gap-1.5">
-						<span className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-sm" />
+						<PiTrafficSignalFill
+							size={15}
+							className="text-amber-500 shrink-0"
+						/>
 						Radares:{" "}
 						<strong className="text-slate-900">
 							{showRadars ? filteredRadars.length : 0}
@@ -339,7 +342,10 @@ const MapComponent: React.FC<MapProps> = ({
 					</span>
 					<span className="text-slate-200">|</span>
 					<span className="flex items-center gap-1.5">
-						<span className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-sm" />
+						<PiSecurityCameraFill
+							size={15}
+							className="text-blue-500 shrink-0"
+						/>
 						Câmeras:{" "}
 						<strong className="text-slate-900">
 							{showCameras ? cameras.length : 0}
@@ -347,7 +353,7 @@ const MapComponent: React.FC<MapProps> = ({
 					</span>
 				</div>
 				<p className="text-[11px] text-slate-500 mt-1 flex items-center gap-1.5">
-					<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+					<FiCheckCircle size={12} className="text-emerald-500 shrink-0" />
 					Dados oficiais CTTU / Prefeitura do Recife
 				</p>
 			</div>
@@ -452,20 +458,13 @@ const MapComponent: React.FC<MapProps> = ({
 						<RadarMarker
 							key={`radar-${radar.id}`}
 							radar={radar}
-							isActive={activeMarker === `radar-${radar.id}`}
 							showLabel={showSpeedLabels}
-							onClick={() => setActiveMarker(`radar-${radar.id}`)}
 						/>
 					))}
 
 				{showCameras &&
 					cameras.map((camera) => (
-						<CameraMarker
-							key={`camera-${camera.id}`}
-							camera={camera}
-							isActive={activeMarker === `camera-${camera.id}`}
-							onClick={() => setActiveMarker(`camera-${camera.id}`)}
-						/>
+						<CameraMarker key={`camera-${camera.id}`} camera={camera} />
 					))}
 			</MapContainer>
 		</div>
