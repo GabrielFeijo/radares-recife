@@ -1,7 +1,13 @@
 "use client";
 import type React from "react";
 import { useEffect, useMemo, useState } from "react";
-import { FiCrosshair, FiFilter, FiMapPin, FiNavigation } from "react-icons/fi";
+import {
+	FiCrosshair,
+	FiExternalLink,
+	FiFilter,
+	FiMapPin,
+	FiNavigation,
+} from "react-icons/fi";
 import { PiSecurityCameraFill, PiTrafficSignalFill } from "react-icons/pi";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -236,37 +242,62 @@ const MapComponent: React.FC<MapProps> = ({
 
 			{/* Menu dropdown de filtro de velocidades */}
 			{showSpeedFilter && (
-				<div className="absolute top-28 sm:top-16 right-3 z-[999] bg-white/95 backdrop-blur-sm p-3 rounded-lg shadow-xl border border-gray-200 flex flex-col gap-2 min-w-44 text-xs sm:text-sm">
-					<p className="font-semibold text-gray-700 border-b pb-1">
-						Velocidade Máxima:
-					</p>
+				<div className="absolute top-28 sm:top-16 right-3 z-[999] bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-2xl border border-slate-200/80 flex flex-col gap-1.5 min-w-52 text-xs">
+					<div className="flex items-center justify-between pb-2 mb-1 border-b border-slate-100">
+						<span className="font-bold text-slate-800 text-xs flex items-center gap-1.5">
+							<FiFilter size={13} className="text-emerald-600" />
+							Filtrar por Velocidade
+						</span>
+						<span className="text-[10px] text-slate-400 font-medium">
+							{filteredRadars.length} exibidos
+						</span>
+					</div>
 					<button
 						type="button"
 						onClick={() => setSelectedSpeed("all")}
-						className={`text-left px-2 py-1 rounded transition-colors ${
+						className={`flex items-center justify-between px-3 py-2 rounded-xl transition-all duration-150 cursor-pointer ${
 							selectedSpeed === "all"
-								? "bg-blue-600 text-white font-medium"
-								: "text-gray-700 hover:bg-gray-100"
+								? "bg-blue-600 text-white font-semibold shadow-sm"
+								: "text-slate-700 hover:bg-slate-100/80 font-medium"
 						}`}
 					>
-						Todas as velocidades ({radars.length})
+						<span>Todas as velocidades</span>
+						<span
+							className={`text-[10px] px-1.5 py-0.5 rounded-md ${
+								selectedSpeed === "all"
+									? "bg-blue-700/80 text-white"
+									: "bg-slate-100 text-slate-600"
+							}`}
+						>
+							{radars.length}
+						</span>
 					</button>
 					{availableSpeeds.map((spd) => {
 						const count = radars.filter(
 							(r) => r.monitoredSpeed?.trim() === spd,
 						).length;
+						const isSelected = selectedSpeed === spd;
 						return (
 							<button
 								key={spd}
 								type="button"
 								onClick={() => setSelectedSpeed(spd)}
-								className={`text-left px-2 py-1 rounded transition-colors ${
-									selectedSpeed === spd
-										? "bg-blue-600 text-white font-medium"
-										: "text-gray-700 hover:bg-gray-100"
+								className={`flex items-center justify-between px-3 py-2 rounded-xl transition-all duration-150 cursor-pointer ${
+									isSelected
+										? "bg-blue-600 text-white font-semibold shadow-sm"
+										: "text-slate-700 hover:bg-slate-100/80 font-medium"
 								}`}
 							>
-								{spd} ({count})
+								<span>{spd}</span>
+								<span
+									className={`text-[10px] px-1.5 py-0.5 rounded-md ${
+										isSelected
+											? "bg-blue-700/80 text-white"
+											: "bg-slate-100 text-slate-600"
+									}`}
+								>
+									{count}
+								</span>
 							</button>
 						);
 					})}
@@ -274,23 +305,32 @@ const MapComponent: React.FC<MapProps> = ({
 			)}
 
 			{/* Painel informativo inferior */}
-			<div className="absolute bottom-4 left-3 z-[999] bg-white/95 backdrop-blur-sm px-3.5 py-2.5 rounded-lg shadow-lg border border-gray-200 text-xs sm:text-sm">
-				<div className="flex items-center gap-2 font-medium text-gray-800">
-					<span className="flex items-center gap-1">
-						<span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block" />
-						Radares: <strong>{showRadars ? filteredRadars.length : 0}</strong>
+			<div className="absolute bottom-4 left-3 z-[999] bg-white/95 backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl border border-slate-200/80 text-xs">
+				<div className="flex items-center gap-3 font-semibold text-slate-800">
+					<span className="flex items-center gap-1.5">
+						<span className="w-2.5 h-2.5 rounded-full bg-amber-500 shadow-sm" />
+						Radares:{" "}
+						<strong className="text-slate-900">
+							{showRadars ? filteredRadars.length : 0}
+						</strong>
 						{selectedSpeed !== "all" && (
-							<span className="text-gray-500">({selectedSpeed})</span>
+							<span className="text-[11px] font-normal text-slate-500">
+								({selectedSpeed})
+							</span>
 						)}
 					</span>
-					<span className="text-gray-300">|</span>
-					<span className="flex items-center gap-1">
-						<span className="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block" />
-						Câmeras: <strong>{showCameras ? cameras.length : 0}</strong>
+					<span className="text-slate-200">|</span>
+					<span className="flex items-center gap-1.5">
+						<span className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-sm" />
+						Câmeras:{" "}
+						<strong className="text-slate-900">
+							{showCameras ? cameras.length : 0}
+						</strong>
 					</span>
 				</div>
-				<p className="text-[11px] text-gray-500 mt-0.5">
-					Dados CTTU / Prefeitura da Cidade do Recife
+				<p className="text-[11px] text-slate-500 mt-1 flex items-center gap-1.5">
+					<span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+					Dados oficiais CTTU / Prefeitura do Recife
 				</p>
 			</div>
 
@@ -315,37 +355,39 @@ const MapComponent: React.FC<MapProps> = ({
 					>
 						{activeMarker === "search-location" && (
 							<Popup autoClose={false} closeOnClick={false}>
-								<section className="text-gray-900 max-w-xs space-y-2">
-									<div className="flex items-start gap-2">
-										<FiMapPin
-											size={20}
-											className="text-red-600 mt-0.5 shrink-0"
-										/>
+								<div className="w-72 sm:w-80 text-slate-800 font-sans p-4 space-y-3">
+									<div className="border-b border-slate-100 pb-2.5 flex items-start gap-2">
+										<div className="w-7 h-7 rounded-lg bg-red-50 text-red-600 flex items-center justify-center shrink-0 border border-red-200/60">
+											<FiMapPin size={16} />
+										</div>
 										<div>
-											<h2 className="font-bold text-sm">
-												Endereço Selecionado
-											</h2>
-											<p className="text-xs text-gray-700">
+											<span className="text-[10px] font-semibold text-red-600 uppercase tracking-wider">
+												Local Pesquisado
+											</span>
+											<h3 className="font-bold text-sm text-slate-900 leading-snug">
 												{searchLocation.address}
-											</p>
+											</h3>
 										</div>
 									</div>
-									<p className="text-xs text-gray-600 pt-1.5 border-t">
-										<strong>Coordenadas:</strong>{" "}
-										{searchLocation.lat.toFixed(5)},{" "}
-										{searchLocation.lon.toFixed(5)}
-									</p>
-									<p className="text-xs">
-										<a
-											href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${searchLocation.lat},${searchLocation.lon}`}
-											target="_blank"
-											rel="noreferrer"
-											className="text-blue-600 hover:text-blue-800 underline font-medium"
-										>
-											Abrir no Google Street View ↗
-										</a>
-									</p>
-								</section>
+									<div className="bg-slate-50/80 p-2 rounded-lg border border-slate-100 text-xs">
+										<span className="text-[10px] text-slate-500 font-medium">
+											Coordenadas GPS
+										</span>
+										<p className="font-semibold text-slate-800">
+											{searchLocation.lat.toFixed(5)},{" "}
+											{searchLocation.lon.toFixed(5)}
+										</p>
+									</div>
+									<a
+										href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${searchLocation.lat},${searchLocation.lon}`}
+										target="_blank"
+										rel="noreferrer"
+										className="w-full flex items-center justify-center gap-2 py-2 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-semibold shadow-sm transition-all duration-200 hover:shadow cursor-pointer"
+									>
+										<span>Abrir no Google Street View</span>
+										<FiExternalLink size={13} />
+									</a>
+								</div>
 							</Popup>
 						)}
 					</Marker>
@@ -362,16 +404,28 @@ const MapComponent: React.FC<MapProps> = ({
 					>
 						{activeMarker === "user-location" && (
 							<Popup autoClose={false} closeOnClick={false}>
-								<section className="text-gray-900 space-y-1.5 p-1">
-									<div className="flex items-center gap-1.5 font-bold text-blue-600 text-sm">
-										<FiNavigation size={16} />
-										<span>Sua Localização Atual</span>
+								<div className="w-64 text-slate-800 font-sans p-4 space-y-2.5">
+									<div className="flex items-center gap-2 border-b border-slate-100 pb-2">
+										<div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-200/60">
+											<FiNavigation size={15} />
+										</div>
+										<div>
+											<span className="text-[10px] font-semibold text-blue-600 uppercase tracking-wider">
+												Sua Posição
+											</span>
+											<h3 className="font-bold text-sm text-slate-900">
+												Localização Atual
+											</h3>
+										</div>
 									</div>
-									<p className="text-xs text-gray-600">
-										Coordenadas: {userLocation.lat.toFixed(5)},{" "}
-										{userLocation.lon.toFixed(5)}
+									<p className="text-xs text-slate-600">
+										Coordenadas:{" "}
+										<strong>
+											{userLocation.lat.toFixed(5)},{" "}
+											{userLocation.lon.toFixed(5)}
+										</strong>
 									</p>
-								</section>
+								</div>
 							</Popup>
 						)}
 					</Marker>

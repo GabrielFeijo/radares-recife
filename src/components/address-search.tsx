@@ -145,21 +145,21 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
 					onFocus={() => results.length > 0 && setShowResults(true)}
 					placeholder="Buscar endereço ou via no Recife..."
 					aria-label="Buscar endereço no Recife"
-					className="w-full pl-4 pr-20 py-2.5 sm:py-3 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none text-gray-800 placeholder-gray-500 bg-white/95 backdrop-blur-sm rounded-lg shadow-md text-sm sm:text-base transition-all"
+					className="w-full pl-4 pr-20 py-2.5 sm:py-3 border border-slate-200/80 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/15 focus:outline-none text-slate-800 placeholder-slate-400 bg-white/95 backdrop-blur-md rounded-xl shadow-md text-sm sm:text-base transition-all"
 				/>
-				<div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+				<div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
 					{query && (
 						<button
 							type="button"
 							onClick={handleClear}
-							className="p-1.5 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+							className="p-1.5 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
 							title="Limpar busca"
 							aria-label="Limpar busca"
 						>
 							<FiX
 								size={16}
 								strokeWidth={2.5}
-								className="text-gray-500 hover:text-gray-700"
+								className="text-slate-400 hover:text-slate-600"
 							/>
 						</button>
 					)}
@@ -168,7 +168,7 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
 						onClick={() =>
 							query.trim().length >= 3 && searchAddress(query.trim())
 						}
-						className="p-1.5 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+						className="p-1.5 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
 						disabled={isLoading || query.trim().length < 3}
 						title="Buscar"
 						aria-label="Buscar"
@@ -176,22 +176,25 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
 						<FiSearch
 							size={18}
 							strokeWidth={2.5}
-							className={isLoading ? "text-gray-400" : "text-gray-600"}
+							className={isLoading ? "text-slate-300" : "text-slate-600"}
 						/>
 					</button>
 				</div>
 			</div>
 
 			{showResults && results.length > 0 && !isLoading && (
-				<div className="absolute top-full mt-1.5 w-full bg-white rounded-lg shadow-xl border border-gray-200 max-h-72 overflow-y-auto z-50">
+				<div className="absolute top-full mt-2 w-full bg-white/98 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-200/80 max-h-80 overflow-y-auto z-50 p-1.5 space-y-0.5">
 					{results.map((result) => (
 						<button
 							type="button"
 							key={result.place_id}
 							onClick={() => handleSelectResult(result)}
-							className="w-full px-4 py-2.5 text-left hover:bg-blue-50/60 transition-colors border-b border-gray-100 last:border-0 cursor-pointer flex items-start gap-2"
+							className="w-full px-3 py-2.5 text-left hover:bg-blue-50/70 active:bg-blue-100/70 rounded-xl transition-all duration-150 cursor-pointer flex items-start gap-2.5"
 						>
-							<span className="text-xs sm:text-sm text-gray-800 font-medium line-clamp-2">
+							<div className="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5 border border-blue-200/60">
+								<FiSearch size={12} />
+							</div>
+							<span className="text-xs sm:text-sm text-slate-800 font-medium line-clamp-2 leading-snug">
 								{result.display_name}
 							</span>
 						</button>
@@ -203,27 +206,27 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
 				query.trim().length >= 3 &&
 				results.length === 0 &&
 				!isLoading && (
-					<div className="absolute top-full mt-1.5 w-full border border-gray-200 p-3 bg-white/95 rounded-lg shadow-xl z-50">
-						<p className="text-xs sm:text-sm text-gray-600 text-center">
+					<div className="absolute top-full mt-2 w-full border border-slate-200/80 p-4 bg-white/98 backdrop-blur-md rounded-2xl shadow-2xl z-50">
+						<p className="text-xs sm:text-sm text-slate-500 text-center font-medium">
 							Nenhum resultado encontrado para "{query}"
 						</p>
 					</div>
 				)}
 
 			{isLoading && (
-				<div className="absolute top-full mt-1.5 w-full bg-white/95 backdrop-blur-sm rounded-lg shadow-xl border border-gray-200 p-2 z-50 space-y-1 animate-pulse">
+				<div className="absolute top-full mt-2 w-full bg-white/98 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-200/80 p-2 z-50 space-y-1.5 animate-pulse">
 					{[1, 2, 3].map((i) => (
 						<div
 							key={i}
-							className="px-3 py-2.5 flex items-start gap-2.5 border-b border-gray-100 last:border-0"
+							className="px-3 py-2.5 flex items-start gap-2.5 rounded-xl border border-transparent"
 						>
-							<div className="w-4 h-4 rounded bg-gray-200 shrink-0 mt-0.5" />
-							<div className="flex-1 space-y-1.5">
+							<div className="w-6 h-6 rounded-lg bg-slate-200 shrink-0 mt-0.5" />
+							<div className="flex-1 space-y-2 py-0.5">
 								<div
-									className="h-3.5 bg-gray-200 rounded"
-									style={{ width: `${80 - i * 15}%` }}
+									className="h-3.5 bg-slate-200 rounded-md"
+									style={{ width: `${85 - i * 15}%` }}
 								/>
-								<div className="h-2.5 bg-gray-100 rounded w-1/2" />
+								<div className="h-2.5 bg-slate-100 rounded-md w-1/2" />
 							</div>
 						</div>
 					))}
