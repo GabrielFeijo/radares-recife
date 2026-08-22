@@ -13,7 +13,6 @@ body {
 	overflow: hidden;
 }
 
-/* Customização dos Popups do Leaflet */
 .leaflet-popup-content-wrapper {
 	border-radius: 1rem;
 	padding: 0;
@@ -60,7 +59,6 @@ body {
 	color: #0f172a;
 }
 
-/* Customização dos Tooltips de Marcadores */
 .leaflet-tooltip {
 	background: rgba(255, 255, 255, 0.95);
 	border: 1px solid rgba(203, 213, 225, 0.8);
@@ -80,7 +78,6 @@ body {
 	border-bottom-color: rgba(255, 255, 255, 0.95);
 }
 
-/* Customização dos Controles de Zoom do Leaflet */
 .leaflet-control-zoom {
 	border: 1px solid rgba(226, 232, 240, 0.9);
 	border-radius: 0.75rem;

@@ -35,7 +35,6 @@ export const CameraMarker: React.FC<CameraMarkerProps> = ({
 			{isActive && (
 				<Popup autoClose>
 					<div className="w-72 sm:w-80 text-slate-800 font-sans p-4 space-y-3">
-						{/* Header */}
 						<div className="border-b border-slate-100 pb-2.5 space-y-1">
 							<span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200/60">
 								<PiSecurityCameraFill size={13} />
@@ -46,7 +45,6 @@ export const CameraMarker: React.FC<CameraMarkerProps> = ({
 							</h3>
 						</div>
 
-						{/* Localização */}
 						<div className="bg-slate-50/80 p-2.5 rounded-lg border border-slate-100 flex items-start gap-2">
 							<FiMapPin size={16} className="text-blue-600 mt-0.5 shrink-0" />
 							<div>
@@ -59,7 +57,6 @@ export const CameraMarker: React.FC<CameraMarkerProps> = ({
 							</div>
 						</div>
 
-						{/* Coordenadas */}
 						<p className="text-[11px] text-slate-500">
 							Coordenadas:{" "}
 							<strong className="text-slate-700">
@@ -67,7 +64,6 @@ export const CameraMarker: React.FC<CameraMarkerProps> = ({
 							</strong>
 						</p>
 
-						{/* Botão de Ação */}
 						<a
 							href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${camera.latitude},${camera.longitude}`}
 							target="_blank"

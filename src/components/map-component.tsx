@@ -181,12 +181,10 @@ const MapComponent: React.FC<MapProps> = ({
 
 	return (
 		<div className="relative w-full h-full overflow-hidden">
-			{/* Barra de busca responsiva */}
 			<div className="absolute top-3 left-3 right-3 sm:right-auto z-[999] sm:w-80 md:w-96">
 				<AddressSearch onLocationSelect={handleLocationSelect} />
 			</div>
 
-			{/* Controles de camadas e ações */}
 			<div className="absolute top-16 sm:top-3 right-3 z-[999] flex flex-wrap items-center gap-2">
 				<MapControlButton
 					onClick={() => setShowRadars(!showRadars)}
@@ -262,7 +260,6 @@ const MapComponent: React.FC<MapProps> = ({
 				/>
 			</div>
 
-			{/* Menu dropdown de filtro de velocidades */}
 			{showSpeedFilter && (
 				<div className="absolute top-28 sm:top-16 right-3 z-[999] bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-2xl border border-slate-200/80 flex flex-col gap-1.5 min-w-52 text-xs">
 					<div className="flex items-center justify-between pb-2 mb-1 border-b border-slate-100">
@@ -326,7 +323,6 @@ const MapComponent: React.FC<MapProps> = ({
 				</div>
 			)}
 
-			{/* Painel informativo inferior */}
 			<div className="absolute bottom-4 left-3 z-[999] bg-white/95 backdrop-blur-md px-4 py-3 rounded-2xl shadow-xl border border-slate-200/80 text-xs">
 				<div className="flex items-center gap-3 font-semibold text-slate-800">
 					<span className="flex items-center gap-1.5">
@@ -366,7 +362,6 @@ const MapComponent: React.FC<MapProps> = ({
 				<MapController center={mapCenter} zoom={mapZoom} trigger={flyTrigger} />
 				<TileLayer url="https://www.google.cn/maps/vt?lyrs=m@221097413,traffic&x={x}&y={y}&z={z}" />
 
-				{/* Marcador de Endereço Pesquisado */}
 				{searchLocation && (
 					<Marker
 						position={[searchLocation.lat, searchLocation.lon]}
@@ -415,7 +410,6 @@ const MapComponent: React.FC<MapProps> = ({
 					</Marker>
 				)}
 
-				{/* Marcador de Localização do Usuário */}
 				{userLocation && (
 					<Marker
 						position={[userLocation.lat, userLocation.lon]}
@@ -453,7 +447,6 @@ const MapComponent: React.FC<MapProps> = ({
 					</Marker>
 				)}
 
-				{/* Marcadores de Radares */}
 				{showRadars &&
 					filteredRadars.map((radar) => (
 						<RadarMarker
@@ -465,7 +458,6 @@ const MapComponent: React.FC<MapProps> = ({
 						/>
 					))}
 
-				{/* Marcadores de Câmeras */}
 				{showCameras &&
 					cameras.map((camera) => (
 						<CameraMarker
