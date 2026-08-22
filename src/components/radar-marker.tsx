@@ -19,12 +19,14 @@ const radarIcon = new L.Icon({
 interface RadarMarkerProps {
 	radar: RadarData;
 	isActive: boolean;
+	showLabel?: boolean;
 	onClick: () => void;
 }
 
 export const RadarMarker: React.FC<RadarMarkerProps> = ({
 	radar,
 	isActive,
+	showLabel = false,
 	onClick,
 }) => {
 	const speedClean =
@@ -33,13 +35,19 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 	return (
 		<Marker
 			position={[radar.latitude, radar.longitude]}
-			title={radar.installationLocation}
+			title={`${radar.installationLocation} (${radar.monitoredSpeed})`}
 			icon={radarIcon}
 			eventHandlers={{
 				mousedown: onClick,
 			}}
 		>
-			<Tooltip offset={[16, 0]} opacity={0.95} permanent className="font-bold">
+			<Tooltip
+				offset={[16, 0]}
+				opacity={0.95}
+				permanent={showLabel}
+				direction="right"
+				className="font-bold"
+			>
 				{radar.monitoredSpeed}
 			</Tooltip>
 			{isActive && (

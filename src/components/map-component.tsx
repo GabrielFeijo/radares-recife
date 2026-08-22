@@ -8,7 +8,11 @@ import {
 	FiMapPin,
 	FiNavigation,
 } from "react-icons/fi";
-import { PiSecurityCameraFill, PiTrafficSignalFill } from "react-icons/pi";
+import {
+	PiSecurityCameraFill,
+	PiTagBold,
+	PiTrafficSignalFill,
+} from "react-icons/pi";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -108,7 +112,8 @@ const MapComponent: React.FC<MapProps> = ({
 		null,
 	);
 	const [showRadars, setShowRadars] = useState(true);
-	const [showCameras, setShowCameras] = useState(true);
+	const [showCameras, setShowCameras] = useState(false);
+	const [showSpeedLabels, setShowSpeedLabels] = useState(false);
 	const [selectedSpeed, setSelectedSpeed] = useState<string>("all");
 	const [showSpeedFilter, setShowSpeedFilter] = useState(false);
 	const [searchLocation, setSearchLocation] = useState<SearchLocation | null>(
@@ -207,6 +212,23 @@ const MapComponent: React.FC<MapProps> = ({
 					}
 					title={showCameras ? "Ocultar Câmeras" : "Exibir Câmeras"}
 					ariaLabel="Alternar visibilidade de câmeras"
+				/>
+
+				<MapControlButton
+					onClick={() => setShowSpeedLabels(!showSpeedLabels)}
+					isActive={showSpeedLabels}
+					icon={
+						<PiTagBold
+							size={18}
+							className={showSpeedLabels ? "text-purple-600" : "text-gray-400"}
+						/>
+					}
+					title={
+						showSpeedLabels
+							? "Ocultar Etiquetas de Velocidade"
+							: "Exibir Etiquetas de Velocidade"
+					}
+					ariaLabel="Alternar rótulos fixos de velocidade"
 				/>
 
 				<MapControlButton
@@ -438,6 +460,7 @@ const MapComponent: React.FC<MapProps> = ({
 							key={`radar-${radar.id}`}
 							radar={radar}
 							isActive={activeMarker === `radar-${radar.id}`}
+							showLabel={showSpeedLabels}
 							onClick={() => setActiveMarker(`radar-${radar.id}`)}
 						/>
 					))}
