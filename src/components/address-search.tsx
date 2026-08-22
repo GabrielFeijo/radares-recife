@@ -1,6 +1,7 @@
+"use client";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { FiSearch, FiX } from "react-icons/fi";
+import { FiMapPin, FiSearch, FiX } from "react-icons/fi";
 import type {
 	AddressSearchProps,
 	PhotonFeature,
@@ -97,7 +98,6 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
 			}
 		} catch (error) {
 			if ((error as Error)?.name !== "AbortError") {
-				console.error("Erro ao buscar endereço:", error);
 				setResults([]);
 			}
 		} finally {
@@ -192,7 +192,7 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
 							className="w-full px-3 py-2.5 text-left hover:bg-blue-50/70 active:bg-blue-100/70 rounded-xl transition-all duration-150 cursor-pointer flex items-start gap-2.5"
 						>
 							<div className="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5 border border-blue-200/60">
-								<FiSearch size={12} />
+								<FiMapPin size={13} />
 							</div>
 							<span className="text-xs sm:text-sm text-slate-800 font-medium line-clamp-2 leading-snug">
 								{result.display_name}
