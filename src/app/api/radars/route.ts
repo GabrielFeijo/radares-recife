@@ -1,23 +1,25 @@
-import { NextRequest, NextResponse } from 'next/server';
-import type { RadarData, ApiResponse } from '@/types';
-import { getRadars } from '@/services/radar-service';
+import { NextResponse } from "next/server";
+import { getRadars } from "@/services/radar-service";
+import type { ApiResponse, RadarData } from "@/types";
 
-export async function GET(request: NextRequest): Promise<NextResponse<ApiResponse<RadarData>>> {
-    try {
-        const radars = await getRadars();
+export async function GET(): Promise<NextResponse<ApiResponse<RadarData>>> {
+	try {
+		const radars = await getRadars();
 
-        return NextResponse.json({
-            success: true,
-            data: radars
-        });
+		return NextResponse.json({
+			success: true,
+			data: radars,
+		});
+	} catch (error) {
+		console.error("Erro ao buscar dados de radares:", error);
 
-    } catch (error) {
-        console.error('Erro ao buscar dados de radares:', error);
-
-        return NextResponse.json({
-            success: false,
-            data: [],
-            error: 'Erro ao buscar dados de radares'
-        }, { status: 500 });
-    }
+		return NextResponse.json(
+			{
+				success: false,
+				data: [],
+				error: "Erro ao buscar dados de radares",
+			},
+			{ status: 500 },
+		);
+	}
 }
