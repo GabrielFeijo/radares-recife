@@ -8,6 +8,17 @@ import {
 } from "@/lib/redis";
 import type { CKANRadarRecord, RadarData } from "@/types";
 
+function sanitizeText(str: string): string {
+	if (!str) return "";
+	return str
+		.replace(/Ö/g, "Í")
+		.replace(/ö/g, "í")
+		.replace(/à/g, "Á")
+		.replace(/§/g, "º")
+		.replace(/\s+/g, " ")
+		.trim();
+}
+
 function mapRadarRecords(records: CKANRadarRecord[]): RadarData[] {
 	return records
 		.map((record) => {
@@ -30,18 +41,22 @@ function mapRadarRecords(records: CKANRadarRecord[]): RadarData[] {
 
 			return {
 				id: record._id,
-				equipmentType: record.tipo_equipamento || "",
-				inmetroRegistration: record.registro_inmetro || "",
-				manufacturerSerialNumber: record.numero_serie_fabricante || "",
-				equipmentIdentification: String(record.identificacao_equipamento || ""),
-				installationLocation: record.local_instalacao || "",
-				monitoringDirection: record.sentido_fiscalizacao || "",
+				equipmentType: sanitizeText(record.tipo_equipamento || ""),
+				inmetroRegistration: sanitizeText(record.registro_inmetro || ""),
+				manufacturerSerialNumber: sanitizeText(
+					record.numero_serie_fabricante || "",
+				),
+				equipmentIdentification: sanitizeText(
+					String(record.identificacao_equipamento || ""),
+				),
+				installationLocation: sanitizeText(record.local_instalacao || ""),
+				monitoringDirection: sanitizeText(record.sentido_fiscalizacao || ""),
 				latitude: lat || 0,
 				longitude: lng || 0,
 				monitoredLanes: Number.isNaN(lanes) ? 0 : lanes,
-				monitoredSpeed: record.velocidade_fiscalizada || "",
+				monitoredSpeed: sanitizeText(record.velocidade_fiscalizada || ""),
 				vmd: Number.isNaN(volume) ? 0 : volume,
-				vmdPeriod: record.periodo_vmd || "",
+				vmdPeriod: sanitizeText(record.periodo_vmd || ""),
 			};
 		})
 		.filter(
@@ -69,8 +84,7 @@ function getLocalRadarsFallback(): RadarData[] {
 			return mapRadarRecords(rawRecords);
 		}
 		return [];
-	} catch (e) {
-		console.error("Erro ao carregar dados locais de radares:", e);
+	} catch {
 		return [];
 	}
 }
@@ -89,16 +103,10 @@ export async function getRadars(): Promise<RadarData[]> {
 				await setCachedData(CACHE_KEYS.RADARS, radars, CACHE_TTL);
 				return radars;
 			}
-		} catch (apiError) {
-			console.warn(
-				"API CKAN de radares falhou, usando fallback local:",
-				(apiError as Error)?.message,
-			);
-		}
+		} catch {}
 
 		return getLocalRadarsFallback();
-	} catch (error) {
-		console.error("Erro ao buscar dados de radares no service:", error);
+	} catch {
 		return getLocalRadarsFallback();
 	}
 }

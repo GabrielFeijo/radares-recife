@@ -17,6 +17,17 @@ interface LocalCameraRecord {
 	longitude?: number | string;
 }
 
+function sanitizeText(str: string): string {
+	if (!str) return "";
+	return str
+		.replace(/Ö/g, "Í")
+		.replace(/ö/g, "í")
+		.replace(/à/g, "Á")
+		.replace(/§/g, "º")
+		.replace(/\s+/g, " ")
+		.trim();
+}
+
 function mapCameraRecords(
 	records: (CKANCameraRecord | LocalCameraRecord)[],
 ): CameraData[] {
@@ -40,8 +51,8 @@ function mapCameraRecords(
 
 			return {
 				id: recordId,
-				name: String(record.nome || ""),
-				address: record.endereco || "",
+				name: sanitizeText(String(record.nome || "")),
+				address: sanitizeText(record.endereco || ""),
 				latitude: lat || 0,
 				longitude: lng || 0,
 			};
@@ -77,8 +88,7 @@ function getLocalCamerasFallback(): CameraData[] {
 			return mapCameraRecords(rawRecords);
 		}
 		return [];
-	} catch (e) {
-		console.error("Erro ao carregar dados locais de câmeras:", e);
+	} catch {
 		return [];
 	}
 }
@@ -97,16 +107,10 @@ export async function getCameras(): Promise<CameraData[]> {
 				await setCachedData(CACHE_KEYS.CAMERAS, cameras, CACHE_TTL);
 				return cameras;
 			}
-		} catch (apiError) {
-			console.warn(
-				"API CKAN de câmeras falhou, usando fallback local:",
-				(apiError as Error)?.message,
-			);
-		}
+		} catch {}
 
 		return getLocalCamerasFallback();
-	} catch (error) {
-		console.error("Erro ao buscar dados de câmeras no service:", error);
+	} catch {
 		return getLocalCamerasFallback();
 	}
 }
