@@ -34,19 +34,13 @@ export async function getRedisClient(): Promise<RedisClientType | null> {
 			},
 		});
 
-		redis.on("error", (err) => {
-			console.warn("Aviso Redis:", err?.message || err);
-		});
+		redis.on("error", () => {});
 
 		await redis.connect();
 		isConnecting = false;
 		connectionFailed = false;
 		return redis;
-	} catch (error) {
-		console.warn(
-			"Redis indisponível, prosseguindo sem cache:",
-			(error as Error)?.message,
-		);
+	} catch {
 		connectionFailed = true;
 		isConnecting = false;
 		redis = null;
@@ -60,8 +54,7 @@ export async function getCachedData<T>(key: string): Promise<T | null> {
 		if (!client?.isOpen) return null;
 		const data = await client.get(key);
 		return data ? JSON.parse(data) : null;
-	} catch (error) {
-		console.error("Erro ao buscar dados do cache:", error);
+	} catch {
 		return null;
 	}
 }
@@ -75,9 +68,7 @@ export async function setCachedData<T>(
 		const client = await getRedisClient();
 		if (!client?.isOpen) return;
 		await client.setEx(key, ttlInSeconds, JSON.stringify(data));
-	} catch (error) {
-		console.error("Erro ao salvar dados no cache:", error);
-	}
+	} catch {}
 }
 
 export async function deleteCachedData(key: string): Promise<void> {
@@ -85,9 +76,7 @@ export async function deleteCachedData(key: string): Promise<void> {
 		const client = await getRedisClient();
 		if (!client?.isOpen) return;
 		await client.del(key);
-	} catch (error) {
-		console.error("Erro ao deletar dados do cache:", error);
-	}
+	} catch {}
 }
 
 export const CACHE_KEYS = {

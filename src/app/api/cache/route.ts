@@ -49,8 +49,7 @@ export async function GET() {
 				},
 			},
 		});
-	} catch (error) {
-		console.error("Erro ao verificar status do cache:", error);
+	} catch {
 		return NextResponse.json(
 			{
 				success: false,

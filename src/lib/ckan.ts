@@ -17,7 +17,6 @@ export async function fetchFromCKAN<T>(resourceId: string): Promise<T[]> {
 	});
 
 	if (!response.ok) {
-		console.error("Failed to fetch data from CKAN API:", response.statusText);
 		throw new Error(`HTTP error! status: ${response.status}`);
 	}
 

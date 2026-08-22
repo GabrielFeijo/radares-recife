@@ -10,9 +10,7 @@ export async function GET(): Promise<NextResponse<ApiResponse<RadarData>>> {
 			success: true,
 			data: radars,
 		});
-	} catch (error) {
-		console.error("Erro ao buscar dados de radares:", error);
-
+	} catch {
 		return NextResponse.json(
 			{
 				success: false,
