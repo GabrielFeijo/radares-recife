@@ -1,17 +1,32 @@
-import type { Metadata } from 'next';
-import { Poppins } from 'next/font/google';
-import './globals.css';
-import Head from 'next/head';
+import type { Metadata } from "next";
+import { Poppins } from "next/font/google";
+import "./globals.css";
 
 const poppins = Poppins({
-	subsets: ['latin'],
-	weight: ['400', '500', '600', '700'],
+	subsets: ["latin"],
+	weight: ["400", "500", "600", "700"],
+	display: "swap",
 });
 
 export const metadata: Metadata = {
-	title: 'Radares Recife',
+	title: "Radares e Câmeras do Recife | Mapa Interativo CTTU",
 	description:
-		'Lista de equipamentos de monitoramento e fiscalização de trânsito (ex: lombada eletrônica, radar, foto sensor) com sua localização geográfica.',
+		"Mapa interativo de localização de radares de velocidade, lombadas eletrônicas e câmeras de monitoramento da CTTU na cidade do Recife.",
+	keywords: [
+		"radares recife",
+		"lombadas eletronicas recife",
+		"cameras de transito cttu",
+		"cttu recife",
+		"mapa de radares",
+	],
+	authors: [{ name: "Gabriel Feijó" }],
+	openGraph: {
+		title: "Radares e Câmeras do Recife | Mapa Interativo",
+		description:
+			"Consulte a localização e detalhes de todos os radares e câmeras de monitoramento do Recife.",
+		type: "website",
+		locale: "pt_BR",
+	},
 };
 
 export default function RootLayout({
@@ -20,13 +35,13 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang='pt-BR'>
-			<Head>
+		<html lang="pt-BR">
+			<head>
 				<meta
-					http-equiv='Content-Security-Policy'
-					content='upgrade-insecure-requests'
+					httpEquiv="Content-Security-Policy"
+					content="upgrade-insecure-requests"
 				/>
-			</Head>
+			</head>
 			<body className={poppins.className}>{children}</body>
 		</html>
 	);
