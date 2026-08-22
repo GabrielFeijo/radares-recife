@@ -1,180 +1,225 @@
-import { useState, useEffect, useRef } from 'react';
-import { FiSearch, FiX } from 'react-icons/fi';
-import { SearchResult, PhotonResponse, PhotonFeature, AddressSearchProps } from '@/types';
+import type React from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { FiSearch, FiX } from "react-icons/fi";
+import type {
+	AddressSearchProps,
+	PhotonFeature,
+	PhotonResponse,
+	SearchResult,
+} from "@/types";
 
 const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
-    const [query, setQuery] = useState('');
-    const [results, setResults] = useState<SearchResult[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [showResults, setShowResults] = useState(false);
-    const searchRef = useRef<HTMLDivElement>(null);
-    const timeoutRef = useRef<NodeJS.Timeout>();
+	const [query, setQuery] = useState("");
+	const [results, setResults] = useState<SearchResult[]>([]);
+	const [isLoading, setIsLoading] = useState(false);
+	const [showResults, setShowResults] = useState(false);
+	const searchRef = useRef<HTMLDivElement>(null);
+	const abortControllerRef = useRef<AbortController | null>(null);
 
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-                setShowResults(false);
-            }
-        };
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (
+				searchRef.current &&
+				!searchRef.current.contains(event.target as Node)
+			) {
+				setShowResults(false);
+			}
+		};
 
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === "Escape") {
+				setShowResults(false);
+			}
+		};
 
-    useEffect(() => {
-        if (query.length < 3) {
-            setResults([]);
-            return;
-        }
+		document.addEventListener("mousedown", handleClickOutside);
+		document.addEventListener("keydown", handleKeyDown);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+			document.removeEventListener("keydown", handleKeyDown);
+		};
+	}, []);
 
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-        }
+	const searchAddress = useCallback(async (searchQuery: string) => {
+		if (abortControllerRef.current) {
+			abortControllerRef.current.abort();
+		}
+		abortControllerRef.current = new AbortController();
 
-        timeoutRef.current = setTimeout(() => {
-            searchAddress(query);
-        }, 500);
+		setIsLoading(true);
+		try {
+			const response = await fetch(
+				`https://photon.komoot.io/api/?q=${encodeURIComponent(searchQuery)}&bbox=-35.05,-8.18,-34.85,-7.90&limit=5`,
+				{ signal: abortControllerRef.current.signal },
+			);
 
-        return () => {
-            if (timeoutRef.current) {
-                clearTimeout(timeoutRef.current);
-            }
-        };
-    }, [query]);
+			if (response.ok) {
+				const data: PhotonResponse = await response.json();
 
-    const searchAddress = async (searchQuery: string) => {
-        setIsLoading(true);
-        try {
-            const response = await fetch(
-                `https://photon.komoot.io/api/?q=${encodeURIComponent(searchQuery)}&bbox=-35.05,-8.18,-34.85,-7.90&limit=5`
-            );
+				const formattedResults: SearchResult[] = data.features.map(
+					(feature: PhotonFeature) => {
+						const props = feature.properties;
+						const coords = feature.geometry.coordinates;
 
-            if (response.ok) {
-                const data: PhotonResponse = await response.json();
-                
-                const formattedResults: SearchResult[] = data.features.map((feature: PhotonFeature) => {
-                    const props = feature.properties;
-                    const coords = feature.geometry.coordinates;
-                    
-                    const parts: string[] = [];
-                    if (props.name) {
-                        parts.push(props.name);
-                    }
-                    if (props.street) {
-                        const streetStr = props.housenumber ? `${props.street}, ${props.housenumber}` : props.street;
-                        parts.push(streetStr);
-                    }
-                    if (!props.street && props.city && !props.name) {
-                        parts.push(props.city);
-                    }
-                    if (props.district) {
-                        parts.push(props.district);
-                    }
-                    if (props.city && props.state) {
-                        parts.push(`${props.city} - ${props.state}`);
-                    }
-                    
-                    const uniqueParts = Array.from(new Set(parts));
+						const parts: string[] = [];
+						if (props.name) {
+							parts.push(props.name);
+						}
+						if (props.street) {
+							const streetStr = props.housenumber
+								? `${props.street}, ${props.housenumber}`
+								: props.street;
+							parts.push(streetStr);
+						}
+						if (!props.street && props.city && !props.name) {
+							parts.push(props.city);
+						}
+						if (props.district) {
+							parts.push(props.district);
+						}
+						if (props.city && props.state) {
+							parts.push(`${props.city} - ${props.state}`);
+						}
 
-                    return {
-                        place_id: props.osm_id || Math.floor(Math.random() * 10000000),
-                        display_name: uniqueParts.join(', '),
-                        lat: coords[1].toString(),
-                        lon: coords[0].toString()
-                    };
-                });
+						const uniqueParts = Array.from(new Set(parts));
 
-                setResults(formattedResults);
-                setShowResults(true);
-            }
-        } catch (error) {
-            console.error('Erro ao buscar endereço:', error);
-            setResults([]);
-        } finally {
-            setIsLoading(false);
-        }
-    };
+						return {
+							place_id: props.osm_id || Math.floor(Math.random() * 10000000),
+							display_name: uniqueParts.join(", ") || "Localização no Recife",
+							lat: coords[1].toString(),
+							lon: coords[0].toString(),
+						};
+					},
+				);
 
-    const handleSelectResult = (result: SearchResult) => {
-        const lat = parseFloat(result.lat);
-        const lon = parseFloat(result.lon);
-        onLocationSelect(lat, lon, result.display_name);
-        setShowResults(false);
-        setResults([]);
-    };
+				setResults(formattedResults);
+				setShowResults(true);
+			}
+		} catch (error) {
+			if ((error as Error)?.name !== "AbortError") {
+				console.error("Erro ao buscar endereço:", error);
+				setResults([]);
+			}
+		} finally {
+			setIsLoading(false);
+		}
+	}, []);
 
-    const handleClear = () => {
-        setQuery('');
-        setResults([]);
-        setShowResults(false);
-    };
+	useEffect(() => {
+		if (query.trim().length < 3) {
+			setResults([]);
+			setIsLoading(false);
+			return;
+		}
 
-    return (
-        <div ref={searchRef} className="relative w-full max-w-md">
-            <div className="relative">
-                <input
-                    type="text"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    onFocus={() => results.length > 0 && setShowResults(true)}
-                    placeholder="Buscar endereço em Recife..."
-                    className="w-full px-4 py-3 pr-20 border border-gray-300 focus:border-gray-500 focus:outline-none text-gray-800 placeholder-gray-500 bg-white bg-opacity-90 rounded shadow-lg"
-                />
-                <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                    {query && (
-                        <button
-                            onClick={handleClear}
-                            className="p-1.5 hover:bg-gray-200 rounded-full transition-colors cursor-pointer"
-                            title="Limpar busca"
-                        >
-                            <FiX size={18} strokeWidth={2.5} className="text-gray-600" />
-                        </button>
-                    )}
-                    <button
-                        onClick={() => query.length >= 3 && searchAddress(query)}
-                        className="p-1.5 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
-                        disabled={isLoading || query.length < 3}
-                        title="Buscar"
-                    >
-                        <FiSearch size={18} strokeWidth={2.5} className={isLoading ? 'text-gray-400' : 'text-gray-600'} />
-                    </button>
-                </div>
-            </div>
+		const timeoutId = setTimeout(() => {
+			searchAddress(query.trim());
+		}, 400);
 
-            {showResults && results.length > 0 && !isLoading && (
-                <div className="absolute top-full mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200 max-h-80 overflow-y-auto">
-                    {results.map((result) => (
-                        <button
-                            key={result.place_id}
-                            onClick={() => handleSelectResult(result)}
-                            className="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0 cursor-pointer"
-                        >
-                            <p className="text-sm text-gray-800 line-clamp-2">
-                                {result.display_name}
-                            </p>
-                        </button>
-                    ))}
-                </div>
-            )}
+		return () => {
+			clearTimeout(timeoutId);
+		};
+	}, [query, searchAddress]);
 
-            {showResults && query.length >= 3 && results.length === 0 && !isLoading && (
-                <div className="absolute top-full mt-2 w-full border border-gray-200 p-4 bg-white bg-opacity-90 rounded shadow-lg">
-                    <p className="text-sm text-gray-600 text-center">
-                        Nenhum resultado encontrado para "{query}"
-                    </p>
-                </div>
-            )}
+	const handleSelectResult = (result: SearchResult) => {
+		const lat = Number.parseFloat(result.lat);
+		const lon = Number.parseFloat(result.lon);
+		onLocationSelect(lat, lon, result.display_name);
+		setShowResults(false);
+		setResults([]);
+	};
 
-            {isLoading && (
-                <div className="absolute top-full mt-2 w-full border border-gray-200 p-4 bg-white bg-opacity-90 rounded shadow-lg">
-                    <p className="text-sm text-gray-600 text-center flex items-center justify-center gap-2">
-                        <span className="w-4 h-4 border-2 border-gray-600 border-t-transparent rounded-full animate-spin"></span>
-                        Buscando...
-                    </p>
-                </div>
-            )}
-        </div>
-    );
+	const handleClear = () => {
+		setQuery("");
+		setResults([]);
+		setShowResults(false);
+	};
+
+	return (
+		<div ref={searchRef} className="relative w-full">
+			<div className="relative">
+				<input
+					type="text"
+					value={query}
+					onChange={(e) => setQuery(e.target.value)}
+					onFocus={() => results.length > 0 && setShowResults(true)}
+					placeholder="Buscar endereço ou via no Recife..."
+					aria-label="Buscar endereço no Recife"
+					className="w-full pl-4 pr-20 py-2.5 sm:py-3 border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:outline-none text-gray-800 placeholder-gray-500 bg-white/95 backdrop-blur-sm rounded-lg shadow-md text-sm sm:text-base transition-all"
+				/>
+				<div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+					{query && (
+						<button
+							type="button"
+							onClick={handleClear}
+							className="p-1.5 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+							title="Limpar busca"
+							aria-label="Limpar busca"
+						>
+							<FiX
+								size={16}
+								strokeWidth={2.5}
+								className="text-gray-500 hover:text-gray-700"
+							/>
+						</button>
+					)}
+					<button
+						type="button"
+						onClick={() =>
+							query.trim().length >= 3 && searchAddress(query.trim())
+						}
+						className="p-1.5 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+						disabled={isLoading || query.trim().length < 3}
+						title="Buscar"
+						aria-label="Buscar"
+					>
+						<FiSearch
+							size={18}
+							strokeWidth={2.5}
+							className={isLoading ? "text-gray-400" : "text-gray-600"}
+						/>
+					</button>
+				</div>
+			</div>
+
+			{showResults && results.length > 0 && !isLoading && (
+				<div className="absolute top-full mt-1.5 w-full bg-white rounded-lg shadow-xl border border-gray-200 max-h-72 overflow-y-auto z-50">
+					{results.map((result) => (
+						<button
+							type="button"
+							key={result.place_id}
+							onClick={() => handleSelectResult(result)}
+							className="w-full px-4 py-2.5 text-left hover:bg-blue-50/60 transition-colors border-b border-gray-100 last:border-0 cursor-pointer flex items-start gap-2"
+						>
+							<span className="text-xs sm:text-sm text-gray-800 font-medium line-clamp-2">
+								{result.display_name}
+							</span>
+						</button>
+					))}
+				</div>
+			)}
+
+			{showResults &&
+				query.trim().length >= 3 &&
+				results.length === 0 &&
+				!isLoading && (
+					<div className="absolute top-full mt-1.5 w-full border border-gray-200 p-3 bg-white/95 rounded-lg shadow-xl z-50">
+						<p className="text-xs sm:text-sm text-gray-600 text-center">
+							Nenhum resultado encontrado para "{query}"
+						</p>
+					</div>
+				)}
+
+			{isLoading && (
+				<div className="absolute top-full mt-1.5 w-full border border-gray-200 p-3 bg-white/95 rounded-lg shadow-xl z-50">
+					<p className="text-xs sm:text-sm text-gray-600 text-center flex items-center justify-center gap-2">
+						<span className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+						Buscando vias e endereços...
+					</p>
+				</div>
+			)}
+		</div>
+	);
 };
 
 export default AddressSearch;
