@@ -211,11 +211,22 @@ const AddressSearch: React.FC<AddressSearchProps> = ({ onLocationSelect }) => {
 				)}
 
 			{isLoading && (
-				<div className="absolute top-full mt-1.5 w-full border border-gray-200 p-3 bg-white/95 rounded-lg shadow-xl z-50">
-					<p className="text-xs sm:text-sm text-gray-600 text-center flex items-center justify-center gap-2">
-						<span className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-						Buscando vias e endereços...
-					</p>
+				<div className="absolute top-full mt-1.5 w-full bg-white/95 backdrop-blur-sm rounded-lg shadow-xl border border-gray-200 p-2 z-50 space-y-1 animate-pulse">
+					{[1, 2, 3].map((i) => (
+						<div
+							key={i}
+							className="px-3 py-2.5 flex items-start gap-2.5 border-b border-gray-100 last:border-0"
+						>
+							<div className="w-4 h-4 rounded bg-gray-200 shrink-0 mt-0.5" />
+							<div className="flex-1 space-y-1.5">
+								<div
+									className="h-3.5 bg-gray-200 rounded"
+									style={{ width: `${80 - i * 15}%` }}
+								/>
+								<div className="h-2.5 bg-gray-100 rounded w-1/2" />
+							</div>
+						</div>
+					))}
 				</div>
 			)}
 		</div>
