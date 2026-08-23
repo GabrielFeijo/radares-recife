@@ -1,4 +1,5 @@
 "use client";
+
 import L from "leaflet";
 import type React from "react";
 import { FiExternalLink, FiMapPin, FiNavigation } from "react-icons/fi";
@@ -18,6 +19,9 @@ interface CameraMarkerProps {
 }
 
 export const CameraMarker: React.FC<CameraMarkerProps> = ({ camera }) => {
+	const streetViewUrl = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${camera.latitude},${camera.longitude}`;
+	const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${camera.latitude},${camera.longitude}`;
+
 	return (
 		<Marker
 			position={[camera.latitude, camera.longitude]}
@@ -61,7 +65,7 @@ export const CameraMarker: React.FC<CameraMarkerProps> = ({ camera }) => {
 
 					<div className="grid grid-cols-2 gap-2.5 pt-1">
 						<a
-							href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${camera.latitude},${camera.longitude}`}
+							href={streetViewUrl}
 							target="_blank"
 							rel="noreferrer"
 							className="flex items-center justify-center gap-1.5 py-2.5 px-3 !bg-blue-600 hover:!bg-blue-700 !text-white rounded-xl text-xs font-semibold shadow-sm hover:shadow transition-all duration-150 cursor-pointer text-center"
@@ -70,7 +74,7 @@ export const CameraMarker: React.FC<CameraMarkerProps> = ({ camera }) => {
 							<span className="!text-white">Street View</span>
 						</a>
 						<a
-							href={`https://www.google.com/maps/dir/?api=1&destination=${camera.latitude},${camera.longitude}`}
+							href={directionsUrl}
 							target="_blank"
 							rel="noreferrer"
 							className="flex items-center justify-center gap-1.5 py-2.5 px-3 !bg-slate-100 hover:!bg-slate-200 !text-slate-800 rounded-xl text-xs font-semibold border border-slate-200 shadow-sm hover:shadow transition-all duration-150 cursor-pointer text-center"

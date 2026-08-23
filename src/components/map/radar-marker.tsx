@@ -1,4 +1,5 @@
 "use client";
+
 import L from "leaflet";
 import type React from "react";
 import { useState } from "react";
@@ -47,6 +48,9 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 		setTimeout(() => setCopied(false), 2000);
 	};
 
+	const streetViewUrl = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${radar.latitude},${radar.longitude}`;
+	const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${radar.latitude},${radar.longitude}`;
+
 	return (
 		<Marker
 			position={[radar.latitude, radar.longitude]}
@@ -63,6 +67,7 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 			>
 				{radar.monitoredSpeed}
 			</Tooltip>
+
 			<Popup closeButton={false} autoClose className="!m-0">
 				<div className="text-slate-800 font-sans space-y-2">
 					<div className="flex items-center justify-between gap-2">
@@ -197,7 +202,7 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 
 					<div className="grid grid-cols-2 gap-2.5 pt-1">
 						<a
-							href={`https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${radar.latitude},${radar.longitude}`}
+							href={streetViewUrl}
 							target="_blank"
 							rel="noreferrer"
 							className="flex items-center justify-center gap-1.5 py-2.5 px-3 !bg-blue-600 hover:!bg-blue-700 !text-white rounded-xl text-xs font-semibold shadow-sm hover:shadow transition-all duration-150 cursor-pointer text-center"
@@ -206,7 +211,7 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 							<span className="!text-white">Street View</span>
 						</a>
 						<a
-							href={`https://www.google.com/maps/dir/?api=1&destination=${radar.latitude},${radar.longitude}`}
+							href={directionsUrl}
 							target="_blank"
 							rel="noreferrer"
 							className="flex items-center justify-center gap-1.5 py-2.5 px-3 !bg-slate-100 hover:!bg-slate-200 !text-slate-800 rounded-xl text-xs font-semibold border border-slate-200 shadow-sm hover:shadow transition-all duration-150 cursor-pointer text-center"
