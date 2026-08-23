@@ -30,64 +30,73 @@ export function UserLocationMarker({ location }: UserLocationMarkerProps) {
 
 	return (
 		<Marker position={[location.lat, location.lon]} icon={userLocationIcon}>
-			<Popup closeButton={false} className="!m-0">
-				<div className="w-[280px] sm:w-[310px] text-slate-800 font-sans p-4 space-y-3">
-					<div className="flex items-center gap-2">
-						<span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-blue-50/90 text-blue-700 border border-blue-200/70 shadow-xs">
-							<FiNavigation size={13} className="shrink-0 text-blue-600" />
-							Sua Posição
+			<Popup
+				closeButton={false}
+				autoPanPaddingTopLeft={[20, 90]}
+				autoPanPaddingBottomRight={[20, 60]}
+				className="!m-0"
+			>
+				<div className="w-[280px] sm:w-[300px] text-slate-800 font-sans overflow-hidden rounded-2xl">
+					<div className="bg-slate-900 text-white px-3.5 py-3 flex items-center gap-1.5">
+						<div className="w-6 h-6 rounded-md bg-blue-500/20 text-blue-400 flex items-center justify-center shrink-0 border border-blue-500/30">
+							<FiNavigation size={13} />
+						</div>
+						<span className="text-xs font-semibold tracking-wide">
+							Sua Localização
 						</span>
 					</div>
 
-					<div className="pt-0.5 pb-2 border-b border-slate-100">
-						<span className="text-[10px] uppercase tracking-wider font-semibold text-slate-400 block mb-0.5">
-							Status
-						</span>
-						<h3 className="font-bold text-sm sm:text-base text-slate-900 leading-snug">
-							Localização Atual
-						</h3>
-					</div>
+					<div className="p-3.5 space-y-3 bg-white">
+						<div className="pb-1 border-b border-slate-100">
+							<span className="text-[10px] uppercase font-bold text-slate-400 block mb-0.5 tracking-wider">
+								Status
+							</span>
+							<h3 className="font-bold text-sm text-slate-900 leading-snug">
+								Posição GPS Atual
+							</h3>
+						</div>
 
-					<div className="flex items-center justify-between bg-slate-50/90 px-3 py-2 rounded-xl border border-slate-100 text-[11px]">
-						<span className="text-slate-500 flex items-center gap-1.5">
-							<FiMapPin size={13} className="text-slate-400 shrink-0" />
-							GPS:{" "}
-							<strong className="text-slate-700 font-mono text-[11px]">
-								{formattedCoords}
-							</strong>
-						</span>
-						<button
-							type="button"
-							onClick={handleCopyCoords}
-							className="text-blue-600 hover:text-blue-700 active:scale-95 font-medium flex items-center gap-1 transition-all cursor-pointer select-none"
-							title="Copiar coordenadas"
-						>
-							{copied ? (
-								<>
-									<FiCheck size={13} className="text-emerald-600" />
-									<span className="text-emerald-600 font-semibold text-[10px]">
-										Copiado!
-									</span>
-								</>
-							) : (
-								<>
-									<FiCopy size={13} />
-									<span className="text-[10px]">Copiar</span>
-								</>
-							)}
-						</button>
-					</div>
+						<div className="flex items-center justify-between bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200/70 text-[11px]">
+							<span className="text-slate-600 flex items-center gap-1 font-medium">
+								<FiMapPin size={11} className="text-slate-400 shrink-0" />
+								GPS:{" "}
+								<strong className="text-slate-800 font-mono text-[10px]">
+									{formattedCoords}
+								</strong>
+							</span>
+							<button
+								type="button"
+								onClick={handleCopyCoords}
+								className="text-blue-600 hover:text-blue-700 active:scale-95 font-semibold flex items-center gap-1 transition-all cursor-pointer"
+								title="Copiar coordenadas"
+							>
+								{copied ? (
+									<>
+										<FiCheck size={12} className="text-emerald-600" />
+										<span className="text-emerald-600 text-[10px]">
+											Copiado!
+										</span>
+									</>
+								) : (
+									<>
+										<FiCopy size={11} />
+										<span className="text-[10px]">Copiar</span>
+									</>
+								)}
+							</button>
+						</div>
 
-					<div className="pt-1">
-						<a
-							href={streetViewUrl}
-							target="_blank"
-							rel="noreferrer"
-							className="w-full flex items-center justify-center gap-1.5 py-2.5 px-3 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white rounded-xl text-xs font-semibold shadow-sm shadow-blue-500/20 hover:shadow-md transition-all duration-150 cursor-pointer text-center"
-						>
-							<FiExternalLink size={13} className="shrink-0" />
-							<span>Abrir no Google Street View</span>
-						</a>
+						<div className="pt-0.5">
+							<a
+								href={streetViewUrl}
+								target="_blank"
+								rel="noreferrer"
+								className="w-full flex items-center justify-center gap-1.5 py-2 px-3 !bg-blue-600 hover:!bg-blue-700 active:scale-[0.98] !text-white rounded-lg text-xs font-semibold shadow-xs transition-all cursor-pointer text-center"
+							>
+								<FiExternalLink size={12} className="!text-white shrink-0" />
+								<span className="!text-white">Ver no Street View</span>
+							</a>
+						</div>
 					</div>
 				</div>
 			</Popup>
