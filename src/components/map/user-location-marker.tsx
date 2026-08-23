@@ -41,10 +41,8 @@ export function UserLocationMarker({ location }: UserLocationMarkerProps) {
 							</p>
 						</div>
 
-						{/* GPS coordinates */}
 						<PopupGpsRow latitude={location.lat} longitude={location.lon} />
 
-						{/* Action buttons (Street View) */}
 						<PopupActions
 							latitude={location.lat}
 							longitude={location.lon}
