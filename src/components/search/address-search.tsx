@@ -73,7 +73,7 @@ export default function AddressSearch({
 					onFocus={() => results.length > 0 && setShowResults(true)}
 					placeholder="Buscar endereço ou via no Recife..."
 					aria-label="Buscar endereço no Recife"
-					className="w-full pl-10 pr-20 py-2.5 sm:py-3 border border-slate-200/90 bg-white/90 backdrop-blur-xl text-slate-900 placeholder-slate-400 rounded-2xl shadow-glass-md focus:border-blue-500/60 focus:ring-4 focus:ring-blue-500/15 focus:outline-none text-xs sm:text-sm font-medium transition-all"
+					className="w-full pl-10 pr-20 py-2.5 sm:py-3 border border-slate-200 bg-white text-slate-900 placeholder-slate-400 rounded-2xl shadow-lg focus:border-blue-500 focus:ring-4 focus:ring-blue-500/15 focus:outline-none text-xs sm:text-sm font-medium transition-all"
 				/>
 				<div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
 					{query && (
@@ -91,7 +91,7 @@ export default function AddressSearch({
 						type="button"
 						onClick={handleSearchManual}
 						disabled={isLoading || query.trim().length < 3}
-						className="p-1.5 bg-slate-100/80 hover:bg-blue-50 text-slate-500 hover:text-blue-600 disabled:opacity-40 disabled:hover:bg-transparent rounded-xl border border-slate-200/60 transition-all cursor-pointer"
+						className="p-1.5 bg-slate-100 hover:bg-blue-50 text-slate-500 hover:text-blue-600 disabled:opacity-40 disabled:hover:bg-transparent rounded-xl border border-slate-200 transition-all cursor-pointer"
 						title="Buscar"
 						aria-label="Buscar"
 					>
@@ -108,7 +108,7 @@ export default function AddressSearch({
 				query.trim().length >= 3 &&
 				results.length === 0 &&
 				!isLoading && (
-					<div className="absolute top-full mt-2 w-full border border-slate-200/90 p-4 bg-white/98 backdrop-blur-2xl rounded-2xl shadow-glass-lg z-50">
+					<div className="absolute top-full mt-2 w-full border border-slate-200 p-4 bg-white rounded-2xl shadow-xl z-50">
 						<p className="text-xs sm:text-sm text-slate-500 text-center font-medium">
 							Nenhum resultado encontrado para &ldquo;{query}&rdquo;
 						</p>
@@ -127,15 +127,15 @@ interface ResultsListProps {
 
 function ResultsList({ results, onSelect }: ResultsListProps) {
 	return (
-		<div className="absolute top-full mt-2 w-full bg-white/98 backdrop-blur-2xl rounded-2xl shadow-glass-lg border border-slate-200/90 z-50 p-2 space-y-1.5 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-			<div className="px-3 py-2 bg-slate-50/80 rounded-xl border border-slate-100/90 flex items-center justify-between">
+		<div className="absolute top-full mt-2 w-full bg-white rounded-2xl shadow-xl border border-slate-200 z-50 p-2 space-y-1.5 overflow-hidden">
+			<div className="px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
 				<div className="flex items-center gap-1.5">
-					<span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
-					<span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">
+					<span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+					<span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-600">
 						Sugestões no Recife / RMR
 					</span>
 				</div>
-				<span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200/80 font-mono">
+				<span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200 font-mono">
 					{results.length} {results.length === 1 ? "local" : "locais"}
 				</span>
 			</div>
@@ -148,22 +148,22 @@ function ResultsList({ results, onSelect }: ResultsListProps) {
 							type="button"
 							key={result.place_id}
 							onClick={() => onSelect(result)}
-							className="w-full p-2.5 text-left rounded-xl transition-all duration-150 cursor-pointer flex items-center justify-between gap-3 group/item hover:bg-gradient-to-r hover:from-blue-50/90 hover:to-indigo-50/60 active:scale-[0.99] border border-transparent hover:border-blue-100/90 hover:shadow-xs"
+							className="w-full p-2.5 text-left rounded-xl transition-all duration-150 cursor-pointer flex items-center justify-between gap-3 group/item hover:bg-slate-50 active:bg-slate-100 border border-transparent hover:border-slate-200"
 						>
 							<div className="flex items-start gap-2.5 min-w-0 flex-1">
-								<div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5 border border-blue-200/60 group-hover/item:border-blue-500 group-hover/item:bg-blue-600 group-hover/item:text-white transition-all shadow-xs">
+								<div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5 border border-blue-100 group-hover/item:bg-blue-600 group-hover/item:text-white transition-all">
 									<FiMapPin size={14} className="shrink-0" />
 								</div>
 								<div className="min-w-0 flex-1">
-									<h4 className="text-xs sm:text-[13px] font-bold text-slate-900 group-hover/item:text-blue-900 leading-snug truncate">
+									<h4 className="text-xs sm:text-[13px] font-bold text-slate-900 group-hover/item:text-blue-600 leading-snug truncate">
 										{title}
 									</h4>
-									<p className="text-[11px] text-slate-500 group-hover/item:text-slate-600 font-medium leading-tight truncate mt-0.5">
+									<p className="text-[11px] text-slate-500 font-medium leading-tight truncate mt-0.5">
 										{subtitle}
 									</p>
 								</div>
 							</div>
-							<div className="w-6 h-6 rounded-lg flex items-center justify-center text-slate-300 group-hover/item:text-blue-600 group-hover/item:bg-blue-100/80 transition-all shrink-0">
+							<div className="w-6 h-6 rounded-lg flex items-center justify-center text-slate-300 group-hover/item:text-blue-600 transition-all shrink-0">
 								<FiArrowUpRight size={14} strokeWidth={2.5} />
 							</div>
 						</button>
@@ -176,8 +176,8 @@ function ResultsList({ results, onSelect }: ResultsListProps) {
 
 function LoadingSkeleton() {
 	return (
-		<div className="absolute top-full mt-2 w-full bg-white/98 backdrop-blur-2xl rounded-2xl shadow-glass-lg border border-slate-200/90 p-2.5 z-50 space-y-1.5 animate-pulse">
-			<div className="px-3 py-2 bg-slate-50 rounded-xl flex items-center justify-between">
+		<div className="absolute top-full mt-2 w-full bg-white rounded-2xl shadow-xl border border-slate-200 p-2.5 z-50 space-y-1.5 animate-pulse">
+			<div className="px-3 py-2 bg-slate-50 rounded-xl flex items-center justify-between border border-slate-100">
 				<div className="h-2.5 bg-slate-200 rounded w-28" />
 				<div className="h-3.5 bg-slate-200 rounded-full w-12" />
 			</div>
