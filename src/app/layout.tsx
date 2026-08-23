@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import { ReactQueryClientProvider } from "@/providers/query-client-provider";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -42,7 +43,9 @@ export default function RootLayout({
 					content="upgrade-insecure-requests"
 				/>
 			</head>
-			<body className={poppins.className}>{children}</body>
+			<body className={poppins.className}>
+				<ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+			</body>
 		</html>
 	);
 }
