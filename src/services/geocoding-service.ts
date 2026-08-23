@@ -1,41 +1,72 @@
 import { PHOTON_CONFIG } from "@/constants/map";
 import type { PhotonFeature, PhotonResponse, SearchResult } from "@/types";
 
-function buildDisplayName(feature: PhotonFeature): string {
+function buildStreetDisplayName(feature: PhotonFeature): {
+	title: string;
+	subtitle: string;
+	fullName: string;
+} {
 	const { properties: props } = feature;
-	const parts: string[] = [];
+	const streetName = props.name || props.street || "Via sem nome";
+	const locationParts: string[] = [];
 
-	if (props.name) parts.push(props.name);
-	if (props.street) {
-		parts.push(
-			props.housenumber
-				? `${props.street}, ${props.housenumber}`
-				: props.street,
-		);
-	}
-	if (!props.street && props.city && !props.name) parts.push(props.city);
-	if (props.district) parts.push(props.district);
-	if (props.city && props.state) parts.push(`${props.city} - ${props.state}`);
+	const neighborhood = props.district || props.locality;
+	if (neighborhood) locationParts.push(neighborhood);
+	if (props.city) locationParts.push(props.city);
+	if (props.state) locationParts.push(props.state);
 
-	return Array.from(new Set(parts)).join(", ") || "Localização no Recife";
+	const subtitle =
+		locationParts.length > 0 ? locationParts.join(", ") : "Recife - Pernambuco";
+
+	const fullName = `${streetName}, ${subtitle}`;
+
+	return {
+		title: streetName,
+		subtitle,
+		fullName,
+	};
 }
 
-function mapPhotonFeatures(features: PhotonFeature[]): SearchResult[] {
-	return features.map((feature, i) => ({
-		place_id: feature.properties.osm_id
-			? String(feature.properties.osm_id)
-			: `result-${i}`,
-		display_name: buildDisplayName(feature),
-		lat: String(feature.geometry.coordinates[1]),
-		lon: String(feature.geometry.coordinates[0]),
-	}));
+function mapAndDeduplicatePhotonFeatures(
+	features: PhotonFeature[],
+): SearchResult[] {
+	const seenKeys = new Set<string>();
+	const results: SearchResult[] = [];
+
+	for (let i = 0; i < features.length; i++) {
+		const feature = features[i];
+		const { title, subtitle, fullName } = buildStreetDisplayName(feature);
+
+		const dedupKey = `${title.toLowerCase()}|${subtitle.toLowerCase()}`;
+		if (seenKeys.has(dedupKey)) {
+			continue;
+		}
+		seenKeys.add(dedupKey);
+
+		results.push({
+			place_id: feature.properties.osm_id
+				? String(feature.properties.osm_id)
+				: `street-${i}`,
+			display_name: fullName,
+			lat: String(feature.geometry.coordinates[1]),
+			lon: String(feature.geometry.coordinates[0]),
+		});
+
+		if (results.length >= PHOTON_CONFIG.limit) {
+			break;
+		}
+	}
+
+	return results;
 }
 
 export async function searchAddressByQuery(
 	searchQuery: string,
 	signal?: AbortSignal,
 ): Promise<SearchResult[]> {
-	const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(searchQuery)}&bbox=${PHOTON_CONFIG.bbox}&limit=${PHOTON_CONFIG.limit}`;
+	const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(
+		searchQuery,
+	)}&bbox=${PHOTON_CONFIG.bbox}&limit=15&osm_tag=highway`;
 	const response = await fetch(url, { signal });
 
 	if (!response.ok) {
@@ -43,5 +74,5 @@ export async function searchAddressByQuery(
 	}
 
 	const data: PhotonResponse = await response.json();
-	return mapPhotonFeatures(data.features || []);
+	return mapAndDeduplicatePhotonFeatures(data.features || []);
 }
