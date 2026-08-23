@@ -9,12 +9,7 @@ import {
 	FiMapPin,
 	FiNavigation,
 } from "react-icons/fi";
-import {
-	PiCertificateBold,
-	PiGaugeBold,
-	PiRoadHorizonBold,
-	PiTrafficSignalBold,
-} from "react-icons/pi";
+import { PiGaugeBold, PiRoadHorizonBold } from "react-icons/pi";
 import { Marker, Popup, Tooltip } from "react-leaflet";
 import { useClipboard } from "@/hooks/use-clipboard";
 import type { RadarData } from "@/types";
@@ -30,13 +25,55 @@ interface RadarMarkerProps {
 	showLabel?: boolean;
 }
 
+interface SpeedBadgeInfo {
+	display: string;
+	unit: string;
+	textSize: string;
+	label: string;
+}
+
+function getSpeedBadgeInfo(speed?: string): SpeedBadgeInfo {
+	if (!speed?.trim()) {
+		return {
+			display: "—",
+			unit: "",
+			textSize: "text-xs",
+			label: "Radar",
+		};
+	}
+
+	const raw = speed.trim();
+
+	// Remove all variations of km/h, kmh (case-insensitive, global) for the badge
+	const clean = raw
+		.replace(/km\s*\/\s*h/gi, "")
+		.replace(/kmh/gi, "")
+		.trim();
+
+	// Choose font size based on text length so "40 e 60" or single numbers fit without overflow
+	let textSize = "text-sm";
+	if (clean.length > 7) {
+		textSize = "text-[8.5px]";
+	} else if (clean.length > 4) {
+		textSize = "text-[9.5px]";
+	} else if (clean.length > 2) {
+		textSize = "text-xs";
+	}
+
+	return {
+		display: clean || "—",
+		unit: "KM/H",
+		textSize,
+		label: raw,
+	};
+}
+
 export const RadarMarker: React.FC<RadarMarkerProps> = ({
 	radar,
 	showLabel = false,
 }) => {
 	const { copied, copy } = useClipboard();
-	const speedClean =
-		radar.monitoredSpeed?.replace(/km\/h/i, "").trim() || "Radar";
+	const speedInfo = getSpeedBadgeInfo(radar.monitoredSpeed);
 
 	const handleCopyCoords = (e: React.MouseEvent) => {
 		e.stopPropagation();
@@ -69,163 +106,182 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 				autoClose
 				autoPanPaddingTopLeft={[20, 90]}
 				autoPanPaddingBottomRight={[20, 60]}
-				className="!m-0"
 			>
-				<div className="w-[300px] sm:w-[320px] text-slate-800 font-sans overflow-hidden rounded-2xl">
-					<div className="bg-slate-900 text-white px-3.5 py-3 flex items-center justify-between gap-2">
+				<div className="text-slate-800 font-sans min-w-[290px] max-w-[340px] overflow-hidden">
+					<div className="bg-gradient-to-r from-slate-900 via-slate-850 to-indigo-950 text-white px-3.5 py-2.5 flex items-center justify-between gap-2 border-b border-slate-800">
 						<div className="flex items-center gap-1.5 min-w-0">
-							<div className="w-6 h-6 rounded-md bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 border border-amber-500/30">
-								<PiTrafficSignalBold size={14} />
-							</div>
-							<span className="text-xs font-semibold tracking-wide truncate">
+							<span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.8)]" />
+							<span className="text-[11px] font-extrabold uppercase tracking-wider text-amber-400 truncate">
 								{radar.equipmentType || "Radar de Trânsito"}
 							</span>
 						</div>
-						<span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">
-							CTTU
-						</span>
+						<div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[9.5px] font-bold shrink-0">
+							<span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+							<span>CTTU RECIFE</span>
+						</div>
 					</div>
 
-					<div className="p-3.5 space-y-3 bg-white">
-						<div className="flex items-start justify-between gap-3 pb-1 border-b border-slate-100">
-							<div className="flex-1 min-w-0">
-								<span className="text-[10px] uppercase font-bold text-slate-400 block mb-0.5 tracking-wider">
-									Localização
+					<div className="p-3.5 space-y-2.5 bg-white">
+						<div className="flex items-start justify-between gap-3 pb-2.5 border-b border-slate-100">
+							<div className="flex-1 min-w-0 pt-0.5">
+								<span className="text-[9.5px] uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1 mb-0.5">
+									<FiMapPin size={10} className="text-blue-600" />
+									Local da Fiscalização
 								</span>
-								<h3 className="font-bold text-sm text-slate-900 leading-snug break-words">
+								<h3 className="font-extrabold text-[13.5px] text-slate-900 leading-snug break-words">
 									{radar.installationLocation}
 								</h3>
 							</div>
-							<div className="shrink-0 w-11 h-11 rounded-full border-[3px] border-red-600 bg-white flex flex-col items-center justify-center shadow-xs">
-								<span className="text-sm font-black text-slate-900 leading-none">
-									{speedClean}
+
+							<div className="shrink-0 w-12 h-12 rounded-full border-[3.5px] border-red-600 bg-white flex flex-col items-center justify-center shadow-md shadow-red-600/15 ring-2 ring-red-100/80 select-none p-0.5">
+								<span
+									className={`${speedInfo.textSize} font-black text-slate-900 leading-none tracking-tight text-center whitespace-nowrap px-0.5`}
+								>
+									{speedInfo.display}
 								</span>
-								<span className="text-[6.5px] font-black text-red-600 uppercase tracking-tighter">
-									KM/H
-								</span>
+								{speedInfo.unit && (
+									<span className="text-[6.5px] font-black text-red-600 uppercase tracking-tighter leading-none mt-0.5">
+										{speedInfo.unit}
+									</span>
+								)}
 							</div>
 						</div>
 
 						<div className="grid grid-cols-2 gap-2 text-xs">
-							<div className="bg-slate-50 p-2 rounded-lg border border-slate-200/70">
-								<span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
-									<FiCompass size={11} className="text-slate-400 shrink-0" />
-									Sentido
-								</span>
+							<div className="bg-blue-50/70 p-2.5 rounded-xl border border-blue-100/90 flex flex-col justify-between">
+								<div className="flex items-center gap-1.5 text-[10px] text-blue-700/80 font-bold uppercase tracking-wider">
+									<FiCompass size={11} className="text-blue-600" />
+									<span>Sentido</span>
+								</div>
 								<p
-									className="font-bold text-slate-800 text-[11px] truncate mt-0.5"
+									className="font-extrabold text-slate-900 text-xs truncate mt-1 flex items-center gap-1"
 									title={radar.monitoringDirection}
 								>
-									{radar.monitoringDirection || "Ambos os sentidos"}
+									<span className="text-blue-600 font-bold">➔</span>
+									<span className="truncate">
+										{radar.monitoringDirection || "Ambos os sentidos"}
+									</span>
 								</p>
 							</div>
 
-							<div className="bg-slate-50 p-2 rounded-lg border border-slate-200/70">
-								<span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
-									<PiRoadHorizonBold
-										size={12}
-										className="text-slate-400 shrink-0"
-									/>
-									Faixas
-								</span>
-								<p className="font-bold text-slate-800 text-[11px] truncate mt-0.5">
+							<div className="bg-indigo-50/70 p-2.5 rounded-xl border border-indigo-100/90 flex flex-col justify-between">
+								<div className="flex items-center gap-1.5 text-[10px] text-indigo-700/80 font-bold uppercase tracking-wider">
+									<PiRoadHorizonBold size={11} className="text-indigo-600" />
+									<span>Faixas</span>
+								</div>
+								<p className="font-extrabold text-slate-900 text-xs truncate mt-1">
 									{radar.monitoredLanes}{" "}
-									{radar.monitoredLanes === 1 ? "faixa" : "faixas"}
+									{radar.monitoredLanes === 1 ? "faixa ativa" : "faixas ativas"}
 								</p>
 							</div>
 
-							<div className="bg-slate-50 p-2 rounded-lg border border-slate-200/70 col-span-2">
-								<span className="text-[10px] text-slate-500 font-medium flex items-center gap-1">
-									<PiGaugeBold size={12} className="text-slate-400 shrink-0" />
-									Fluxo Médio Diário (VMD)
-								</span>
-								<div className="flex items-center justify-between gap-2 mt-0.5">
-									<p className="font-bold text-slate-800 text-xs">
-										{radar.vmd > 0
-											? `${radar.vmd.toLocaleString("pt-BR")} veículos/dia`
-											: "Não informado"}
-									</p>
+							<div className="bg-gradient-to-r from-amber-50/80 to-orange-50/60 p-2.5 rounded-xl border border-amber-200/70 col-span-2">
+								<div className="flex items-center justify-between">
+									<div className="flex items-center gap-1.5 text-[10px] text-amber-800 font-bold uppercase tracking-wider">
+										<PiGaugeBold size={12} className="text-amber-600" />
+										<span>Fluxo Médio Diário (VMD)</span>
+									</div>
 									{radar.vmdPeriod && (
-										<span className="text-[9px] px-1.5 py-0.5 bg-slate-200 rounded text-slate-700 font-semibold shrink-0">
+										<span className="text-[9px] px-1.5 py-0.5 bg-amber-100/90 rounded-md text-amber-800 font-bold font-mono shrink-0 border border-amber-200">
 											{radar.vmdPeriod}
 										</span>
 									)}
 								</div>
-							</div>
-						</div>
-
-						<div className="flex items-center justify-between bg-slate-50 px-2.5 py-1.5 rounded-lg border border-slate-200/70 text-[11px]">
-							<span className="text-slate-600 flex items-center gap-1 font-medium">
-								<FiMapPin size={11} className="text-slate-400 shrink-0" />
-								GPS:{" "}
-								<strong className="text-slate-800 font-mono text-[10px]">
-									{formattedCoords}
-								</strong>
-							</span>
-							<button
-								type="button"
-								onClick={handleCopyCoords}
-								className="text-blue-600 hover:text-blue-700 active:scale-95 font-semibold flex items-center gap-1 transition-all cursor-pointer"
-								title="Copiar coordenadas"
-							>
-								{copied ? (
-									<>
-										<FiCheck size={12} className="text-emerald-600" />
-										<span className="text-emerald-600 text-[10px]">
-											Copiado!
+								<p className="font-extrabold text-slate-900 text-xs mt-1 flex items-baseline gap-1.5">
+									{radar.vmd > 0 ? (
+										<>
+											<span className="text-sm font-black text-amber-950 font-mono">
+												{radar.vmd.toLocaleString("pt-BR")}
+											</span>
+											<span className="text-[11px] text-amber-800/80 font-medium">
+												veículos por dia
+											</span>
+										</>
+									) : (
+										<span className="text-slate-500 font-medium text-[11px]">
+											Dado de fluxo não informado
 										</span>
-									</>
-								) : (
-									<>
-										<FiCopy size={11} />
-										<span className="text-[10px]">Copiar</span>
-									</>
-								)}
-							</button>
+									)}
+								</p>
+							</div>
 						</div>
 
-						{(radar.equipmentIdentification || radar.inmetroRegistration) && (
-							<div className="bg-amber-50/70 p-2 rounded-lg border border-amber-200/60 text-[10px] text-slate-700 flex flex-wrap items-center gap-x-2 gap-y-0.5">
-								<span className="flex items-center gap-1 text-amber-900 font-bold">
-									<PiCertificateBold size={12} className="text-amber-600" />
-									Metadados:
-								</span>
-								{radar.equipmentIdentification && (
-									<span>
-										ID:{" "}
-										<strong className="text-slate-900">
-											{radar.equipmentIdentification}
-										</strong>
+						<div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 space-y-1.5">
+							{(radar.equipmentIdentification || radar.inmetroRegistration) && (
+								<div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[9.5px] pb-1.5 border-b border-slate-200/60 font-medium text-slate-600">
+									{radar.equipmentIdentification && (
+										<span className="flex items-center gap-1">
+											<span className="text-slate-400 uppercase font-bold">
+												ID:
+											</span>
+											<strong className="text-slate-900 font-mono font-bold">
+												{radar.equipmentIdentification}
+											</strong>
+										</span>
+									)}
+									{radar.inmetroRegistration && (
+										<span className="flex items-center gap-1">
+											<span className="text-slate-400 uppercase font-bold">
+												INMETRO:
+											</span>
+											<strong className="text-slate-900 font-semibold truncate">
+												{radar.inmetroRegistration}
+											</strong>
+										</span>
+									)}
+								</div>
+							)}
+
+							<div className="flex items-center justify-between text-[10.5px]">
+								<div className="flex items-center gap-1.5 text-slate-600 font-medium min-w-0">
+									<FiMapPin size={11} className="text-blue-600 shrink-0" />
+									<span className="text-[9.5px] text-slate-400 font-bold uppercase tracking-wider">
+										GPS
 									</span>
-								)}
-								{radar.inmetroRegistration && (
-									<span>
-										INMETRO:{" "}
-										<strong className="text-slate-900">
-											{radar.inmetroRegistration}
-										</strong>
+									<span className="text-slate-800 font-mono text-[10px] truncate">
+										{formattedCoords}
 									</span>
-								)}
+								</div>
+								<button
+									type="button"
+									onClick={handleCopyCoords}
+									className="text-blue-600 hover:text-blue-700 active:scale-95 font-bold flex items-center gap-1 transition-all cursor-pointer hover:bg-blue-50 px-2 py-0.5 rounded-md shrink-0 ml-2"
+									title="Copiar coordenadas"
+								>
+									{copied ? (
+										<>
+											<FiCheck size={11} className="text-emerald-600" />
+											<span className="text-emerald-600 text-[10px]">
+												Copiado!
+											</span>
+										</>
+									) : (
+										<>
+											<FiCopy size={10} />
+											<span className="text-[10px]">Copiar</span>
+										</>
+									)}
+								</button>
 							</div>
-						)}
+						</div>
 
 						<div className="grid grid-cols-2 gap-2 pt-0.5">
 							<a
 								href={streetViewUrl}
 								target="_blank"
 								rel="noreferrer"
-								className="flex items-center justify-center gap-1.5 py-2 px-3 !bg-blue-600 hover:!bg-blue-700 active:scale-[0.98] !text-white rounded-lg text-xs font-semibold shadow-xs transition-all cursor-pointer text-center"
+								className="flex items-center justify-center gap-1.5 py-2.5 px-3 !bg-gradient-to-r !from-blue-600 !to-indigo-600 hover:!from-blue-700 hover:!to-indigo-700 active:scale-[0.98] !text-white rounded-xl text-xs font-bold shadow-sm shadow-blue-500/25 transition-all cursor-pointer text-center"
 							>
-								<FiExternalLink size={12} className="!text-white shrink-0" />
+								<FiExternalLink size={13} className="!text-white shrink-0" />
 								<span className="!text-white">Street View</span>
 							</a>
 							<a
 								href={directionsUrl}
 								target="_blank"
 								rel="noreferrer"
-								className="flex items-center justify-center gap-1.5 py-2 px-3 !bg-slate-100 hover:!bg-slate-200 active:scale-[0.98] !text-slate-800 rounded-lg text-xs font-semibold border border-slate-200 shadow-xs transition-all cursor-pointer text-center"
+								className="flex items-center justify-center gap-1.5 py-2.5 px-3 !bg-slate-100 hover:!bg-slate-200 active:scale-[0.98] !text-slate-800 rounded-xl text-xs font-bold border border-slate-200/90 shadow-xs transition-all cursor-pointer text-center"
 							>
-								<FiNavigation size={12} className="text-blue-600 shrink-0" />
+								<FiNavigation size={13} className="text-blue-600 shrink-0" />
 								<span className="!text-slate-800">Como Chegar</span>
 							</a>
 						</div>
