@@ -41,12 +41,12 @@ export function SearchMarker({ location }: SearchMarkerProps) {
 	return (
 		<Marker position={[location.lat, location.lon]} icon={searchIcon}>
 			<Popup
-				autoClose={false}
-				closeOnClick={false}
+				autoClose={true}
+				closeButton={false}
 				autoPanPaddingTopLeft={[20, 90]}
 				autoPanPaddingBottomRight={[20, 60]}
 			>
-				<div className="text-slate-800 font-sans min-w-[290px] max-w-[340px] overflow-hidden">
+				<div className="text-slate-800 font-sans overflow-hidden">
 					<div className="bg-gradient-to-r from-slate-900 via-slate-850 to-purple-950 text-white px-3.5 py-2.5 flex items-center justify-between gap-2 border-b border-slate-800">
 						<div className="flex items-center gap-1.5 min-w-0">
 							<span className="w-2 h-2 rounded-full bg-purple-400 shadow-[0_0_8px_rgba(192,132,252,0.8)]" />
