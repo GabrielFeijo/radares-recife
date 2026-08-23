@@ -33,11 +33,9 @@ const VARIANT_ICON: Record<ToastVariant, React.ReactNode> = {
 };
 
 const VARIANT_STYLE: Record<ToastVariant, string> = {
-	error:
-		"border-rose-200/90 bg-rose-50/95 backdrop-blur-xl text-rose-900 shadow-glass-md",
-	info: "border-sky-200/90 bg-sky-50/95 backdrop-blur-xl text-sky-900 shadow-glass-md",
-	success:
-		"border-emerald-200/90 bg-emerald-50/95 backdrop-blur-xl text-emerald-900 shadow-glass-md",
+	error: "border-rose-200 bg-rose-50 text-rose-900 shadow-lg",
+	info: "border-sky-200 bg-sky-50 text-sky-900 shadow-lg",
+	success: "border-emerald-200 bg-emerald-50 text-emerald-900 shadow-lg",
 };
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
