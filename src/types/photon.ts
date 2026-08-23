@@ -1,10 +1,3 @@
-export interface SearchResult {
-	place_id: number;
-	display_name: string;
-	lat: string;
-	lon: string;
-}
-
 export interface PhotonProperties {
 	osm_id?: number;
 	name?: string;
@@ -24,8 +17,4 @@ export interface PhotonFeature {
 
 export interface PhotonResponse {
 	features: PhotonFeature[];
-}
-
-export interface AddressSearchProps {
-	onLocationSelect: (lat: number, lon: number, address: string) => void;
 }
