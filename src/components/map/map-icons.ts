@@ -114,3 +114,33 @@ export const userLocationIcon = new L.Icon({
 	iconAnchor: [22, 22],
 	popupAnchor: [0, -22],
 });
+
+export function createRadarClusterIcon(cluster: L.MarkerCluster): L.DivIcon {
+	const count = cluster.getChildCount();
+	let size = 36;
+	if (count >= 100) size = 44;
+	else if (count >= 10) size = 40;
+
+	return L.divIcon({
+		html: `<div class="radar-cluster-badge" style="width:${size}px; height:${size}px;">
+			<span class="cluster-count">${count}</span>
+		</div>`,
+		className: "radar-cluster-container",
+		iconSize: L.point(size, size, true),
+	});
+}
+
+export function createCameraClusterIcon(cluster: L.MarkerCluster): L.DivIcon {
+	const count = cluster.getChildCount();
+	let size = 36;
+	if (count >= 100) size = 44;
+	else if (count >= 10) size = 40;
+
+	return L.divIcon({
+		html: `<div class="camera-cluster-badge" style="width:${size}px; height:${size}px;">
+			<span class="cluster-count">${count}</span>
+		</div>`,
+		className: "camera-cluster-container",
+		iconSize: L.point(size, size, true),
+	});
+}
