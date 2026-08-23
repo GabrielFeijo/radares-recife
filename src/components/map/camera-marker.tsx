@@ -37,7 +37,6 @@ export const CameraMarker: React.FC<CameraMarkerProps> = ({ camera }) => {
 					/>
 
 					<div className="p-3.5 space-y-3">
-						{/* Point name */}
 						<div>
 							<span className="text-[10px] uppercase font-semibold text-slate-400 tracking-wider block mb-0.5">
 								Ponto de Monitoramento
@@ -47,7 +46,6 @@ export const CameraMarker: React.FC<CameraMarkerProps> = ({ camera }) => {
 							</h3>
 						</div>
 
-						{/* Address / Crossing info */}
 						<div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex items-start gap-2.5">
 							<PiMapPinLineBold
 								size={14}
@@ -63,13 +61,11 @@ export const CameraMarker: React.FC<CameraMarkerProps> = ({ camera }) => {
 							</div>
 						</div>
 
-						{/* GPS coordinates */}
 						<PopupGpsRow
 							latitude={camera.latitude}
 							longitude={camera.longitude}
 						/>
 
-						{/* Action buttons */}
 						<PopupActions
 							latitude={camera.latitude}
 							longitude={camera.longitude}
