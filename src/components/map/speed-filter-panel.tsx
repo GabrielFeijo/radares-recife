@@ -51,7 +51,7 @@ export function SpeedFilterPanel({
 	onSelectSpeed,
 }: SpeedFilterPanelProps) {
 	return (
-		<div className="absolute top-28 sm:top-16 right-3 z-[999] bg-white/95 backdrop-blur-2xl p-3.5 rounded-2xl shadow-glass-lg border border-slate-200/90 flex flex-col gap-1.5 min-w-56 text-xs animate-in fade-in zoom-in-95 duration-150">
+		<div className="absolute top-28 sm:top-16 right-3 z-[999] bg-white p-3.5 rounded-2xl shadow-xl border border-slate-200 flex flex-col gap-1.5 min-w-56 text-xs animate-in fade-in zoom-in-95 duration-150">
 			<div className="flex items-center justify-between pb-2 mb-1 border-b border-slate-100">
 				<span className="font-bold text-slate-800 text-xs flex items-center gap-1.5">
 					<FiFilter size={13} className="text-emerald-600" />
