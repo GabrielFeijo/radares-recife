@@ -5,7 +5,7 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import AddressSearch from "@/components/search/address-search";
 import { ToastProvider } from "@/components/ui/toast";
-import { MAP_DEFAULTS } from "@/constants/map";
+import { MAP_DEFAULTS, MAP_TILES } from "@/constants/map";
 import { useCameras } from "@/hooks/use-cameras";
 import { useGeolocation } from "@/hooks/use-geolocation";
 import { useMapControls } from "@/hooks/use-map-controls";
@@ -64,7 +64,7 @@ function MapContent() {
 	}
 
 	return (
-		<div className="relative w-full h-full overflow-hidden">
+		<div className="relative w-full h-full overflow-hidden bg-slate-100">
 			<div className="absolute top-3 left-3 right-3 sm:right-auto z-[999] sm:w-80 md:w-96">
 				<AddressSearch onLocationSelect={handleLocationSelect} />
 			</div>
@@ -94,13 +94,13 @@ function MapContent() {
 			<MapContainer
 				center={mapCenter}
 				zoom={mapZoom}
-				style={{ height: "100vh", width: "100%" }}
+				style={{ height: "100vh", width: "100%", backgroundColor: "#f8fafc" }}
 				scrollWheelZoom={true}
 				attributionControl={false}
 			>
 				<MapController center={mapCenter} zoom={mapZoom} trigger={flyTrigger} />
 
-				<TileLayer url="https://www.google.cn/maps/vt?lyrs=m@221097413,traffic&x={x}&y={y}&z={z}" />
+				<TileLayer url={MAP_TILES.GOOGLE_MAPS.url} />
 
 				{searchLocation && <SearchMarker location={searchLocation} />}
 				{userLocation && <UserLocationMarker location={userLocation} />}
