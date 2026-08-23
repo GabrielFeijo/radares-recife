@@ -27,15 +27,17 @@ export function useToast(): ToastContextValue {
 const TOAST_DURATION_MS = 4000;
 
 const VARIANT_ICON: Record<ToastVariant, React.ReactNode> = {
-	error: <FiAlertCircle size={16} className="shrink-0 text-red-500" />,
-	info: <FiInfo size={16} className="shrink-0 text-blue-500" />,
-	success: <FiCheckCircle size={16} className="shrink-0 text-emerald-500" />,
+	error: <FiAlertCircle size={16} className="shrink-0 text-rose-600" />,
+	info: <FiInfo size={16} className="shrink-0 text-sky-600" />,
+	success: <FiCheckCircle size={16} className="shrink-0 text-emerald-600" />,
 };
 
 const VARIANT_STYLE: Record<ToastVariant, string> = {
-	error: "border-red-200 bg-red-50 text-red-900",
-	info: "border-blue-200 bg-blue-50 text-blue-900",
-	success: "border-emerald-200 bg-emerald-50 text-emerald-900",
+	error:
+		"border-rose-200/90 bg-rose-50/95 backdrop-blur-xl text-rose-900 shadow-glass-md",
+	info: "border-sky-200/90 bg-sky-50/95 backdrop-blur-xl text-sky-900 shadow-glass-md",
+	success:
+		"border-emerald-200/90 bg-emerald-50/95 backdrop-blur-xl text-emerald-900 shadow-glass-md",
 };
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
