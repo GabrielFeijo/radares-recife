@@ -130,6 +130,47 @@ body {
 	border-right-color: rgba(15, 23, 42, 0.92);
 }
 
+.leaflet-container .leaflet-tooltip.radar-speed-tooltip {
+	background-color: #ffffff;
+	border: 1px solid rgba(203, 213, 225, 0.9);
+	border-radius: 9999px;
+	box-shadow:
+		0 4px 12px -2px rgba(15, 23, 42, 0.12),
+		0 2px 4px -1px rgba(15, 23, 42, 0.04);
+	padding: 2.5px 8px;
+	font-family: inherit;
+	line-height: 1;
+	pointer-events: none;
+	user-select: none;
+}
+
+.leaflet-container .leaflet-tooltip-top.radar-speed-tooltip:before {
+	border-top-color: #ffffff;
+	margin-bottom: -1px;
+}
+
+.radar-speed-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 4.5px;
+}
+
+.radar-speed-dot {
+	width: 5.5px;
+	height: 5.5px;
+	border-radius: 9999px;
+	background-color: #ea580c;
+	flex-shrink: 0;
+}
+
+.radar-speed-text {
+	font-size: 11px;
+	font-weight: 800;
+	color: #0f172a;
+	letter-spacing: -0.01em;
+	white-space: nowrap;
+}
+
 .leaflet-container .leaflet-control-zoom {
 	border: 1px solid rgba(15, 23, 42, 0.08);
 	border-radius: 1rem;

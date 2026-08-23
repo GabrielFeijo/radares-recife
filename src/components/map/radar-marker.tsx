@@ -56,11 +56,24 @@ function getSpeedBadgeInfo(speed?: string): SpeedBadgeInfo {
 	};
 }
 
+function formatSpeedLabel(speed?: string): string {
+	if (!speed?.trim()) return "Radar";
+	return speed
+		.trim()
+		.replace(
+			/(\d+)\s*(?:km\/h|kmh)?\s*e\s*(\d+)\s*(?:km\/h|kmh)?/gi,
+			"$1 / $2 km/h",
+		)
+		.replace(/km\/h/gi, "km/h")
+		.replace(/kmh/gi, "km/h");
+}
+
 export const RadarMarker: React.FC<RadarMarkerProps> = ({
 	radar,
 	showLabel = false,
 }) => {
 	const speedInfo = getSpeedBadgeInfo(radar.monitoredSpeed);
+	const speedLabel = formatSpeedLabel(radar.monitoredSpeed);
 
 	return (
 		<Marker
@@ -70,13 +83,16 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 		>
 			<Tooltip
 				key={showLabel ? "permanent" : "hover"}
-				offset={[16, 0]}
-				opacity={0.95}
+				offset={[0, -42]}
+				opacity={1}
 				permanent={showLabel}
-				direction="right"
-				className="font-bold"
+				direction="top"
+				className="radar-speed-tooltip"
 			>
-				{radar.monitoredSpeed}
+				<span className="radar-speed-pill">
+					<span className="radar-speed-dot" />
+					<span className="radar-speed-text">{speedLabel}</span>
+				</span>
 			</Tooltip>
 
 			<Popup
