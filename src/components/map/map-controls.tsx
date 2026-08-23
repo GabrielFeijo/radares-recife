@@ -21,14 +21,16 @@ export function MapControls({
 	onLocate,
 }: MapControlsProps) {
 	return (
-		<div className="absolute top-16 sm:top-3 right-3 z-[999] flex flex-wrap items-center gap-2">
+		<div className="absolute top-16 sm:top-3 right-3 z-[999] flex flex-wrap items-center gap-1.5 sm:gap-2">
 			<MapControlButton
 				onClick={controls.toggleRadars}
 				isActive={controls.showRadars}
 				icon={
 					<PiTrafficSignalFill
 						size={20}
-						className={controls.showRadars ? "text-amber-600" : "text-gray-400"}
+						className={
+							controls.showRadars ? "text-amber-500" : "text-slate-400"
+						}
 					/>
 				}
 				title={controls.showRadars ? "Ocultar Radares" : "Exibir Radares"}
@@ -41,7 +43,7 @@ export function MapControls({
 				icon={
 					<PiSecurityCameraFill
 						size={20}
-						className={controls.showCameras ? "text-blue-600" : "text-gray-400"}
+						className={controls.showCameras ? "text-sky-600" : "text-slate-400"}
 					/>
 				}
 				title={controls.showCameras ? "Ocultar Câmeras" : "Exibir Câmeras"}
@@ -55,7 +57,7 @@ export function MapControls({
 					<PiTagBold
 						size={18}
 						className={
-							controls.showSpeedLabels ? "text-purple-600" : "text-gray-400"
+							controls.showSpeedLabels ? "text-indigo-600" : "text-slate-400"
 						}
 					/>
 				}
@@ -75,8 +77,8 @@ export function MapControls({
 						size={18}
 						className={
 							controls.selectedSpeed !== "all"
-								? "text-emerald-600"
-								: "text-gray-600"
+								? "text-emerald-600 font-bold"
+								: "text-slate-500 group-hover:text-slate-800"
 						}
 					/>
 				}
@@ -91,7 +93,9 @@ export function MapControls({
 					<FiCrosshair
 						size={18}
 						className={
-							isLocating ? "animate-spin text-blue-600" : "text-gray-700"
+							isLocating
+								? "animate-spin text-blue-600"
+								: "text-slate-500 group-hover:text-slate-800"
 						}
 					/>
 				}
