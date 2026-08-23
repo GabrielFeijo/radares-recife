@@ -1,8 +1,6 @@
 "use client";
 
-import L from "leaflet";
 import type React from "react";
-import { useState } from "react";
 import {
 	FiCheck,
 	FiCompass,
@@ -19,14 +17,14 @@ import {
 	PiTrafficSignalBold,
 } from "react-icons/pi";
 import { Marker, Popup, Tooltip } from "react-leaflet";
+import { useClipboard } from "@/hooks/use-clipboard";
 import type { RadarData } from "@/types";
-
-const radarIcon = new L.Icon({
-	iconUrl: "/radar.png",
-	iconSize: [32, 32],
-	iconAnchor: [16, 16],
-	popupAnchor: [0, -16],
-});
+import {
+	formatCoordinates,
+	getDirectionsUrl,
+	getStreetViewUrl,
+} from "@/utils/maps";
+import { radarIcon } from "./map-icons";
 
 interface RadarMarkerProps {
 	radar: RadarData;
@@ -37,19 +35,18 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 	radar,
 	showLabel = false,
 }) => {
-	const [copied, setCopied] = useState(false);
+	const { copied, copy } = useClipboard();
 	const speedClean =
 		radar.monitoredSpeed?.replace(/km\/h/i, "").trim() || "Radar";
 
 	const handleCopyCoords = (e: React.MouseEvent) => {
 		e.stopPropagation();
-		navigator.clipboard.writeText(`${radar.latitude}, ${radar.longitude}`);
-		setCopied(true);
-		setTimeout(() => setCopied(false), 2000);
+		copy(`${radar.latitude}, ${radar.longitude}`);
 	};
 
-	const streetViewUrl = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${radar.latitude},${radar.longitude}`;
-	const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${radar.latitude},${radar.longitude}`;
+	const streetViewUrl = getStreetViewUrl(radar.latitude, radar.longitude);
+	const directionsUrl = getDirectionsUrl(radar.latitude, radar.longitude);
+	const formattedCoords = formatCoordinates(radar.latitude, radar.longitude);
 
 	return (
 		<Marker
@@ -150,7 +147,7 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 							<FiMapPin size={12} className="text-slate-400" />
 							GPS:{" "}
 							<strong className="text-slate-700 font-mono">
-								{radar.latitude.toFixed(5)}, {radar.longitude.toFixed(5)}
+								{formattedCoords}
 							</strong>
 						</span>
 						<button

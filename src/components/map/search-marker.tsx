@@ -1,22 +1,9 @@
 "use client";
 
-import L from "leaflet";
 import { FiExternalLink, FiMapPin } from "react-icons/fi";
 import { Marker, Popup } from "react-leaflet";
-
-const searchIcon = new L.Icon({
-	iconUrl:
-		"data:image/svg+xml;base64," +
-		btoa(`
-		<svg xmlns="http://www.w3.org/2000/svg" width="40" height="50" viewBox="0 0 40 50">
-			<path fill="#ef4444" stroke="#991b1b" stroke-width="2" d="M20 1 C9 1 1 9 1 20 C1 31 20 49 20 49 S39 31 39 20 C39 9 31 1 20 1 Z"/>
-			<circle cx="20" cy="20" r="8" fill="white"/>
-		</svg>
-	`),
-	iconSize: [30, 40],
-	iconAnchor: [15, 40],
-	popupAnchor: [0, -40],
-});
+import { formatCoordinates, getStreetViewUrl } from "@/utils/maps";
+import { searchIcon } from "./map-icons";
 
 interface SearchLocation {
 	lat: number;
@@ -29,7 +16,8 @@ interface SearchMarkerProps {
 }
 
 export function SearchMarker({ location }: SearchMarkerProps) {
-	const streetViewUrl = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${location.lat},${location.lon}`;
+	const streetViewUrl = getStreetViewUrl(location.lat, location.lon);
+	const formattedCoords = formatCoordinates(location.lat, location.lon);
 
 	return (
 		<Marker position={[location.lat, location.lon]} icon={searchIcon}>
@@ -53,9 +41,7 @@ export function SearchMarker({ location }: SearchMarkerProps) {
 						<span className="text-[10px] text-slate-500 font-medium">
 							Coordenadas GPS
 						</span>
-						<p className="font-semibold text-slate-800">
-							{location.lat.toFixed(5)}, {location.lon.toFixed(5)}
-						</p>
+						<p className="font-semibold text-slate-800">{formattedCoords}</p>
 					</div>
 
 					<a

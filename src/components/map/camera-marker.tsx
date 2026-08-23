@@ -1,26 +1,25 @@
 "use client";
 
-import L from "leaflet";
 import type React from "react";
 import { FiExternalLink, FiMapPin, FiNavigation } from "react-icons/fi";
 import { PiSecurityCameraFill } from "react-icons/pi";
 import { Marker, Popup } from "react-leaflet";
 import type { CameraData } from "@/types";
-
-const cameraIcon = new L.Icon({
-	iconUrl: "/camera.png",
-	iconSize: [32, 32],
-	iconAnchor: [16, 16],
-	popupAnchor: [0, -16],
-});
+import {
+	formatCoordinates,
+	getDirectionsUrl,
+	getStreetViewUrl,
+} from "@/utils/maps";
+import { cameraIcon } from "./map-icons";
 
 interface CameraMarkerProps {
 	camera: CameraData;
 }
 
 export const CameraMarker: React.FC<CameraMarkerProps> = ({ camera }) => {
-	const streetViewUrl = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${camera.latitude},${camera.longitude}`;
-	const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${camera.latitude},${camera.longitude}`;
+	const streetViewUrl = getStreetViewUrl(camera.latitude, camera.longitude);
+	const directionsUrl = getDirectionsUrl(camera.latitude, camera.longitude);
+	const formattedCoords = formatCoordinates(camera.latitude, camera.longitude);
 
 	return (
 		<Marker
@@ -58,7 +57,7 @@ export const CameraMarker: React.FC<CameraMarkerProps> = ({ camera }) => {
 							<FiMapPin size={13} className="text-slate-400 shrink-0" />
 							GPS:{" "}
 							<strong className="text-slate-700 font-mono">
-								{camera.latitude.toFixed(5)}, {camera.longitude.toFixed(5)}
+								{formattedCoords}
 							</strong>
 						</span>
 					</div>

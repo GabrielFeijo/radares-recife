@@ -1,29 +1,18 @@
 "use client";
 
-import L from "leaflet";
 import { FiNavigation } from "react-icons/fi";
 import { Marker, Popup } from "react-leaflet";
 import type { UserLocation } from "@/hooks/use-geolocation";
-
-const userLocationIcon = new L.Icon({
-	iconUrl:
-		"data:image/svg+xml;base64," +
-		btoa(`
-		<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
-			<circle cx="18" cy="18" r="14" fill="#3b82f6" fill-opacity="0.3"/>
-			<circle cx="18" cy="18" r="8" fill="#2563eb" stroke="white" stroke-width="2.5"/>
-		</svg>
-	`),
-	iconSize: [36, 36],
-	iconAnchor: [18, 18],
-	popupAnchor: [0, -18],
-});
+import { formatCoordinates } from "@/utils/maps";
+import { userLocationIcon } from "./map-icons";
 
 interface UserLocationMarkerProps {
 	location: UserLocation;
 }
 
 export function UserLocationMarker({ location }: UserLocationMarkerProps) {
+	const formattedCoords = formatCoordinates(location.lat, location.lon);
+
 	return (
 		<Marker position={[location.lat, location.lon]} icon={userLocationIcon}>
 			<Popup closeButton={false}>
@@ -42,10 +31,7 @@ export function UserLocationMarker({ location }: UserLocationMarkerProps) {
 						</div>
 					</div>
 					<p className="text-xs text-slate-600">
-						Coordenadas:{" "}
-						<strong>
-							{location.lat.toFixed(5)}, {location.lon.toFixed(5)}
-						</strong>
+						Coordenadas: <strong>{formattedCoords}</strong>
 					</p>
 				</div>
 			</Popup>
