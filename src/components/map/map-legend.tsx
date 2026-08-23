@@ -14,7 +14,7 @@ export function MapLegend({
 	selectedSpeed,
 }: MapLegendProps) {
 	return (
-		<div className="absolute bottom-4 left-3 z-[999] bg-white/95 backdrop-blur-2xl px-4 py-3 rounded-2xl shadow-glass-lg border border-slate-200/90 text-xs">
+		<div className="absolute bottom-4 left-3 z-[999] bg-white px-4 py-3 rounded-2xl shadow-lg border border-slate-200 text-xs">
 			<div className="flex items-center gap-3.5 font-semibold text-slate-700">
 				<div className="flex items-center gap-2">
 					<div className="w-5 h-5 rounded-lg bg-amber-500/15 text-amber-600 flex items-center justify-center shrink-0 border border-amber-500/30">
