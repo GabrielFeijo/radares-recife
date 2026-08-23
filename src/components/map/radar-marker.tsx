@@ -56,16 +56,29 @@ function getSpeedBadgeInfo(speed?: string): SpeedBadgeInfo {
 	};
 }
 
-function formatSpeedLabel(speed?: string): string {
-	if (!speed?.trim()) return "Radar";
-	return speed
-		.trim()
-		.replace(
-			/(\d+)\s*(?:km\/h|kmh)?\s*e\s*(\d+)\s*(?:km\/h|kmh)?/gi,
-			"$1 / $2 km/h",
-		)
-		.replace(/km\/h/gi, "km/h")
-		.replace(/kmh/gi, "km/h");
+function parseSpeedParts(speed?: string): { value: string; unit: string } {
+	if (!speed?.trim()) {
+		return { value: "Radar", unit: "" };
+	}
+
+	const raw = speed.trim();
+	const multiMatch = raw.match(/(\d+)\s*(?:km\/h|kmh)?\s*e\s*(\d+)/i);
+	if (multiMatch) {
+		return {
+			value: `${multiMatch[1]} / ${multiMatch[2]}`,
+			unit: "km/h",
+		};
+	}
+
+	const clean = raw
+		.replace(/km\s*\/\s*h/gi, "")
+		.replace(/kmh/gi, "")
+		.trim();
+
+	return {
+		value: clean || raw,
+		unit: "km/h",
+	};
 }
 
 export const RadarMarker: React.FC<RadarMarkerProps> = ({
@@ -73,7 +86,7 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 	showLabel = false,
 }) => {
 	const speedInfo = getSpeedBadgeInfo(radar.monitoredSpeed);
-	const speedLabel = formatSpeedLabel(radar.monitoredSpeed);
+	const speedParts = parseSpeedParts(radar.monitoredSpeed);
 
 	return (
 		<Marker
@@ -89,9 +102,12 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 				direction="top"
 				className="radar-speed-tooltip"
 			>
-				<span className="radar-speed-pill">
+				<span className="radar-speed-badge">
 					<span className="radar-speed-dot" />
-					<span className="radar-speed-text">{speedLabel}</span>
+					<span className="radar-speed-number">{speedParts.value}</span>
+					{speedParts.unit && (
+						<span className="radar-speed-unit">{speedParts.unit}</span>
+					)}
 				</span>
 			</Tooltip>
 
