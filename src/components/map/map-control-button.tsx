@@ -28,7 +28,7 @@ export function MapControlButton({
 			disabled={disabled}
 			aria-label={ariaLabel ?? title}
 			title={title}
-			className={`p-2.5 sm:p-3 border border-slate-200/90 bg-white/90 backdrop-blur-xl text-slate-700 rounded-2xl shadow-glass-sm hover:shadow-glass-md hover:border-slate-300 hover:text-slate-900 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500/30 transition-all duration-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100 relative group ${className}`}
+			className={`p-2.5 sm:p-3 border border-slate-200 bg-white text-slate-700 rounded-2xl shadow-md hover:shadow-lg hover:border-slate-300 hover:text-slate-900 active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500/30 transition-all duration-200 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100 relative group ${className}`}
 		>
 			<div className="relative flex items-center justify-center">
 				{icon}
