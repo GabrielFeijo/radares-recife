@@ -1,6 +1,8 @@
 "use client";
 
+import type L from "leaflet";
 import type React from "react";
+import { useMemo } from "react";
 import { FiCompass } from "react-icons/fi";
 import {
 	PiGaugeBold,
@@ -35,6 +37,7 @@ function getSpeedBadgeInfo(speed?: string): SpeedBadgeInfo {
 	}
 
 	const raw = speed.trim();
+
 	const clean = raw
 		.replace(/km\s*\/\s*h/gi, "")
 		.replace(/kmh/gi, "")
@@ -88,11 +91,26 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 	const speedInfo = getSpeedBadgeInfo(radar.monitoredSpeed);
 	const speedParts = parseSpeedParts(radar.monitoredSpeed);
 
+	const eventHandlers = useMemo(
+		() => ({
+			popupclose(e: L.LeafletEvent) {
+				if (showLabel) {
+					const marker = e.target as L.Marker;
+					if (marker?.getTooltip()) {
+						marker.openTooltip();
+					}
+				}
+			},
+		}),
+		[showLabel],
+	);
+
 	return (
 		<Marker
 			position={[radar.latitude, radar.longitude]}
 			title={`${radar.installationLocation} (${radar.monitoredSpeed})`}
 			icon={radarIcon}
+			eventHandlers={eventHandlers}
 		>
 			<Tooltip
 				key={showLabel ? "permanent" : "hover"}
