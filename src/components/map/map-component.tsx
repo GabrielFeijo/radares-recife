@@ -13,8 +13,10 @@ import { useRadars } from "@/hooks/use-radars";
 import { CameraMarker } from "./camera-marker";
 import { MapController } from "./map-controller";
 import { MapControls } from "./map-controls";
+import { createCameraClusterIcon, createRadarClusterIcon } from "./map-icons";
 import { MapLegend } from "./map-legend";
 import { MapSkeleton } from "./map-skeleton";
+import { MarkerClusterGroup } from "./marker-cluster-group";
 import { RadarMarker } from "./radar-marker";
 import { SearchMarker } from "./search-marker";
 import { SpeedFilterPanel } from "./speed-filter-panel";
@@ -105,19 +107,41 @@ function MapContent() {
 				{searchLocation && <SearchMarker location={searchLocation} />}
 				{userLocation && <UserLocationMarker location={userLocation} />}
 
-				{controls.showRadars &&
-					controls.filteredRadars.map((radar) => (
-						<RadarMarker
-							key={`radar-${radar.id}`}
-							radar={radar}
-							showLabel={controls.showSpeedLabels}
-						/>
-					))}
+				{controls.showRadars && (
+					<MarkerClusterGroup
+						chunkedLoading
+						maxClusterRadius={45}
+						spiderfyOnMaxZoom={true}
+						showCoverageOnHover={false}
+						zoomToBoundsOnClick={true}
+						disableClusteringAtZoom={17}
+						iconCreateFunction={createRadarClusterIcon}
+					>
+						{controls.filteredRadars.map((radar) => (
+							<RadarMarker
+								key={`radar-${radar.id}`}
+								radar={radar}
+								showLabel={controls.showSpeedLabels}
+							/>
+						))}
+					</MarkerClusterGroup>
+				)}
 
-				{controls.showCameras &&
-					cameras.map((camera) => (
-						<CameraMarker key={`camera-${camera.id}`} camera={camera} />
-					))}
+				{controls.showCameras && (
+					<MarkerClusterGroup
+						chunkedLoading
+						maxClusterRadius={45}
+						spiderfyOnMaxZoom={true}
+						showCoverageOnHover={false}
+						zoomToBoundsOnClick={true}
+						disableClusteringAtZoom={17}
+						iconCreateFunction={createCameraClusterIcon}
+					>
+						{cameras.map((camera) => (
+							<CameraMarker key={`camera-${camera.id}`} camera={camera} />
+						))}
+					</MarkerClusterGroup>
+				)}
 			</MapContainer>
 		</div>
 	);
