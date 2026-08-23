@@ -62,7 +62,7 @@ export async function getCachedData<T>(key: string): Promise<T | null> {
 export async function setCachedData<T>(
 	key: string,
 	data: T,
-	ttlInSeconds: number = 86400,
+	ttlInSeconds = 86400,
 ): Promise<void> {
 	try {
 		const client = await getRedisClient();
