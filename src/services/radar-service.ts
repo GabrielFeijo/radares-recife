@@ -1,3 +1,4 @@
+import { CKAN_RESOURCE_IDS } from "@/constants/map";
 import localRadarsData from "@/data/radars.json";
 import { fetchFromCKAN } from "@/lib/ckan";
 import {
@@ -7,37 +8,23 @@ import {
 	setCachedData,
 } from "@/lib/redis";
 import type { CKANRadarRecord, RadarData } from "@/types";
+import { sanitizeText } from "@/utils/text";
 
-function sanitizeText(str: string): string {
-	if (!str) return "";
-	return str
-		.replace(/Ö/g, "Í")
-		.replace(/ö/g, "í")
-		.replace(/à/g, "Á")
-		.replace(/§/g, "º")
-		.replace(/\s+/g, " ")
-		.trim();
+function toFloat(value: number | string): number {
+	return typeof value === "number" ? value : Number.parseFloat(String(value));
+}
+
+function toInt(value: number | string): number {
+	return typeof value === "number" ? value : Number.parseInt(String(value), 10);
 }
 
 function mapRadarRecords(records: CKANRadarRecord[]): RadarData[] {
 	return records
 		.map((record) => {
-			const lat =
-				typeof record.latitude === "number"
-					? record.latitude
-					: Number.parseFloat(String(record.latitude));
-			const lng =
-				typeof record.longitude === "number"
-					? record.longitude
-					: Number.parseFloat(String(record.longitude));
-			const lanes =
-				typeof record.faixas_fiscalizadas === "number"
-					? record.faixas_fiscalizadas
-					: Number.parseInt(String(record.faixas_fiscalizadas), 10);
-			const volume =
-				typeof record.vmd === "number"
-					? record.vmd
-					: Number.parseInt(String(record.vmd), 10);
+			const lat = toFloat(record.latitude);
+			const lng = toFloat(record.longitude);
+			const lanes = toInt(record.faixas_fiscalizadas);
+			const volume = toInt(record.vmd);
 
 			return {
 				id: record._id,
@@ -70,7 +57,7 @@ function mapRadarRecords(records: CKANRadarRecord[]): RadarData[] {
 
 async function fetchRadarsFromAPI(): Promise<RadarData[]> {
 	const records = await fetchFromCKAN<CKANRadarRecord>(
-		"36c2b47b-f439-4895-8b65-3f3dda36a4a7",
+		CKAN_RESOURCE_IDS.RADARS,
 	);
 	return mapRadarRecords(records);
 }
@@ -80,10 +67,10 @@ function getLocalRadarsFallback(): RadarData[] {
 		const rawRecords = (
 			localRadarsData as unknown as { result?: { records?: CKANRadarRecord[] } }
 		)?.result?.records;
-		if (rawRecords && Array.isArray(rawRecords)) {
-			return mapRadarRecords(rawRecords);
-		}
-		return [];
+
+		return rawRecords && Array.isArray(rawRecords)
+			? mapRadarRecords(rawRecords)
+			: [];
 	} catch {
 		return [];
 	}
@@ -91,15 +78,12 @@ function getLocalRadarsFallback(): RadarData[] {
 
 export async function getRadars(): Promise<RadarData[]> {
 	try {
-		const cachedRadars = await getCachedData<RadarData[]>(CACHE_KEYS.RADARS);
-
-		if (cachedRadars && cachedRadars.length > 0) {
-			return cachedRadars;
-		}
+		const cached = await getCachedData<RadarData[]>(CACHE_KEYS.RADARS);
+		if (cached && cached.length > 0) return cached;
 
 		try {
 			const radars = await fetchRadarsFromAPI();
-			if (radars && radars.length > 0) {
+			if (radars.length > 0) {
 				await setCachedData(CACHE_KEYS.RADARS, radars, CACHE_TTL);
 				return radars;
 			}
