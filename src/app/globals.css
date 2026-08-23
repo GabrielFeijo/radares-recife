@@ -32,6 +32,33 @@ body {
 	overflow: hidden;
 }
 
+.leaflet-container .leaflet-tooltip.font-bold {
+	font-weight: 800;
+	letter-spacing: -0.01em;
+}
+
+.custom-scrollbar {
+	scrollbar-width: thin;
+	scrollbar-color: rgba(148, 163, 184, 0.4) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+	width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	background: rgba(148, 163, 184, 0.35);
+	border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+	background: rgba(100, 116, 139, 0.6);
+}
+
 .leaflet-container .leaflet-popup-content {
 	margin: 0;
 	width: auto;
