@@ -71,8 +71,8 @@ export default function AddressSearch({
 					value={query}
 					onChange={(e) => setQuery(e.target.value)}
 					onFocus={() => results.length > 0 && setShowResults(true)}
-					placeholder="Buscar endereço ou via no Recife..."
-					aria-label="Buscar endereço no Recife"
+					placeholder="Buscar rua, avenida ou via no Recife..."
+					aria-label="Buscar rua ou avenida no Recife"
 					className="w-full pl-10 pr-20 py-2.5 sm:py-3 border border-slate-200 bg-white text-slate-900 placeholder-slate-400 rounded-2xl shadow-lg focus:border-blue-500 focus:ring-4 focus:ring-blue-500/15 focus:outline-none text-xs sm:text-sm font-medium transition-all"
 				/>
 				<div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
@@ -110,7 +110,7 @@ export default function AddressSearch({
 				!isLoading && (
 					<div className="absolute top-full mt-2 w-full border border-slate-200 p-4 bg-white rounded-2xl shadow-xl z-50">
 						<p className="text-xs sm:text-sm text-slate-500 text-center font-medium">
-							Nenhum resultado encontrado para &ldquo;{query}&rdquo;
+							Nenhuma rua ou avenida encontrada para &ldquo;{query}&rdquo;
 						</p>
 					</div>
 				)}
@@ -132,11 +132,11 @@ function ResultsList({ results, onSelect }: ResultsListProps) {
 				<div className="flex items-center gap-1.5">
 					<span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
 					<span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-600">
-						Sugestões no Recife / RMR
+						Ruas e Avenidas no Recife / RMR
 					</span>
 				</div>
 				<span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200 font-mono">
-					{results.length} {results.length === 1 ? "local" : "locais"}
+					{results.length} {results.length === 1 ? "via" : "vias"}
 				</span>
 			</div>
 
