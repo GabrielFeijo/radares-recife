@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { MapSkeleton } from "@/components/map-skeleton";
+import { MapSkeleton } from "@/components/map/map-skeleton";
 
 const MapComponent = dynamic(() => import("@/components/map/map-component"), {
 	loading: () => <MapSkeleton />,

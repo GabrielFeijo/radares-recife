@@ -3,7 +3,6 @@
 import { useCallback, useState } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { MapSkeleton } from "@/components/map-skeleton";
 import AddressSearch from "@/components/search/address-search";
 import { ToastProvider } from "@/components/ui/toast";
 import { MAP_DEFAULTS } from "@/constants/map";
@@ -15,6 +14,7 @@ import { CameraMarker } from "./camera-marker";
 import { MapController } from "./map-controller";
 import { MapControls } from "./map-controls";
 import { MapLegend } from "./map-legend";
+import { MapSkeleton } from "./map-skeleton";
 import { RadarMarker } from "./radar-marker";
 import { SearchMarker } from "./search-marker";
 import { SpeedFilterPanel } from "./speed-filter-panel";
