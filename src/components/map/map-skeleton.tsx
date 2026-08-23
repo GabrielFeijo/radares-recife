@@ -12,33 +12,35 @@ export function MapSkeleton() {
 			<div className="absolute top-[72%] left-[48%] w-5 h-5 rounded-full bg-sky-500/30 border border-sky-500/50 shadow-xs" />
 
 			<div className="absolute top-3 left-3 right-3 sm:right-auto z-10 sm:w-80 md:w-96">
-				<div className="w-full h-11 sm:h-12 bg-white/90 backdrop-blur-xl rounded-2xl shadow-glass-md border border-slate-200/80 flex items-center justify-between px-4">
+				<div className="w-full h-11 sm:h-12 bg-white rounded-2xl shadow-lg border border-slate-200 flex items-center justify-between px-4">
 					<div className="h-4 w-40 bg-slate-200 rounded-md" />
 					<div className="w-5 h-5 bg-slate-200 rounded-full" />
 				</div>
 			</div>
 
 			<div className="absolute top-16 sm:top-3 right-3 z-10 flex flex-wrap items-center gap-2">
-				<div className="w-10 h-10 sm:w-11 sm:h-11 bg-white/90 backdrop-blur-xl rounded-2xl shadow-glass-sm border border-slate-200/80 flex items-center justify-center">
+				<div className="w-10 h-10 sm:w-11 sm:h-11 bg-white rounded-2xl shadow-md border border-slate-200 flex items-center justify-center">
 					<div className="w-5 h-5 bg-slate-200 rounded-md" />
 				</div>
-				<div className="w-10 h-10 sm:w-11 sm:h-11 bg-white/90 backdrop-blur-xl rounded-2xl shadow-glass-sm border border-slate-200/80 flex items-center justify-center">
+				<div className="w-10 h-10 sm:w-11 sm:h-11 bg-white rounded-2xl shadow-md border border-slate-200 flex items-center justify-center">
 					<div className="w-5 h-5 bg-slate-200 rounded-md" />
 				</div>
-				<div className="w-10 h-10 sm:w-11 sm:h-11 bg-white/90 backdrop-blur-xl rounded-2xl shadow-glass-sm border border-slate-200/80 flex items-center justify-center">
+				<div className="w-10 h-10 sm:w-11 sm:h-11 bg-white rounded-2xl shadow-md border border-slate-200 flex items-center justify-center">
 					<div className="w-5 h-5 bg-slate-200 rounded-md" />
 				</div>
-				<div className="w-10 h-10 sm:w-11 sm:h-11 bg-white/90 backdrop-blur-xl rounded-2xl shadow-glass-sm border border-slate-200/80 flex items-center justify-center">
+				<div className="w-10 h-10 sm:w-11 sm:h-11 bg-white rounded-2xl shadow-md border border-slate-200 flex items-center justify-center">
 					<div className="w-5 h-5 bg-slate-200 rounded-md" />
 				</div>
 			</div>
 
-			<div className="absolute bottom-4 left-3 z-10 bg-white/90 backdrop-blur-xl px-4 py-3 rounded-2xl shadow-glass-lg border border-slate-200/80 min-w-56 space-y-2">
-				<div className="flex items-center gap-3">
-					<div className="h-4 w-24 bg-slate-200 rounded-md" />
-					<div className="h-4 w-24 bg-slate-200 rounded-md" />
+			<div className="absolute bottom-4 left-3 z-10">
+				<div className="h-20 w-56 bg-white rounded-2xl shadow-md border border-slate-200 flex flex-col justify-center px-4 gap-2">
+					<div className="flex items-center gap-3">
+						<div className="h-4 w-24 bg-slate-200 rounded-md" />
+						<div className="h-4 w-24 bg-slate-200 rounded-md" />
+					</div>
+					<div className="h-3 w-40 bg-slate-200 rounded-md" />
 				</div>
-				<div className="h-3 w-40 bg-slate-200/70 rounded-md" />
 			</div>
 		</div>
 	);
