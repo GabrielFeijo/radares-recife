@@ -94,7 +94,6 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 					/>
 
 					<div className="p-3.5 space-y-3">
-						{/* Top: Location Title + Speed Sign */}
 						<div className="flex items-start justify-between gap-3">
 							<div className="flex-1 min-w-0">
 								<span className="text-[10px] uppercase font-semibold text-slate-400 tracking-wider block mb-0.5">
@@ -105,7 +104,6 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 								</h3>
 							</div>
 
-							{/* Traffic Speed Sign (Placa R-19) */}
 							<div
 								className="shrink-0 w-11 h-11 rounded-full border-[3px] border-red-600 bg-white flex flex-col items-center justify-center shadow-xs select-none"
 								title={`Velocidade máxima permitida: ${radar.monitoredSpeed}`}
@@ -123,7 +121,6 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 							</div>
 						</div>
 
-						{/* Technical details grid */}
 						<div className="grid grid-cols-2 gap-2 text-xs">
 							<div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
 								<div className="flex items-center gap-1.5 text-[10px] text-slate-500 font-semibold uppercase tracking-wider">
@@ -149,7 +146,6 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 								</p>
 							</div>
 
-							{/* VMD (Volume Médio Diário) */}
 							<div className="col-span-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100">
 								<div className="flex items-center justify-between text-[10px] text-slate-500 font-semibold uppercase tracking-wider">
 									<div className="flex items-center gap-1.5">
@@ -181,7 +177,6 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 							</div>
 						</div>
 
-						{/* Equipment ID / INMETRO */}
 						{(radar.equipmentIdentification || radar.inmetroRegistration) && (
 							<div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-2.5 py-1.5 rounded-lg bg-slate-50/70 border border-slate-100 text-[10px] text-slate-500">
 								{radar.equipmentIdentification && (
@@ -203,13 +198,11 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 							</div>
 						)}
 
-						{/* GPS coordinates with copy */}
 						<PopupGpsRow
 							latitude={radar.latitude}
 							longitude={radar.longitude}
 						/>
 
-						{/* Actions */}
 						<PopupActions
 							latitude={radar.latitude}
 							longitude={radar.longitude}
