@@ -65,10 +65,8 @@ export function SearchMarker({ location }: SearchMarkerProps) {
 							)}
 						</div>
 
-						{/* GPS coordinates */}
 						<PopupGpsRow latitude={location.lat} longitude={location.lon} />
 
-						{/* Action buttons */}
 						<PopupActions latitude={location.lat} longitude={location.lon} />
 					</div>
 				</div>
