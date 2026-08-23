@@ -8,39 +8,10 @@ import {
 	useState,
 } from "react";
 import { PHOTON_CONFIG } from "@/constants/map";
-import type { PhotonFeature, PhotonResponse, SearchResult } from "@/types";
+import { searchAddressByQuery } from "@/services/geocoding-service";
+import type { SearchResult } from "@/types";
 
 type LocationSelectFn = (lat: number, lon: number, address: string) => void;
-
-function buildDisplayName(feature: PhotonFeature): string {
-	const { properties: props } = feature;
-	const parts: string[] = [];
-
-	if (props.name) parts.push(props.name);
-	if (props.street) {
-		parts.push(
-			props.housenumber
-				? `${props.street}, ${props.housenumber}`
-				: props.street,
-		);
-	}
-	if (!props.street && props.city && !props.name) parts.push(props.city);
-	if (props.district) parts.push(props.district);
-	if (props.city && props.state) parts.push(`${props.city} - ${props.state}`);
-
-	return Array.from(new Set(parts)).join(", ") || "Localização no Recife";
-}
-
-function mapPhotonFeatures(features: PhotonFeature[]): SearchResult[] {
-	return features.map((feature, i) => ({
-		place_id: feature.properties.osm_id
-			? String(feature.properties.osm_id)
-			: `result-${i}`,
-		display_name: buildDisplayName(feature),
-		lat: String(feature.geometry.coordinates[1]),
-		lon: String(feature.geometry.coordinates[0]),
-	}));
-}
 
 export interface UseAddressSearchReturn {
 	query: string;
@@ -93,18 +64,16 @@ export function useAddressSearch(
 
 		setIsLoading(true);
 		try {
-			const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(searchQuery)}&bbox=${PHOTON_CONFIG.bbox}&limit=${PHOTON_CONFIG.limit}`;
-			const response = await fetch(url, {
-				signal: abortControllerRef.current.signal,
-			});
-
-			if (response.ok) {
-				const data: PhotonResponse = await response.json();
-				setResults(mapPhotonFeatures(data.features));
-				setShowResults(true);
-			}
+			const data = await searchAddressByQuery(
+				searchQuery,
+				abortControllerRef.current.signal,
+			);
+			setResults(data);
+			setShowResults(true);
 		} catch (error) {
-			if ((error as Error)?.name !== "AbortError") setResults([]);
+			if ((error as Error)?.name !== "AbortError") {
+				setResults([]);
+			}
 		} finally {
 			setIsLoading(false);
 		}
