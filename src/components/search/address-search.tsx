@@ -1,11 +1,47 @@
 "use client";
 
-import { FiMapPin, FiNavigation, FiSearch, FiX } from "react-icons/fi";
+import {
+	FiArrowUpRight,
+	FiMapPin,
+	FiNavigation,
+	FiSearch,
+	FiX,
+} from "react-icons/fi";
 import { useAddressSearch } from "@/hooks/use-address-search";
 import type { SearchResult } from "@/types";
 
 interface AddressSearchProps {
 	onLocationSelect: (lat: number, lon: number, address: string) => void;
+}
+
+function parseAddress(displayName: string): {
+	title: string;
+	subtitle: string;
+} {
+	const parts = displayName.split(",").map((p) => p.trim());
+	if (parts.length <= 1) {
+		return {
+			title: parts[0] || displayName,
+			subtitle: "Recife e Região Metropolitana",
+		};
+	}
+
+	const title = parts[0];
+	const filtered = parts.slice(1).filter((p) => {
+		const lower = p.toLowerCase();
+		return (
+			!lower.includes("região") &&
+			!lower.includes("brasil") &&
+			!/^\d{5}-?\d{3}$/.test(p)
+		);
+	});
+
+	const subtitle =
+		filtered.length > 0
+			? filtered.slice(0, 3).join(", ")
+			: "Recife - Pernambuco";
+
+	return { title, subtitle };
 }
 
 export default function AddressSearch({
@@ -91,42 +127,67 @@ interface ResultsListProps {
 
 function ResultsList({ results, onSelect }: ResultsListProps) {
 	return (
-		<div className="absolute top-full mt-2 w-full bg-white/98 backdrop-blur-2xl rounded-2xl shadow-glass-lg border border-slate-200/90 max-h-80 overflow-y-auto z-50 p-1.5 space-y-1">
-			<div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100 flex items-center justify-between">
-				<span>Sugestões no Recife / RMR</span>
-				<span className="text-blue-600 font-mono font-bold">
-					{results.length} locais
+		<div className="absolute top-full mt-2 w-full bg-white/98 backdrop-blur-2xl rounded-2xl shadow-glass-lg border border-slate-200/90 z-50 p-2 space-y-1.5 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+			<div className="px-3 py-2 bg-slate-50/80 rounded-xl border border-slate-100/90 flex items-center justify-between">
+				<div className="flex items-center gap-1.5">
+					<span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
+					<span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500">
+						Sugestões no Recife / RMR
+					</span>
+				</div>
+				<span className="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200/80 font-mono">
+					{results.length} {results.length === 1 ? "local" : "locais"}
 				</span>
 			</div>
-			{results.map((result) => (
-				<button
-					type="button"
-					key={result.place_id}
-					onClick={() => onSelect(result)}
-					className="w-full px-3 py-2.5 text-left hover:bg-blue-50/70 active:bg-blue-100/70 rounded-xl transition-all duration-150 cursor-pointer flex items-start gap-2.5 group/item"
-				>
-					<div className="w-7 h-7 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5 border border-blue-200/60 group-hover/item:border-blue-400 group-hover/item:bg-blue-100/80 transition-colors">
-						<FiMapPin size={13} />
-					</div>
-					<span className="text-xs sm:text-sm text-slate-800 group-hover/item:text-blue-900 font-medium line-clamp-2 leading-snug">
-						{result.display_name}
-					</span>
-				</button>
-			))}
+
+			<div className="max-h-[300px] overflow-y-auto custom-scrollbar space-y-1 pr-1">
+				{results.map((result) => {
+					const { title, subtitle } = parseAddress(result.display_name);
+					return (
+						<button
+							type="button"
+							key={result.place_id}
+							onClick={() => onSelect(result)}
+							className="w-full p-2.5 text-left rounded-xl transition-all duration-150 cursor-pointer flex items-center justify-between gap-3 group/item hover:bg-gradient-to-r hover:from-blue-50/90 hover:to-indigo-50/60 active:scale-[0.99] border border-transparent hover:border-blue-100/90 hover:shadow-xs"
+						>
+							<div className="flex items-start gap-2.5 min-w-0 flex-1">
+								<div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5 border border-blue-200/60 group-hover/item:border-blue-500 group-hover/item:bg-blue-600 group-hover/item:text-white transition-all shadow-xs">
+									<FiMapPin size={14} className="shrink-0" />
+								</div>
+								<div className="min-w-0 flex-1">
+									<h4 className="text-xs sm:text-[13px] font-bold text-slate-900 group-hover/item:text-blue-900 leading-snug truncate">
+										{title}
+									</h4>
+									<p className="text-[11px] text-slate-500 group-hover/item:text-slate-600 font-medium leading-tight truncate mt-0.5">
+										{subtitle}
+									</p>
+								</div>
+							</div>
+							<div className="w-6 h-6 rounded-lg flex items-center justify-center text-slate-300 group-hover/item:text-blue-600 group-hover/item:bg-blue-100/80 transition-all shrink-0">
+								<FiArrowUpRight size={14} strokeWidth={2.5} />
+							</div>
+						</button>
+					);
+				})}
+			</div>
 		</div>
 	);
 }
 
 function LoadingSkeleton() {
 	return (
-		<div className="absolute top-full mt-2 w-full bg-white/98 backdrop-blur-2xl rounded-2xl shadow-glass-lg border border-slate-200/90 p-2 z-50 space-y-1.5 animate-pulse">
+		<div className="absolute top-full mt-2 w-full bg-white/98 backdrop-blur-2xl rounded-2xl shadow-glass-lg border border-slate-200/90 p-2.5 z-50 space-y-1.5 animate-pulse">
+			<div className="px-3 py-2 bg-slate-50 rounded-xl flex items-center justify-between">
+				<div className="h-2.5 bg-slate-200 rounded w-28" />
+				<div className="h-3.5 bg-slate-200 rounded-full w-12" />
+			</div>
 			{[1, 2, 3].map((i) => (
 				<div
 					key={i}
-					className="px-3 py-2.5 flex items-start gap-2.5 rounded-xl border border-transparent"
+					className="p-2.5 flex items-start gap-2.5 rounded-xl border border-transparent"
 				>
-					<div className="w-7 h-7 rounded-lg bg-slate-200 shrink-0 mt-0.5" />
-					<div className="flex-1 space-y-2 py-0.5">
+					<div className="w-8 h-8 rounded-xl bg-slate-200 shrink-0 mt-0.5" />
+					<div className="flex-1 space-y-1.5 py-0.5">
 						<div
 							className="h-3.5 bg-slate-200 rounded-md"
 							style={{ width: `${85 - i * 15}%` }}
