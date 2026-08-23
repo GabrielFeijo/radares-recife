@@ -154,7 +154,6 @@ body {
 	color: #0284c7;
 }
 
-/* Leaflet MarkerCluster Animations */
 .leaflet-cluster-anim .leaflet-marker-icon,
 .leaflet-cluster-anim .leaflet-marker-shadow {
 	transition:
@@ -168,7 +167,6 @@ body {
 		stroke-opacity 0.25s ease-in;
 }
 
-/* Radar Cluster Badge */
 .leaflet-container .radar-cluster-container {
 	background: transparent;
 	border: none;
@@ -202,7 +200,6 @@ body {
 		0 6px 8px -4px rgba(0, 0, 0, 0.15);
 }
 
-/* Camera Cluster Badge */
 .leaflet-container .camera-cluster-container {
 	background: transparent;
 	border: none;
