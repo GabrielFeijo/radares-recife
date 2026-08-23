@@ -25,15 +25,15 @@ function SpeedOption({ label, count, isSelected, onSelect }: SpeedOptionProps) {
 			onClick={onSelect}
 			className={`flex items-center justify-between px-3 py-2 rounded-xl transition-all duration-150 cursor-pointer ${
 				isSelected
-					? "bg-blue-600 text-white font-semibold shadow-sm"
-					: "text-slate-700 hover:bg-slate-100/80 font-medium"
+					? "bg-emerald-50 border border-emerald-300/80 text-emerald-800 font-semibold shadow-xs"
+					: "text-slate-700 hover:bg-slate-100/80 hover:text-slate-900 border border-transparent font-medium"
 			}`}
 		>
-			<span>{label}</span>
+			<span className="text-xs">{label}</span>
 			<span
-				className={`text-[10px] px-1.5 py-0.5 rounded-md ${
+				className={`text-[10px] px-2 py-0.5 rounded-lg font-mono font-medium ${
 					isSelected
-						? "bg-blue-700/80 text-white"
+						? "bg-emerald-100/80 text-emerald-800 border border-emerald-200"
 						: "bg-slate-100 text-slate-600"
 				}`}
 			>
@@ -51,13 +51,13 @@ export function SpeedFilterPanel({
 	onSelectSpeed,
 }: SpeedFilterPanelProps) {
 	return (
-		<div className="absolute top-28 sm:top-16 right-3 z-[999] bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-2xl border border-slate-200/80 flex flex-col gap-1.5 min-w-52 text-xs">
+		<div className="absolute top-28 sm:top-16 right-3 z-[999] bg-white/95 backdrop-blur-2xl p-3.5 rounded-2xl shadow-glass-lg border border-slate-200/90 flex flex-col gap-1.5 min-w-56 text-xs animate-in fade-in zoom-in-95 duration-150">
 			<div className="flex items-center justify-between pb-2 mb-1 border-b border-slate-100">
 				<span className="font-bold text-slate-800 text-xs flex items-center gap-1.5">
 					<FiFilter size={13} className="text-emerald-600" />
 					Filtrar por Velocidade
 				</span>
-				<span className="text-[10px] text-slate-400 font-medium">
+				<span className="text-[10px] text-slate-400 font-mono font-medium">
 					{filteredCount} exibidos
 				</span>
 			</div>
