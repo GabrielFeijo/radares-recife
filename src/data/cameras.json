@@ -1,404 +1,404 @@
 {
-  "fields": [
-    {
-      "type": "int",
-      "id": "_id"
-    },
-    {
-      "type": "text",
-      "id": "nome"
-    },
-    {
-      "type": "text",
-      "id": "endereco"
-    },
-    {
-      "type": "numeric",
-      "id": "longitude"
-    },
-    {
-      "type": "numeric",
-      "id": "latitude"
-    }
-  ],
-  "records": [
-    {
-      "id": 1,
-      "nome": "Câmera 150",
-      "endereco": "Largo do Cabanga - Ponte do Pina",
-      "latitude": -8.080844,
-      "longitude": -34.891049
-    },
-    {
-      "id": 2,
-      "nome": "Câmera 151",
-      "endereco": "Av. Herculano Bandeira - Semáforo 137",
-      "latitude": -8.088795,
-      "longitude": -34.885291
-    },
-    {
-      "id": 3,
-      "nome": "Câmera 152",
-      "endereco": "Av. Agamenon Magalhães - sentido Olinda",
-      "latitude": -8.042955,
-      "longitude": -34.884789
-    },
-    {
-      "id": 4,
-      "nome": "Câmera 153",
-      "endereco": "Av. Boa Viagem - 3º Jardim",
-      "latitude": -8.108781,
-      "longitude": -34.888551
-    },
-    {
-      "id": 5,
-      "nome": "Câmera 154",
-      "endereco": "Av Engenhriro Abdias de Carvalho - próx à lombada eletrônica",
-      "latitude": -8.063758,
-      "longitude": -34.934995
-    },
-    {
-      "id": 6,
-      "nome": "Câmera 155",
-      "endereco": "Av. Mascarenhas de Moraes - próx. ao Aeroporto Internacional do Guararapes",
-      "latitude": -8.13007,
-      "longitude": -34.915872
-    },
-    {
-      "id": 7,
-      "nome": "Câmera 156",
-      "endereco": "Av Recife - próx. ao Supermercado Hiper Bompreço",
-      "latitude": -8.099239,
-      "longitude": -34.928312
-    },
-    {
-      "id": 8,
-      "nome": "Câmera 157",
-      "endereco": "Av. Cruz Cabugá - próx. à rua Frei Cassimiro",
-      "latitude": -8.048875,
-      "longitude": -34.877896
-    },
-    {
-      "id": 9,
-      "nome": "Câmera 158",
-      "endereco": "Av. Boa Viagem - Polo Pina",
-      "latitude": -8.09196,
-      "longitude": -34.882156
-    },
-    {
-      "id": 10,
-      "nome": "Câmera 159",
-      "endereco": "Av. Visconde de Jequitinhonha - próx. à Rua Barão de Souza Leão",
-      "latitude": -8.130581,
-      "longitude": -34.90253
-    },
-    {
-      "id": 11,
-      "nome": "Câmera 160",
-      "endereco": "Av. Sul",
-      "latitude": -8.076826,
-      "longitude": -34.894728
-    },
-    {
-      "id": 12,
-      "nome": "Câmera 161",
-      "endereco": "Rua Madre de Deus x Rua Marquês de Olinda",
-      "latitude": -8.063617,
-      "longitude": -34.873652
-    },
-    {
-      "id": 13,
-      "nome": "Câmera 162",
-      "endereco": "Av. Domingos Ferreira em frente ao Extra",
-      "latitude": -8.105273,
-      "longitude": -34.889512
-    },
-    {
-      "id": 14,
-      "nome": "Câmera 163",
-      "endereco": "Av. Agamenon Magalhães x Praça do Derby - Sent. Olinda",
-      "latitude": -8.056638,
-      "longitude": -34.897664
-    },
-    {
-      "id": 15,
-      "nome": "Câmera 164",
-      "endereco": "Largo do Cabanga - Joana Bezerra",
-      "latitude": -8.079051,
-      "longitude": -34.891956
-    },
-    {
-      "id": 16,
-      "nome": "Câmera 165",
-      "endereco": "Av. Conde da Boa Vista x Rua da Soledade",
-      "latitude": -8.057498,
-      "longitude": -34.890191
-    },
-    {
-      "id": 17,
-      "nome": "Câmera 166",
-      "endereco": "Av. Conde da Boa Vista x Rua do Hospício",
-      "latitude": -8.0606,
-      "longitude": -34.884183
-    },
-    {
-      "id": 18,
-      "nome": "Câmera 167",
-      "endereco": "Av. Conde da Boa Vista x Rua Dom Bosco",
-      "latitude": -8.055915,
-      "longitude": -34.895499
-    },
-    {
-      "id": 19,
-      "nome": "Câmera 168",
-      "endereco": "Av. Boa Viagem em frente Parque Dona Lindu",
-      "latitude": -8.141328,
-      "longitude": -34.903406
-    },
-    {
-      "id": 20,
-      "nome": "Câmera 169",
-      "endereco": "Rua Arquiteto Luiz Nunes - Próx. ao sem. 399",
-      "latitude": -8.086,
-      "longitude": -34.909591
-    },
-    {
-      "id": 21,
-      "nome": "Câmera 170",
-      "endereco": "Av. Maurício de Nassau",
-      "latitude": -8.03891,
-      "longitude": -34.930443
-    },
-    {
-      "id": 22,
-      "nome": "Câmera 171",
-      "endereco": "Av. Afonso Olindense",
-      "latitude": -8.039688,
-      "longitude": -34.957694
-    },
-    {
-      "id": 23,
-      "nome": "Câmera 172",
-      "endereco": "Av. Conselheiro Aguiar - Conj. Pernambucano",
-      "latitude": -8.101464,
-      "longitude": -34.886929
-    },
-    {
-      "id": 24,
-      "nome": "Câmera 173",
-      "endereco": "Av. General San Martin",
-      "latitude": -8.06772,
-      "longitude": -34.927883
-    },
-    {
-      "id": 25,
-      "nome": "Câmera 174",
-      "endereco": "Av. Domingos Ferreira - Próximo ao Bom Preço",
-      "latitude": -8.130484,
-      "longitude": -34.902077
-    },
-    {
-      "id": 26,
-      "nome": "Câmera 175",
-      "endereco": "Av. Agamenon Magalhães - Sent. Boa Viagem",
-      "latitude": -8.04219,
-      "longitude": -34.884856
-    },
-    {
-      "id": 27,
-      "nome": "Câmera 176",
-      "endereco": "Av. Norte - Próximo à Av. João de Barros",
-      "latitude": -8.038517,
-      "longitude": -34.892231
-    },
-    {
-      "id": 28,
-      "nome": "Câmera 177",
-      "endereco": "Av. Conselheiro Aguiar - Próximo à rua Padre Carapuceiro",
-      "latitude": -8.119406,
-      "longitude": -34.8965
-    },
-    {
-      "id": 29,
-      "nome": "Câmera 178",
-      "endereco": "Viaduto Capitão Temudo",
-      "latitude": -8.071233,
-      "longitude": -34.895588
-    },
-    {
-      "id": 30,
-      "nome": "Câmera 179",
-      "endereco": "A. Dr. José Rufino - em frente à Igreja",
-      "latitude": -8.093111,
-      "longitude": -34.943079
-    },
-    {
-      "id": 31,
-      "nome": "Câmera 180",
-      "endereco": "Av. Recife - Entrada do Ibura",
-      "latitude": -8.1069,
-      "longitude": -34.927153
-    },
-    {
-      "id": 32,
-      "nome": "Câmera 181",
-      "endereco": "Av. Antônio de Góes - Próximo ao Posto BR",
-      "latitude": -8.085441,
-      "longitude": -34.886747
-    },
-    {
-      "id": 33,
-      "nome": "Câmera 182",
-      "endereco": "Av. Agamenon Magalhães - em frente ao Hospital Português",
-      "latitude": -8.063651,
-      "longitude": -34.897546
-    },
-    {
-      "id": 34,
-      "nome": "Câmera 183",
-      "endereco": "Av. Agamenon Magalhães - Próximo aos Bancos Itaú",
-      "latitude": -8.062616,
-      "longitude": -34.897217
-    },
-    {
-      "id": 35,
-      "nome": "Câmera 184",
-      "endereco": "Av. Agamenon Magalhães x Rua Dr. Leopoldo Lins",
-      "latitude": -8.048904,
-      "longitude": -34.892814
-    },
-    {
-      "id": 36,
-      "nome": "Câmera 185",
-      "endereco": "Av. Agamenon Magalhães x Rua Buenos Aires",
-      "latitude": -8.048511,
-      "longitude": -34.893029
-    },
-    {
-      "id": 37,
-      "nome": "Câmera 186",
-      "endereco": "Av. Conselheiro Rosa e Silva",
-      "latitude": -8.044426,
-      "longitude": -34.89711
-    },
-    {
-      "id": 38,
-      "nome": "Câmera 187",
-      "endereco": "Av. Agamenon Magalhães - Praça do Derby Sent. Boa Viagem",
-      "latitude": -8.056573,
-      "longitude": -34.898079
-    },
-    {
-      "id": 39,
-      "nome": "Câmera 188",
-      "endereco": "Av. Engenheiro José Estelita",
-      "latitude": -8.077012,
-      "longitude": -34.890408
-    },
-    {
-      "id": 40,
-      "nome": "Câmera 189",
-      "endereco": "Rua José Osório c/ Rua Real da Torre",
-      "latitude": -8.053504,
-      "longitude": -34.908757
-    },
-    {
-      "id": 41,
-      "nome": "Câmera 190",
-      "endereco": "R. Real da Torre c/ Av. Caxangá",
-      "latitude": -8.054072,
-      "longitude": -34.914245
-    },
-    {
-      "id": 42,
-      "nome": "Câmera 191",
-      "endereco": "Av. Antônio de Góes - Início",
-      "latitude": -8.087629,
-      "longitude": -34.884475
-    },
-    {
-      "id": 43,
-      "nome": "Câmera 192",
-      "endereco": "Cais de Sta. RIta - Viaduto das Cinco Pontas",
-      "latitude": -8.071536,
-      "longitude": -34.877373
-    },
-    {
-      "id": 44,
-      "nome": "Câmera 193",
-      "endereco": "Av. Rui Barbosa",
-      "latitude": -8.041468,
-      "longitude": -34.903291
-    },
-    {
-      "id": 45,
-      "nome": "Câmera 194",
-      "endereco": "Cais José Estelita Próx. à Lombada Eletrônica",
-      "latitude": -8.075036,
-      "longitude": -34.885401
-    },
-    {
-      "id": 46,
-      "nome": "Câmera 195",
-      "endereco": "Av. Agamenon Magalhães c/ Rua Joaquim Nabuco",
-      "latitude": -8.053153,
-      "longitude": -34.896709
-    },
-    {
-      "id": 47,
-      "nome": "Câmera 196",
-      "endereco": "Av. 17 de Agosto - BarChef",
-      "latitude": -8.032467,
-      "longitude": -34.923375
-    },
-    {
-      "id": 48,
-      "nome": "Câmera 197",
-      "endereco": "Cais do Apolo - Em frente à PCR",
-      "latitude": -8.054322,
-      "longitude": -34.871936
-    },
-    {
-      "id": 49,
-      "nome": "Câmera 200",
-      "endereco": "Via Mangue 1 - Ponte Paulo Guerra",
-      "latitude": -8.081941,
-      "longitude": -34.891417
-    },
-    {
-      "id": 50,
-      "nome": "Câmera 201",
-      "endereco": "Via Mangue 2 - Rio Mar",
-      "latitude": -8.087608,
-      "longitude": -34.891334
-    },
-    {
-      "id": 51,
-      "nome": "Câmera 202",
-      "endereco": "Via Mangue 3 - Aeroclube",
-      "latitude": -8.095032,
-      "longitude": -34.892825
-    },
-    {
-      "id": 52,
-      "nome": "Câmera 203",
-      "endereco": "Via Mangue 4 - Extra",
-      "latitude": -8.104072,
-      "longitude": -34.890333
-    },
-    {
-      "id": 53,
-      "nome": "Câmera 204",
-      "endereco": "Via Mangue 5 - Acesso Fernando S. Barbosa",
-      "latitude": -8.109981,
-      "longitude": -34.899675
-    },
-    {
-      "id": 54,
-      "nome": "Câmera 205",
-      "endereco": "Via Mangue 6 - Antônio Falcão",
-      "latitude": -8.112545,
-      "longitude": -34.901797
-    }
-  ]
+	"fields": [
+		{
+			"type": "int",
+			"id": "_id"
+		},
+		{
+			"type": "text",
+			"id": "nome"
+		},
+		{
+			"type": "text",
+			"id": "endereco"
+		},
+		{
+			"type": "numeric",
+			"id": "longitude"
+		},
+		{
+			"type": "numeric",
+			"id": "latitude"
+		}
+	],
+	"records": [
+		{
+			"id": 1,
+			"nome": "Câmera 150",
+			"endereco": "Largo do Cabanga - Ponte do Pina",
+			"latitude": -8.080844,
+			"longitude": -34.891049
+		},
+		{
+			"id": 2,
+			"nome": "Câmera 151",
+			"endereco": "Av. Herculano Bandeira - Semáforo 137",
+			"latitude": -8.088795,
+			"longitude": -34.885291
+		},
+		{
+			"id": 3,
+			"nome": "Câmera 152",
+			"endereco": "Av. Agamenon Magalhães - sentido Olinda",
+			"latitude": -8.042955,
+			"longitude": -34.884789
+		},
+		{
+			"id": 4,
+			"nome": "Câmera 153",
+			"endereco": "Av. Boa Viagem - 3º Jardim",
+			"latitude": -8.108781,
+			"longitude": -34.888551
+		},
+		{
+			"id": 5,
+			"nome": "Câmera 154",
+			"endereco": "Av Engenhriro Abdias de Carvalho - próx à lombada eletrônica",
+			"latitude": -8.063758,
+			"longitude": -34.934995
+		},
+		{
+			"id": 6,
+			"nome": "Câmera 155",
+			"endereco": "Av. Mascarenhas de Moraes - próx. ao Aeroporto Internacional do Guararapes",
+			"latitude": -8.13007,
+			"longitude": -34.915872
+		},
+		{
+			"id": 7,
+			"nome": "Câmera 156",
+			"endereco": "Av Recife - próx. ao Supermercado Hiper Bompreço",
+			"latitude": -8.099239,
+			"longitude": -34.928312
+		},
+		{
+			"id": 8,
+			"nome": "Câmera 157",
+			"endereco": "Av. Cruz Cabugá - próx. à rua Frei Cassimiro",
+			"latitude": -8.048875,
+			"longitude": -34.877896
+		},
+		{
+			"id": 9,
+			"nome": "Câmera 158",
+			"endereco": "Av. Boa Viagem - Polo Pina",
+			"latitude": -8.09196,
+			"longitude": -34.882156
+		},
+		{
+			"id": 10,
+			"nome": "Câmera 159",
+			"endereco": "Av. Visconde de Jequitinhonha - próx. à Rua Barão de Souza Leão",
+			"latitude": -8.130581,
+			"longitude": -34.90253
+		},
+		{
+			"id": 11,
+			"nome": "Câmera 160",
+			"endereco": "Av. Sul",
+			"latitude": -8.076826,
+			"longitude": -34.894728
+		},
+		{
+			"id": 12,
+			"nome": "Câmera 161",
+			"endereco": "Rua Madre de Deus x Rua Marquês de Olinda",
+			"latitude": -8.063617,
+			"longitude": -34.873652
+		},
+		{
+			"id": 13,
+			"nome": "Câmera 162",
+			"endereco": "Av. Domingos Ferreira em frente ao Extra",
+			"latitude": -8.105273,
+			"longitude": -34.889512
+		},
+		{
+			"id": 14,
+			"nome": "Câmera 163",
+			"endereco": "Av. Agamenon Magalhães x Praça do Derby - Sent. Olinda",
+			"latitude": -8.056638,
+			"longitude": -34.897664
+		},
+		{
+			"id": 15,
+			"nome": "Câmera 164",
+			"endereco": "Largo do Cabanga - Joana Bezerra",
+			"latitude": -8.079051,
+			"longitude": -34.891956
+		},
+		{
+			"id": 16,
+			"nome": "Câmera 165",
+			"endereco": "Av. Conde da Boa Vista x Rua da Soledade",
+			"latitude": -8.057498,
+			"longitude": -34.890191
+		},
+		{
+			"id": 17,
+			"nome": "Câmera 166",
+			"endereco": "Av. Conde da Boa Vista x Rua do Hospício",
+			"latitude": -8.0606,
+			"longitude": -34.884183
+		},
+		{
+			"id": 18,
+			"nome": "Câmera 167",
+			"endereco": "Av. Conde da Boa Vista x Rua Dom Bosco",
+			"latitude": -8.055915,
+			"longitude": -34.895499
+		},
+		{
+			"id": 19,
+			"nome": "Câmera 168",
+			"endereco": "Av. Boa Viagem em frente Parque Dona Lindu",
+			"latitude": -8.141328,
+			"longitude": -34.903406
+		},
+		{
+			"id": 20,
+			"nome": "Câmera 169",
+			"endereco": "Rua Arquiteto Luiz Nunes - Próx. ao sem. 399",
+			"latitude": -8.086,
+			"longitude": -34.909591
+		},
+		{
+			"id": 21,
+			"nome": "Câmera 170",
+			"endereco": "Av. Maurício de Nassau",
+			"latitude": -8.03891,
+			"longitude": -34.930443
+		},
+		{
+			"id": 22,
+			"nome": "Câmera 171",
+			"endereco": "Av. Afonso Olindense",
+			"latitude": -8.039688,
+			"longitude": -34.957694
+		},
+		{
+			"id": 23,
+			"nome": "Câmera 172",
+			"endereco": "Av. Conselheiro Aguiar - Conj. Pernambucano",
+			"latitude": -8.101464,
+			"longitude": -34.886929
+		},
+		{
+			"id": 24,
+			"nome": "Câmera 173",
+			"endereco": "Av. General San Martin",
+			"latitude": -8.06772,
+			"longitude": -34.927883
+		},
+		{
+			"id": 25,
+			"nome": "Câmera 174",
+			"endereco": "Av. Domingos Ferreira - Próximo ao Bom Preço",
+			"latitude": -8.130484,
+			"longitude": -34.902077
+		},
+		{
+			"id": 26,
+			"nome": "Câmera 175",
+			"endereco": "Av. Agamenon Magalhães - Sent. Boa Viagem",
+			"latitude": -8.04219,
+			"longitude": -34.884856
+		},
+		{
+			"id": 27,
+			"nome": "Câmera 176",
+			"endereco": "Av. Norte - Próximo à Av. João de Barros",
+			"latitude": -8.038517,
+			"longitude": -34.892231
+		},
+		{
+			"id": 28,
+			"nome": "Câmera 177",
+			"endereco": "Av. Conselheiro Aguiar - Próximo à rua Padre Carapuceiro",
+			"latitude": -8.119406,
+			"longitude": -34.8965
+		},
+		{
+			"id": 29,
+			"nome": "Câmera 178",
+			"endereco": "Viaduto Capitão Temudo",
+			"latitude": -8.071233,
+			"longitude": -34.895588
+		},
+		{
+			"id": 30,
+			"nome": "Câmera 179",
+			"endereco": "A. Dr. José Rufino - em frente à Igreja",
+			"latitude": -8.093111,
+			"longitude": -34.943079
+		},
+		{
+			"id": 31,
+			"nome": "Câmera 180",
+			"endereco": "Av. Recife - Entrada do Ibura",
+			"latitude": -8.1069,
+			"longitude": -34.927153
+		},
+		{
+			"id": 32,
+			"nome": "Câmera 181",
+			"endereco": "Av. Antônio de Góes - Próximo ao Posto BR",
+			"latitude": -8.085441,
+			"longitude": -34.886747
+		},
+		{
+			"id": 33,
+			"nome": "Câmera 182",
+			"endereco": "Av. Agamenon Magalhães - em frente ao Hospital Português",
+			"latitude": -8.063651,
+			"longitude": -34.897546
+		},
+		{
+			"id": 34,
+			"nome": "Câmera 183",
+			"endereco": "Av. Agamenon Magalhães - Próximo aos Bancos Itaú",
+			"latitude": -8.062616,
+			"longitude": -34.897217
+		},
+		{
+			"id": 35,
+			"nome": "Câmera 184",
+			"endereco": "Av. Agamenon Magalhães x Rua Dr. Leopoldo Lins",
+			"latitude": -8.048904,
+			"longitude": -34.892814
+		},
+		{
+			"id": 36,
+			"nome": "Câmera 185",
+			"endereco": "Av. Agamenon Magalhães x Rua Buenos Aires",
+			"latitude": -8.048511,
+			"longitude": -34.893029
+		},
+		{
+			"id": 37,
+			"nome": "Câmera 186",
+			"endereco": "Av. Conselheiro Rosa e Silva",
+			"latitude": -8.044426,
+			"longitude": -34.89711
+		},
+		{
+			"id": 38,
+			"nome": "Câmera 187",
+			"endereco": "Av. Agamenon Magalhães - Praça do Derby Sent. Boa Viagem",
+			"latitude": -8.056573,
+			"longitude": -34.898079
+		},
+		{
+			"id": 39,
+			"nome": "Câmera 188",
+			"endereco": "Av. Engenheiro José Estelita",
+			"latitude": -8.077012,
+			"longitude": -34.890408
+		},
+		{
+			"id": 40,
+			"nome": "Câmera 189",
+			"endereco": "Rua José Osório c/ Rua Real da Torre",
+			"latitude": -8.053504,
+			"longitude": -34.908757
+		},
+		{
+			"id": 41,
+			"nome": "Câmera 190",
+			"endereco": "R. Real da Torre c/ Av. Caxangá",
+			"latitude": -8.054072,
+			"longitude": -34.914245
+		},
+		{
+			"id": 42,
+			"nome": "Câmera 191",
+			"endereco": "Av. Antônio de Góes - Início",
+			"latitude": -8.087629,
+			"longitude": -34.884475
+		},
+		{
+			"id": 43,
+			"nome": "Câmera 192",
+			"endereco": "Cais de Sta. RIta - Viaduto das Cinco Pontas",
+			"latitude": -8.071536,
+			"longitude": -34.877373
+		},
+		{
+			"id": 44,
+			"nome": "Câmera 193",
+			"endereco": "Av. Rui Barbosa",
+			"latitude": -8.041468,
+			"longitude": -34.903291
+		},
+		{
+			"id": 45,
+			"nome": "Câmera 194",
+			"endereco": "Cais José Estelita Próx. à Lombada Eletrônica",
+			"latitude": -8.075036,
+			"longitude": -34.885401
+		},
+		{
+			"id": 46,
+			"nome": "Câmera 195",
+			"endereco": "Av. Agamenon Magalhães c/ Rua Joaquim Nabuco",
+			"latitude": -8.053153,
+			"longitude": -34.896709
+		},
+		{
+			"id": 47,
+			"nome": "Câmera 196",
+			"endereco": "Av. 17 de Agosto - BarChef",
+			"latitude": -8.032467,
+			"longitude": -34.923375
+		},
+		{
+			"id": 48,
+			"nome": "Câmera 197",
+			"endereco": "Cais do Apolo - Em frente à PCR",
+			"latitude": -8.054322,
+			"longitude": -34.871936
+		},
+		{
+			"id": 49,
+			"nome": "Câmera 200",
+			"endereco": "Via Mangue 1 - Ponte Paulo Guerra",
+			"latitude": -8.081941,
+			"longitude": -34.891417
+		},
+		{
+			"id": 50,
+			"nome": "Câmera 201",
+			"endereco": "Via Mangue 2 - Rio Mar",
+			"latitude": -8.087608,
+			"longitude": -34.891334
+		},
+		{
+			"id": 51,
+			"nome": "Câmera 202",
+			"endereco": "Via Mangue 3 - Aeroclube",
+			"latitude": -8.095032,
+			"longitude": -34.892825
+		},
+		{
+			"id": 52,
+			"nome": "Câmera 203",
+			"endereco": "Via Mangue 4 - Extra",
+			"latitude": -8.104072,
+			"longitude": -34.890333
+		},
+		{
+			"id": 53,
+			"nome": "Câmera 204",
+			"endereco": "Via Mangue 5 - Acesso Fernando S. Barbosa",
+			"latitude": -8.109981,
+			"longitude": -34.899675
+		},
+		{
+			"id": 54,
+			"nome": "Câmera 205",
+			"endereco": "Via Mangue 6 - Antônio Falcão",
+			"latitude": -8.112545,
+			"longitude": -34.901797
+		}
+	]
 }

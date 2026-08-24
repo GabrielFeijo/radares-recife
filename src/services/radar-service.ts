@@ -1,49 +1,96 @@
-import type { RadarData, CKANRadarRecord } from '@/types';
-import { getCachedData, setCachedData, CACHE_KEYS, CACHE_TTL } from '@/lib/redis';
-import { fetchFromCKAN } from '@/lib/ckan';
+import { CKAN_RESOURCE_IDS } from "@/constants/map";
+import localRadarsData from "@/data/radars.json";
+import { fetchFromCKAN } from "@/lib/ckan";
+import {
+	CACHE_KEYS,
+	CACHE_TTL,
+	getCachedData,
+	setCachedData,
+} from "@/lib/redis";
+import type { CKANRadarRecord, RadarData } from "@/types";
+import { sanitizeText } from "@/utils/text";
+
+function toFloat(value: number | string): number {
+	return typeof value === "number" ? value : Number.parseFloat(String(value));
+}
+
+function toInt(value: number | string): number {
+	return typeof value === "number" ? value : Number.parseInt(String(value), 10);
+}
+
+function mapRadarRecords(records: CKANRadarRecord[]): RadarData[] {
+	return records
+		.map((record) => {
+			const lat = toFloat(record.latitude);
+			const lng = toFloat(record.longitude);
+			const lanes = toInt(record.faixas_fiscalizadas);
+			const volume = toInt(record.vmd);
+
+			return {
+				id: record._id,
+				equipmentType: sanitizeText(record.tipo_equipamento || ""),
+				inmetroRegistration: sanitizeText(record.registro_inmetro || ""),
+				manufacturerSerialNumber: sanitizeText(
+					record.numero_serie_fabricante || "",
+				),
+				equipmentIdentification: sanitizeText(
+					String(record.identificacao_equipamento || ""),
+				),
+				installationLocation: sanitizeText(record.local_instalacao || ""),
+				monitoringDirection: sanitizeText(record.sentido_fiscalizacao || ""),
+				latitude: lat || 0,
+				longitude: lng || 0,
+				monitoredLanes: Number.isNaN(lanes) ? 0 : lanes,
+				monitoredSpeed: sanitizeText(record.velocidade_fiscalizada || ""),
+				vmd: Number.isNaN(volume) ? 0 : volume,
+				vmdPeriod: sanitizeText(record.periodo_vmd || ""),
+			};
+		})
+		.filter(
+			(radar) =>
+				radar.latitude !== 0 &&
+				radar.longitude !== 0 &&
+				!Number.isNaN(radar.latitude) &&
+				!Number.isNaN(radar.longitude),
+		);
+}
 
 async function fetchRadarsFromAPI(): Promise<RadarData[]> {
-    const records = await fetchFromCKAN<CKANRadarRecord>('36c2b47b-f439-4895-8b65-3f3dda36a4a7');
+	const records = await fetchFromCKAN<CKANRadarRecord>(
+		CKAN_RESOURCE_IDS.RADARS,
+	);
+	return mapRadarRecords(records);
+}
 
-    return records.map((record) => {
-        const lat = typeof record.latitude === 'number' ? record.latitude : parseFloat(String(record.latitude));
-        const lng = typeof record.longitude === 'number' ? record.longitude : parseFloat(String(record.longitude));
-        const lanes = typeof record.faixas_fiscalizadas === 'number' ? record.faixas_fiscalizadas : parseInt(String(record.faixas_fiscalizadas), 10);
-        const volume = typeof record.vmd === 'number' ? record.vmd : parseInt(String(record.vmd), 10);
-        
-        return {
-            id: record._id,
-            equipmentType: record.tipo_equipamento || '',
-            inmetroRegistration: record.registro_inmetro || '',
-            manufacturerSerialNumber: record.numero_serie_fabricante || '',
-            equipmentIdentification: String(record.identificacao_equipamento || ''),
-            installationLocation: record.local_instalacao || '',
-            monitoringDirection: record.sentido_fiscalizacao || '',
-            latitude: lat || 0,
-            longitude: lng || 0,
-            monitoredLanes: isNaN(lanes) ? 0 : lanes,
-            monitoredSpeed: record.velocidade_fiscalizada || '',
-            vmd: isNaN(volume) ? 0 : volume,
-            vmdPeriod: record.periodo_vmd || ''
-        };
-    }).filter(radar => radar.latitude !== 0 && radar.longitude !== 0 && !isNaN(radar.latitude) && !isNaN(radar.longitude));
+function getLocalRadarsFallback(): RadarData[] {
+	try {
+		const rawRecords = (
+			localRadarsData as unknown as { result?: { records?: CKANRadarRecord[] } }
+		)?.result?.records;
+
+		return rawRecords && Array.isArray(rawRecords)
+			? mapRadarRecords(rawRecords)
+			: [];
+	} catch {
+		return [];
+	}
 }
 
 export async function getRadars(): Promise<RadarData[]> {
-    try {
-        const cachedRadars = await getCachedData<RadarData[]>(CACHE_KEYS.RADARS);
+	try {
+		const cached = await getCachedData<RadarData[]>(CACHE_KEYS.RADARS);
+		if (cached && cached.length > 0) return cached;
 
-        if (cachedRadars) {
-            return cachedRadars;
-        }
+		try {
+			const radars = await fetchRadarsFromAPI();
+			if (radars.length > 0) {
+				await setCachedData(CACHE_KEYS.RADARS, radars, CACHE_TTL);
+				return radars;
+			}
+		} catch {}
 
-        const radars = await fetchRadarsFromAPI();
-
-        await setCachedData(CACHE_KEYS.RADARS, radars, CACHE_TTL);
-
-        return radars;
-    } catch (error) {
-        console.error('Erro ao buscar dados de radares no service:', error);
-        return [];
-    }
+		return getLocalRadarsFallback();
+	} catch {
+		return getLocalRadarsFallback();
+	}
 }
