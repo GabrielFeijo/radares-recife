@@ -33,7 +33,7 @@ export function MapSkeleton() {
 				</div>
 			</div>
 
-			<div className="absolute bottom-[max(1rem,env(safe-area-inset-bottom))] left-3 z-10">
+			<div className="hidden sm:block absolute bottom-[max(1rem,env(safe-area-inset-bottom))] left-3 z-10">
 				<div className="h-20 w-56 bg-white rounded-2xl shadow-md border border-slate-200 flex flex-col justify-center px-4 gap-2">
 					<div className="flex items-center gap-3">
 						<div className="h-4 w-24 bg-slate-200 rounded-md" />

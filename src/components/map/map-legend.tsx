@@ -14,7 +14,7 @@ export function MapLegend({
 	selectedSpeed,
 }: MapLegendProps) {
 	return (
-		<div className="absolute bottom-[max(1rem,env(safe-area-inset-bottom))] left-3 z-[999] bg-white px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-2xl shadow-lg border border-slate-200 text-xs max-w-[calc(100vw-5rem)] sm:max-w-none">
+		<div className="hidden sm:block absolute bottom-[max(1rem,env(safe-area-inset-bottom))] left-3 z-[999] bg-white px-4 py-3 rounded-2xl shadow-lg border border-slate-200 text-xs">
 			<div className="flex items-center gap-3.5 font-semibold text-slate-700">
 				<div className="flex items-center gap-2">
 					<div className="w-5 h-5 rounded-lg bg-amber-500/15 text-amber-600 flex items-center justify-center shrink-0 border border-amber-500/30">
