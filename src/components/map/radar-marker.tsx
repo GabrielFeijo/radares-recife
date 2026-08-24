@@ -3,11 +3,6 @@
 import type React from "react";
 import { useMemo } from "react";
 import { FiCompass } from "react-icons/fi";
-import {
-	PiGaugeBold,
-	PiRoadHorizonBold,
-	PiTrafficSignalFill,
-} from "react-icons/pi";
 import { Marker, Popup } from "react-leaflet";
 import type { RadarData } from "@/types";
 import { getRadarDivIcon } from "./map-icons";
@@ -83,25 +78,31 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 			>
 				<div className="w-[305px] font-sans text-slate-800 bg-white">
 					<PopupHeader
-						category={radar.equipmentType || "Radar de Trânsito"}
+						category={radar.equipmentType || "Fiscalização Eletrônica"}
 						variant="radar"
-						icon={<PiTrafficSignalFill size={13} className="text-amber-600" />}
-						badge="CTTU Recife"
+						badge={
+							radar.equipmentIdentification
+								? `#${radar.equipmentIdentification}`
+								: "CTTU"
+						}
 					/>
 
 					<div className="p-3.5 space-y-3">
 						<div className="flex items-start justify-between gap-3">
 							<div className="flex-1 min-w-0">
-								<span className="text-[10px] uppercase font-semibold text-slate-400 tracking-wider block mb-0.5">
-									Local de Fiscalização
-								</span>
-								<h3 className="font-bold text-[13px] text-slate-900 leading-snug break-words">
+								<h3 className="font-bold text-[13.5px] text-slate-900 leading-snug break-words">
 									{radar.installationLocation}
 								</h3>
+								<div className="flex items-center gap-1.5 text-[11px] text-slate-500 font-medium mt-1">
+									<FiCompass size={11} className="text-slate-400 shrink-0" />
+									<span className="truncate">
+										{radar.monitoringDirection || "Ambos os sentidos"}
+									</span>
+								</div>
 							</div>
 
 							<div
-								className="shrink-0 w-11 h-11 rounded-full border-[3px] border-red-600 bg-white flex flex-col items-center justify-center shadow-xs select-none"
+								className="shrink-0 w-11 h-11 rounded-full border-[2.5px] border-red-600 bg-white flex flex-col items-center justify-center shadow-xs select-none"
 								title={`Velocidade máxima permitida: ${radar.monitoredSpeed}`}
 							>
 								<span
@@ -117,79 +118,52 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 							</div>
 						</div>
 
-						<div className="grid grid-cols-2 gap-2 text-xs">
-							<div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
-								<div className="flex items-center gap-1.5 text-[10px] text-slate-500 font-semibold uppercase tracking-wider">
-									<FiCompass size={11} className="text-slate-400" />
-									<span>Sentido</span>
-								</div>
-								<p
-									className="font-semibold text-slate-800 text-xs truncate mt-1"
-									title={radar.monitoringDirection}
-								>
-									{radar.monitoringDirection || "Ambos os sentidos"}
-								</p>
-							</div>
-
-							<div className="p-2.5 rounded-xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
-								<div className="flex items-center gap-1.5 text-[10px] text-slate-500 font-semibold uppercase tracking-wider">
-									<PiRoadHorizonBold size={11} className="text-slate-400" />
-									<span>Faixas</span>
-								</div>
-								<p className="font-semibold text-slate-800 text-xs truncate mt-1">
+						<div className="grid grid-cols-2 gap-2 p-2.5 rounded-xl bg-slate-50/70 border border-slate-100 text-xs">
+							<div>
+								<span className="text-[9.5px] font-bold uppercase tracking-wider text-slate-400 block">
+									Faixas
+								</span>
+								<p className="font-semibold text-slate-800 text-[12px] mt-0.5 font-mono">
 									{radar.monitoredLanes}{" "}
-									{radar.monitoredLanes === 1 ? "faixa ativa" : "faixas ativas"}
+									{radar.monitoredLanes === 1 ? "ativa" : "ativas"}
 								</p>
 							</div>
 
-							<div className="col-span-2 p-2.5 rounded-xl bg-slate-50 border border-slate-100">
-								<div className="flex items-center justify-between text-[10px] text-slate-500 font-semibold uppercase tracking-wider">
-									<div className="flex items-center gap-1.5">
-										<PiGaugeBold size={11} className="text-slate-400" />
-										<span>Fluxo Médio Diário (VMD)</span>
-									</div>
+							<div>
+								<div className="flex items-center justify-between">
+									<span className="text-[9.5px] font-bold uppercase tracking-wider text-slate-400 block">
+										Fluxo Diário
+									</span>
 									{radar.vmdPeriod && (
-										<span className="text-[9px] px-1.5 py-0.2 bg-white rounded text-slate-600 font-mono font-medium border border-slate-200">
+										<span className="text-[8.5px] font-mono text-slate-400">
 											{radar.vmdPeriod}
 										</span>
 									)}
 								</div>
-								<p className="font-semibold text-slate-800 text-xs mt-1">
+								<p className="font-semibold text-slate-800 text-[12px] mt-0.5 font-mono">
 									{radar.vmd > 0 ? (
-										<span className="flex items-baseline gap-1.5">
-											<strong className="text-sm font-bold text-slate-900 font-mono">
-												{radar.vmd.toLocaleString("pt-BR")}
-											</strong>
-											<span className="text-slate-500 text-[11px] font-normal">
-												veículos por dia
+										<span>
+											{radar.vmd.toLocaleString("pt-BR")}{" "}
+											<span className="text-[10px] text-slate-400 font-sans font-normal">
+												veíc/dia
 											</span>
 										</span>
 									) : (
-										<span className="text-slate-400 font-normal text-[11px]">
-											Dado de fluxo não informado
+										<span className="text-slate-400 font-normal text-[11px] font-sans">
+											Não informado
 										</span>
 									)}
 								</p>
 							</div>
 						</div>
 
-						{(radar.equipmentIdentification || radar.inmetroRegistration) && (
-							<div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-2.5 py-1.5 rounded-lg bg-slate-50/70 border border-slate-100 text-[10px] text-slate-500">
-								{radar.equipmentIdentification && (
-									<span>
-										<span className="text-slate-400 font-medium">ID:</span>{" "}
-										<strong className="font-mono text-slate-700">
-											{radar.equipmentIdentification}
-										</strong>
-									</span>
-								)}
+						{(radar.inmetroRegistration || radar.manufacturerSerialNumber) && (
+							<div className="flex items-center justify-between text-[10px] font-mono text-slate-400 px-1">
 								{radar.inmetroRegistration && (
-									<span className="truncate">
-										<span className="text-slate-400 font-medium">INMETRO:</span>{" "}
-										<strong className="text-slate-700">
-											{radar.inmetroRegistration}
-										</strong>
-									</span>
+									<span>INMETRO: {radar.inmetroRegistration}</span>
+								)}
+								{radar.manufacturerSerialNumber && (
+									<span>SÉRIE: {radar.manufacturerSerialNumber}</span>
 								)}
 							</div>
 						)}

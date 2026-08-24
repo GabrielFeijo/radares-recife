@@ -1,6 +1,5 @@
 "use client";
 
-import { FiMapPin } from "react-icons/fi";
 import { Marker, Popup } from "react-leaflet";
 import { searchIcon } from "./map-icons";
 import { PopupActions } from "./popup-actions";
@@ -46,20 +45,16 @@ export function SearchMarker({ location }: SearchMarkerProps) {
 					<PopupHeader
 						category="Local Pesquisado"
 						variant="search"
-						icon={<FiMapPin size={12} className="text-indigo-600" />}
 						badge="Destino"
 					/>
 
 					<div className="p-3.5 space-y-3">
 						<div>
-							<span className="text-[10px] uppercase font-semibold text-slate-400 tracking-wider block mb-0.5">
-								Endereço Selecionado
-							</span>
-							<h3 className="font-bold text-[13px] text-slate-900 leading-snug break-words">
+							<h3 className="font-bold text-[13.5px] text-slate-900 leading-snug break-words">
 								{title}
 							</h3>
 							{subtitle && (
-								<p className="text-[11px] text-slate-500 font-medium leading-tight mt-0.5 break-words">
+								<p className="text-[11px] text-slate-500 font-medium leading-snug mt-1 break-words">
 									{subtitle}
 								</p>
 							)}

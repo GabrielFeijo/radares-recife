@@ -1,6 +1,5 @@
 "use client";
 
-import { FiNavigation } from "react-icons/fi";
 import { Marker, Popup } from "react-leaflet";
 import type { UserLocation } from "@/hooks/use-geolocation";
 import { userLocationIcon } from "./map-icons";
@@ -24,19 +23,15 @@ export function UserLocationMarker({ location }: UserLocationMarkerProps) {
 					<PopupHeader
 						category="Sua Localização"
 						variant="location"
-						icon={<FiNavigation size={12} className="text-emerald-600" />}
-						badge="GPS Ativo"
+						badge="Ao Vivo"
 					/>
 
 					<div className="p-3.5 space-y-3">
 						<div>
-							<span className="text-[10px] uppercase font-semibold text-slate-400 tracking-wider block mb-0.5">
-								Posição do Dispositivo
-							</span>
-							<h3 className="font-bold text-[13px] text-slate-900 leading-snug">
+							<h3 className="font-bold text-[13.5px] text-slate-900 leading-snug">
 								Localização Atual
 							</h3>
-							<p className="text-[11px] text-slate-500 font-medium leading-tight mt-0.5">
+							<p className="text-[11px] text-slate-500 font-medium leading-snug mt-0.5">
 								Geolocalização obtida via sensor do navegador
 							</p>
 						</div>
