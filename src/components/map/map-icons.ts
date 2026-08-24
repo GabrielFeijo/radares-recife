@@ -1,39 +1,94 @@
 import L from "leaflet";
 
-export const radarIcon = new L.Icon({
-	iconUrl:
-		"data:image/svg+xml;base64," +
-		btoa(`
-		<svg xmlns="http://www.w3.org/2000/svg" width="40" height="48" viewBox="0 0 40 48">
-			<defs>
-				<filter id="pinShadow" x="-30%" y="-20%" width="160%" height="150%">
-					<feDropShadow dx="0" dy="4" stdDeviation="3.5" flood-color="#0f172a" flood-opacity="0.3"/>
-				</filter>
-				<linearGradient id="radarPinGrad" x1="0" y1="0" x2="0" y2="1">
-					<stop offset="0%" stop-color="#fb923c"/>
-					<stop offset="100%" stop-color="#ea580c"/>
-				</linearGradient>
-			</defs>
-			<ellipse cx="20" cy="45" rx="8" ry="3" fill="#0f172a" fill-opacity="0.25"/>
-			<path fill="url(#radarPinGrad)" stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round" filter="url(#pinShadow)"
-				d="M20 2 C10.059 2 2 10.059 2 20 C2 31.5 20 44 20 44 S38 31.5 38 20 C38 10.059 29.941 2 20 2 Z"/>
-			<circle cx="20" cy="18.5" r="11" fill="#ffffff"/>
-			<g>
-				<path d="M 12.5 22.5 A 8.5 8.5 0 0 1 20 11.5" fill="none" stroke="#0f172a" stroke-width="2.4" stroke-linecap="round"/>
-				<path d="M 20 11.5 A 8.5 8.5 0 0 1 27.5 22.5" fill="none" stroke="#ea580c" stroke-width="2.4" stroke-linecap="round"/>
-				<line x1="14.5" y1="17" x2="16" y2="18" stroke="#0f172a" stroke-width="1.2" stroke-linecap="round"/>
-				<line x1="20" y1="12" x2="20" y2="14" stroke="#ea580c" stroke-width="1.4" stroke-linecap="round"/>
-				<line x1="25.5" y1="17" x2="24" y2="18" stroke="#ea580c" stroke-width="1.2" stroke-linecap="round"/>
-				<circle cx="20" cy="21" r="2.8" fill="#0f172a"/>
-				<line x1="20" y1="21" x2="25" y2="14.5" stroke="#ea580c" stroke-width="2.2" stroke-linecap="round"/>
-				<circle cx="20" cy="21" r="1.1" fill="#ffffff"/>
-			</g>
-		</svg>
-	`),
-	iconSize: [34, 42],
-	iconAnchor: [17, 42],
-	popupAnchor: [0, -42],
-});
+const RADAR_PIN_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="34" height="42" viewBox="0 0 40 48">
+	<defs>
+		<filter id="pinShadow" x="-30%" y="-20%" width="160%" height="150%">
+			<feDropShadow dx="0" dy="4" stdDeviation="3.5" flood-color="#0f172a" flood-opacity="0.3"/>
+		</filter>
+		<linearGradient id="radarPinGrad" x1="0" y1="0" x2="0" y2="1">
+			<stop offset="0%" stop-color="#fb923c"/>
+			<stop offset="100%" stop-color="#ea580c"/>
+		</linearGradient>
+	</defs>
+	<ellipse cx="20" cy="45" rx="8" ry="3" fill="#0f172a" fill-opacity="0.25"/>
+	<path fill="url(#radarPinGrad)" stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round" filter="url(#pinShadow)"
+		d="M20 2 C10.059 2 2 10.059 2 20 C2 31.5 20 44 20 44 S38 31.5 38 20 C38 10.059 29.941 2 20 2 Z"/>
+	<circle cx="20" cy="18.5" r="11" fill="#ffffff"/>
+	<g>
+		<path d="M 12.5 22.5 A 8.5 8.5 0 0 1 20 11.5" fill="none" stroke="#0f172a" stroke-width="2.4" stroke-linecap="round"/>
+		<path d="M 20 11.5 A 8.5 8.5 0 0 1 27.5 22.5" fill="none" stroke="#ea580c" stroke-width="2.4" stroke-linecap="round"/>
+		<line x1="14.5" y1="17" x2="16" y2="18" stroke="#0f172a" stroke-width="1.2" stroke-linecap="round"/>
+		<line x1="20" y1="12" x2="20" y2="14" stroke="#ea580c" stroke-width="1.4" stroke-linecap="round"/>
+		<line x1="25.5" y1="17" x2="24" y2="18" stroke="#ea580c" stroke-width="1.2" stroke-linecap="round"/>
+		<circle cx="20" cy="21" r="2.8" fill="#0f172a"/>
+		<line x1="20" y1="21" x2="25" y2="14.5" stroke="#ea580c" stroke-width="2.2" stroke-linecap="round"/>
+		<circle cx="20" cy="21" r="1.1" fill="#ffffff"/>
+	</g>
+</svg>`;
+
+export function parseSpeedParts(speed?: string): {
+	value: string;
+	unit: string;
+} {
+	if (!speed?.trim()) {
+		return { value: "Radar", unit: "" };
+	}
+
+	const raw = speed.trim();
+	const multiMatch = raw.match(/(\d+)\s*(?:km\/h|kmh)?\s*e\s*(\d+)/i);
+	if (multiMatch) {
+		return {
+			value: `${multiMatch[1]} / ${multiMatch[2]}`,
+			unit: "km/h",
+		};
+	}
+
+	const clean = raw
+		.replace(/km\s*\/\s*h/gi, "")
+		.replace(/kmh/gi, "")
+		.trim();
+
+	return {
+		value: clean || raw,
+		unit: "km/h",
+	};
+}
+
+const radarIconCache = new Map<string, L.DivIcon>();
+
+export function getRadarDivIcon(
+	speed: string | undefined,
+	showLabel: boolean,
+): L.DivIcon {
+	const cleanSpeed = speed?.trim() || "";
+	const cacheKey = `${cleanSpeed}_${showLabel ? "1" : "0"}`;
+
+	const existing = radarIconCache.get(cacheKey);
+	if (existing) return existing;
+
+	const speedParts = parseSpeedParts(speed);
+	const icon = L.divIcon({
+		className: "radar-custom-marker-wrapper",
+		html: `<div class="radar-custom-marker ${showLabel ? "has-label" : ""}">
+			<div class="radar-marker-badge">
+				<span class="radar-speed-badge">
+					<span class="radar-speed-dot"></span>
+					<span class="radar-speed-number">${speedParts.value}</span>
+					${speedParts.unit ? `<span class="radar-speed-unit">${speedParts.unit}</span>` : ""}
+				</span>
+			</div>
+			<div class="radar-marker-pin">
+				${RADAR_PIN_SVG}
+			</div>
+		</div>`,
+		iconSize: [70, 68],
+		iconAnchor: [35, 68],
+		popupAnchor: showLabel ? [0, -68] : [0, -42],
+	});
+
+	radarIconCache.set(cacheKey, icon);
+	return icon;
+}
 
 export const cameraIcon = new L.Icon({
 	iconUrl:
