@@ -1,6 +1,6 @@
 export function MapSkeleton() {
 	return (
-		<div className="relative w-full h-full min-h-screen bg-slate-100 overflow-hidden select-none animate-pulse">
+		<div className="relative w-full h-full h-[100dvh] min-h-[100dvh] bg-slate-100 overflow-hidden select-none animate-pulse">
 			<div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-60" />
 
 			<div className="absolute top-[28%] left-[24%] w-5 h-5 rounded-full bg-amber-500/30 border border-amber-500/50 shadow-xs" />
@@ -11,14 +11,14 @@ export function MapSkeleton() {
 			<div className="absolute top-[20%] left-[45%] w-5 h-5 rounded-full bg-amber-500/30 border border-amber-500/50 shadow-xs" />
 			<div className="absolute top-[72%] left-[48%] w-5 h-5 rounded-full bg-sky-500/30 border border-sky-500/50 shadow-xs" />
 
-			<div className="absolute top-3 left-3 right-3 sm:right-auto z-10 sm:w-80 md:w-96">
+			<div className="absolute top-[max(0.75rem,env(safe-area-inset-top))] left-3 right-3 sm:right-auto z-10 sm:w-80 md:w-96">
 				<div className="w-full h-11 sm:h-12 bg-white rounded-2xl shadow-lg border border-slate-200 flex items-center justify-between px-4">
 					<div className="h-4 w-40 bg-slate-200 rounded-md" />
 					<div className="w-5 h-5 bg-slate-200 rounded-full" />
 				</div>
 			</div>
 
-			<div className="absolute top-16 sm:top-3 right-3 z-10 flex flex-wrap items-center gap-2">
+			<div className="absolute top-[max(4.25rem,calc(env(safe-area-inset-top)+3.5rem))] sm:top-[max(0.75rem,env(safe-area-inset-top))] right-3 z-10 flex flex-wrap items-center gap-2">
 				<div className="w-10 h-10 sm:w-11 sm:h-11 bg-white rounded-2xl shadow-md border border-slate-200 flex items-center justify-center">
 					<div className="w-5 h-5 bg-slate-200 rounded-md" />
 				</div>
@@ -33,7 +33,7 @@ export function MapSkeleton() {
 				</div>
 			</div>
 
-			<div className="absolute bottom-4 left-3 z-10">
+			<div className="hidden sm:block absolute bottom-[max(1rem,env(safe-area-inset-bottom))] left-3 z-10">
 				<div className="h-20 w-56 bg-white rounded-2xl shadow-md border border-slate-200 flex flex-col justify-center px-4 gap-2">
 					<div className="flex items-center gap-3">
 						<div className="h-4 w-24 bg-slate-200 rounded-md" />

@@ -66,8 +66,8 @@ function MapContent() {
 	}
 
 	return (
-		<div className="relative w-full h-full overflow-hidden bg-slate-100">
-			<div className="absolute top-3 left-3 right-3 sm:right-auto z-[999] sm:w-80 md:w-96">
+		<div className="relative w-full h-full h-[100dvh] overflow-hidden bg-slate-100">
+			<div className="absolute top-[max(0.75rem,env(safe-area-inset-top))] left-3 right-3 sm:right-auto z-[999] sm:w-80 md:w-96">
 				<AddressSearch onLocationSelect={handleLocationSelect} />
 			</div>
 
@@ -95,7 +95,7 @@ function MapContent() {
 			<MapContainer
 				center={mapCenter}
 				zoom={mapZoom}
-				style={{ height: "100vh", width: "100%", backgroundColor: "#f8fafc" }}
+				style={{ height: "100%", width: "100%", backgroundColor: "#f8fafc" }}
 				scrollWheelZoom={true}
 				attributionControl={false}
 			>

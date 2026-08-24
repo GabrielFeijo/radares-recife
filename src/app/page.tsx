@@ -8,7 +8,7 @@ const MapComponent = dynamic(() => import("@/components/map/map-component"), {
 
 export default function Home() {
 	return (
-		<main className="w-screen h-screen overflow-hidden">
+		<main className="w-full h-full h-[100dvh] min-h-[100dvh] overflow-hidden">
 			<MapComponent />
 		</main>
 	);
