@@ -1,6 +1,5 @@
 "use client";
 
-import type L from "leaflet";
 import type React from "react";
 import { useMemo } from "react";
 import { FiCompass } from "react-icons/fi";
@@ -9,9 +8,9 @@ import {
 	PiRoadHorizonBold,
 	PiTrafficSignalFill,
 } from "react-icons/pi";
-import { Marker, Popup, Tooltip } from "react-leaflet";
+import { Marker, Popup } from "react-leaflet";
 import type { RadarData } from "@/types";
-import { radarIcon } from "./map-icons";
+import { getRadarDivIcon } from "./map-icons";
 import { PopupActions } from "./popup-actions";
 import { PopupGpsRow } from "./popup-gps-row";
 import { PopupHeader } from "./popup-header";
@@ -59,76 +58,23 @@ function getSpeedBadgeInfo(speed?: string): SpeedBadgeInfo {
 	};
 }
 
-function parseSpeedParts(speed?: string): { value: string; unit: string } {
-	if (!speed?.trim()) {
-		return { value: "Radar", unit: "" };
-	}
-
-	const raw = speed.trim();
-	const multiMatch = raw.match(/(\d+)\s*(?:km\/h|kmh)?\s*e\s*(\d+)/i);
-	if (multiMatch) {
-		return {
-			value: `${multiMatch[1]} / ${multiMatch[2]}`,
-			unit: "km/h",
-		};
-	}
-
-	const clean = raw
-		.replace(/km\s*\/\s*h/gi, "")
-		.replace(/kmh/gi, "")
-		.trim();
-
-	return {
-		value: clean || raw,
-		unit: "km/h",
-	};
-}
-
 export const RadarMarker: React.FC<RadarMarkerProps> = ({
 	radar,
 	showLabel = false,
 }) => {
 	const speedInfo = getSpeedBadgeInfo(radar.monitoredSpeed);
-	const speedParts = parseSpeedParts(radar.monitoredSpeed);
 
-	const eventHandlers = useMemo(
-		() => ({
-			popupclose(e: L.LeafletEvent) {
-				if (showLabel) {
-					const marker = e.target as L.Marker;
-					if (marker?.getTooltip()) {
-						marker.openTooltip();
-					}
-				}
-			},
-		}),
-		[showLabel],
+	const icon = useMemo(
+		() => getRadarDivIcon(radar.monitoredSpeed, showLabel),
+		[radar.monitoredSpeed, showLabel],
 	);
 
 	return (
 		<Marker
 			position={[radar.latitude, radar.longitude]}
 			title={`${radar.installationLocation} (${radar.monitoredSpeed})`}
-			icon={radarIcon}
-			eventHandlers={eventHandlers}
+			icon={icon}
 		>
-			<Tooltip
-				key={showLabel ? "permanent" : "hover"}
-				offset={[0, -42]}
-				opacity={1}
-				permanent={showLabel}
-				direction="top"
-				className="radar-speed-tooltip"
-			>
-				<span className="radar-speed-badge">
-					<span className="radar-speed-dot" />
-					<span className="radar-speed-number">{speedParts.value}</span>
-					{speedParts.unit && (
-						<span className="radar-speed-unit">{speedParts.unit}</span>
-					)}
-				</span>
-			</Tooltip>
-
 			<Popup
 				closeButton={false}
 				autoClose
