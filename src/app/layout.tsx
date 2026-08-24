@@ -1,13 +1,22 @@
-import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { ReactQueryClientProvider } from "@/providers/query-client-provider";
 import "./globals.css";
 
-const poppins = Poppins({
+const plusJakartaSans = Plus_Jakarta_Sans({
 	subsets: ["latin"],
-	weight: ["400", "500", "600", "700"],
+	weight: ["400", "500", "600", "700", "800"],
 	display: "swap",
+	variable: "--font-sans",
 });
+
+export const viewport: Viewport = {
+	width: "device-width",
+	initialScale: 1,
+	maximumScale: 1,
+	viewportFit: "cover",
+	themeColor: "#f8fafc",
+};
 
 export const metadata: Metadata = {
 	title: "Radares e Câmeras do Recife | Mapa Interativo CTTU",
@@ -43,7 +52,9 @@ export default function RootLayout({
 					content="upgrade-insecure-requests"
 				/>
 			</head>
-			<body className={poppins.className}>
+			<body
+				className={`${plusJakartaSans.variable} ${plusJakartaSans.className} font-sans`}
+			>
 				<ReactQueryClientProvider>{children}</ReactQueryClientProvider>
 			</body>
 		</html>

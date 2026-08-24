@@ -3,18 +3,35 @@
 @tailwind utilities;
 
 :root {
-	--font-family: inherit;
+	--font-family:
+		var(--font-sans), "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
 }
 
+html,
 body {
-	font-family: inherit;
+	height: 100dvh;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	-webkit-overflow-scrolling: touch;
+	font-family: var(--font-family);
 	background-color: #f8fafc;
 	color: #0f172a;
-	overflow: hidden;
 }
 
 .leaflet-container {
+	height: 100%;
+	width: 100%;
 	background-color: #f8fafc;
+}
+
+.leaflet-bottom {
+	bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+
+.leaflet-top {
+	top: max(0.5rem, env(safe-area-inset-top));
 }
 
 .leaflet-popup {
