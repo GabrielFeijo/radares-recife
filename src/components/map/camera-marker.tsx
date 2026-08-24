@@ -26,7 +26,7 @@ export const CameraMarker: React.FC<CameraMarkerProps> = ({ camera }) => {
 				autoPanPaddingTopLeft={[20, 90]}
 				autoPanPaddingBottomRight={[20, 60]}
 			>
-				<div className="w-[300px] font-sans text-slate-800 bg-white">
+				<div className="w-[305px] font-sans text-slate-800 bg-white">
 					<PopupHeader
 						category="Câmera de Monitoramento"
 						variant="camera"

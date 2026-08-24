@@ -19,7 +19,7 @@ export function UserLocationMarker({ location }: UserLocationMarkerProps) {
 				autoPanPaddingTopLeft={[20, 90]}
 				autoPanPaddingBottomRight={[20, 60]}
 			>
-				<div className="w-[290px] font-sans text-slate-800 bg-white">
+				<div className="w-[305px] font-sans text-slate-800 bg-white">
 					<PopupHeader
 						category="Sua Localização"
 						variant="location"
