@@ -82,7 +82,6 @@ function MapContent() {
 					radars={radars}
 					availableSpeeds={controls.availableSpeeds}
 					selectedSpeed={controls.selectedSpeed}
-					filteredCount={controls.filteredRadars.length}
 					onSelectSpeed={controls.selectSpeed}
 				/>
 			)}
