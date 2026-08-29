@@ -36,7 +36,6 @@ export function parseSpeedParts(speed?: string): SpeedParts {
 export function getSpeedBadgeInfo(speed?: string): SpeedBadgeInfo {
 	const parts = parseSpeedParts(speed);
 
-	// No speed → fallback "Radar" has no unit; use smaller text size
 	if (!parts.unit) {
 		return { ...parts, textSize: "text-xs" };
 	}

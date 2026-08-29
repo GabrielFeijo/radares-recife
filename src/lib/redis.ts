@@ -4,12 +4,11 @@ let redis: RedisClientType | null = null;
 let connectionFailedAt: number | null = null;
 let connectionPromise: Promise<RedisClientType | null> | null = null;
 
-const CONNECTION_RETRY_AFTER_MS = 5 * 60 * 1000; // retry after 5 min
+const CONNECTION_RETRY_AFTER_MS = 5 * 60 * 1000;
 
 function isConnectionFailed(): boolean {
 	if (connectionFailedAt === null) return false;
 	if (Date.now() - connectionFailedAt > CONNECTION_RETRY_AFTER_MS) {
-		// Reset so we can try again after a temporary outage
 		connectionFailedAt = null;
 		return false;
 	}
