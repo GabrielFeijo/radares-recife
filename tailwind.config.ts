@@ -8,6 +8,12 @@ const config: Config = {
 	],
 	theme: {
 		extend: {
+			zIndex: {
+				'map-ui': '700',
+				'map-search': '710',
+				'map-dropdown': '720',
+				'map-toast': '730',
+			},
 			colors: {
 				obsidian: {
 					950: '#06090e',
