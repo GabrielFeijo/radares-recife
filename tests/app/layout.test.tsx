@@ -25,6 +25,15 @@ describe("app/layout", () => {
 	});
 
 	it("should render RootLayout with HTML, children and QueryProvider", () => {
+		const consoleSpy = vi
+			.spyOn(console, "error")
+			.mockImplementation((msg, ...args) => {
+				if (typeof msg === "string" && msg.includes("validateDOMNesting")) {
+					return;
+				}
+				console.error(msg, ...args);
+			});
+
 		render(
 			<RootLayout>
 				<div data-testid="app-content">App Body</div>
@@ -34,5 +43,7 @@ describe("app/layout", () => {
 		expect(screen.getByTestId("query-provider")).toBeInTheDocument();
 		expect(screen.getByTestId("app-content")).toBeInTheDocument();
 		expect(screen.getByText("App Body")).toBeInTheDocument();
+
+		consoleSpy.mockRestore();
 	});
 });
