@@ -1,8 +1,20 @@
 import { createClient, type RedisClientType } from "redis";
 
 let redis: RedisClientType | null = null;
-let connectionFailed = false;
+let connectionFailedAt: number | null = null;
 let connectionPromise: Promise<RedisClientType | null> | null = null;
+
+const CONNECTION_RETRY_AFTER_MS = 5 * 60 * 1000; // retry after 5 min
+
+function isConnectionFailed(): boolean {
+	if (connectionFailedAt === null) return false;
+	if (Date.now() - connectionFailedAt > CONNECTION_RETRY_AFTER_MS) {
+		// Reset so we can try again after a temporary outage
+		connectionFailedAt = null;
+		return false;
+	}
+	return true;
+}
 
 async function connect(redisUrl: string): Promise<RedisClientType | null> {
 	try {
@@ -12,7 +24,7 @@ async function connect(redisUrl: string): Promise<RedisClientType | null> {
 				connectTimeout: 2000,
 				reconnectStrategy: (retries) => {
 					if (retries > 2) {
-						connectionFailed = true;
+						connectionFailedAt = Date.now();
 						return false;
 					}
 					return 1000;
@@ -23,11 +35,11 @@ async function connect(redisUrl: string): Promise<RedisClientType | null> {
 		client.on("error", () => {});
 
 		await client.connect();
-		connectionFailed = false;
+		connectionFailedAt = null;
 		redis = client as RedisClientType;
 		return redis;
 	} catch {
-		connectionFailed = true;
+		connectionFailedAt = Date.now();
 		redis = null;
 		return null;
 	} finally {
@@ -37,7 +49,7 @@ async function connect(redisUrl: string): Promise<RedisClientType | null> {
 
 export async function getRedisClient(): Promise<RedisClientType | null> {
 	const redisUrl = process.env.REDIS_URL;
-	if (!redisUrl || connectionFailed) {
+	if (!redisUrl || isConnectionFailed()) {
 		return null;
 	}
 
@@ -73,7 +85,9 @@ export async function setCachedData<T>(
 		const client = await getRedisClient();
 		if (!client?.isOpen) return;
 		await client.setEx(key, ttlInSeconds, JSON.stringify(data));
-	} catch {}
+	} catch (err) {
+		console.warn("[redis] setCachedData failed for key:", key, err);
+	}
 }
 
 export async function deleteCachedData(key: string): Promise<void> {
@@ -81,7 +95,9 @@ export async function deleteCachedData(key: string): Promise<void> {
 		const client = await getRedisClient();
 		if (!client?.isOpen) return;
 		await client.del(key);
-	} catch {}
+	} catch (err) {
+		console.warn("[redis] deleteCachedData failed for key:", key, err);
+	}
 }
 
 export const CACHE_KEYS = {

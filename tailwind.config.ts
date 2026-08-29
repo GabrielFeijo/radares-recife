@@ -48,9 +48,6 @@ const config: Config = {
 					'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
 				'dark-glass': 'linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(6, 9, 14, 0.95) 100%)',
 			},
-			fontFamily: {
-				poppins: ['Poppins', 'sans-serif'],
-			},
 		},
 	},
 	plugins: [],

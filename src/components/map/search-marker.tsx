@@ -1,16 +1,11 @@
 "use client";
 
 import { Marker, Popup } from "react-leaflet";
+import type { SearchLocation } from "@/types";
 import { searchIcon } from "./map-icons";
 import { PopupActions } from "./popup-actions";
 import { PopupGpsRow } from "./popup-gps-row";
 import { PopupHeader } from "./popup-header";
-
-interface SearchLocation {
-	lat: number;
-	lon: number;
-	address: string;
-}
 
 interface SearchMarkerProps {
 	location: SearchLocation;
