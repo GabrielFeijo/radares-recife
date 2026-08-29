@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, renderHook, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ToastProvider, useToast } from "@/components/ui/toast";
 
@@ -35,14 +35,18 @@ describe("components/ui/toast", () => {
 	});
 
 	it("should throw error when useToast is used outside of ToastProvider", () => {
-		const TestInvalid = () => {
-			useToast();
-			return null;
+		const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+		const errorHandler = (e: ErrorEvent) => {
+			e.preventDefault();
 		};
+		window.addEventListener("error", errorHandler);
 
-		expect(() => render(<TestInvalid />)).toThrow(
+		expect(() => renderHook(() => useToast())).toThrow(
 			"useToast must be used within <ToastProvider>",
 		);
+
+		window.removeEventListener("error", errorHandler);
+		consoleSpy.mockRestore();
 	});
 
 	it("should render toasts for all variants and auto-dismiss after 4000ms", () => {
@@ -88,5 +92,27 @@ describe("components/ui/toast", () => {
 		fireEvent.click(dismissBtn);
 
 		expect(screen.queryByText("Info de teste")).not.toBeInTheDocument();
+	});
+
+	it("should correctly handle individual dismissals among multiple toasts triggered at the same timestamp", () => {
+		render(
+			<ToastProvider>
+				<TestToastConsumer />
+			</ToastProvider>,
+		);
+
+		fireEvent.click(screen.getByText("Trigger Error Toast"));
+		fireEvent.click(screen.getByText("Trigger Info Toast"));
+
+		expect(screen.getByText("Erro de teste")).toBeInTheDocument();
+		expect(screen.getByText("Info de teste")).toBeInTheDocument();
+
+		const dismissButtons = screen.getAllByLabelText("Fechar notificação");
+		expect(dismissButtons).toHaveLength(2);
+
+		fireEvent.click(dismissButtons[0]);
+
+		expect(screen.queryByText("Erro de teste")).not.toBeInTheDocument();
+		expect(screen.getByText("Info de teste")).toBeInTheDocument();
 	});
 });
