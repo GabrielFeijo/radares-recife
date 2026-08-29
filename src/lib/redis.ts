@@ -1,26 +1,12 @@
 import { createClient, type RedisClientType } from "redis";
 
 let redis: RedisClientType | null = null;
-let isConnecting = false;
 let connectionFailed = false;
+let connectionPromise: Promise<RedisClientType | null> | null = null;
 
-export async function getRedisClient(): Promise<RedisClientType | null> {
-	const redisUrl = process.env.REDIS_URL;
-	if (!redisUrl || connectionFailed) {
-		return null;
-	}
-
-	if (redis?.isOpen) {
-		return redis;
-	}
-
-	if (isConnecting) {
-		return null;
-	}
-
+async function connect(redisUrl: string): Promise<RedisClientType | null> {
 	try {
-		isConnecting = true;
-		redis = createClient({
+		const client = createClient({
 			url: redisUrl,
 			socket: {
 				connectTimeout: 2000,
@@ -34,18 +20,37 @@ export async function getRedisClient(): Promise<RedisClientType | null> {
 			},
 		});
 
-		redis.on("error", () => {});
+		client.on("error", () => {});
 
-		await redis.connect();
-		isConnecting = false;
+		await client.connect();
 		connectionFailed = false;
+		redis = client as RedisClientType;
 		return redis;
 	} catch {
 		connectionFailed = true;
-		isConnecting = false;
 		redis = null;
 		return null;
+	} finally {
+		connectionPromise = null;
 	}
+}
+
+export async function getRedisClient(): Promise<RedisClientType | null> {
+	const redisUrl = process.env.REDIS_URL;
+	if (!redisUrl || connectionFailed) {
+		return null;
+	}
+
+	if (redis?.isOpen) {
+		return redis;
+	}
+
+	if (connectionPromise) {
+		return connectionPromise;
+	}
+
+	connectionPromise = connect(redisUrl);
+	return connectionPromise;
 }
 
 export async function getCachedData<T>(key: string): Promise<T | null> {
