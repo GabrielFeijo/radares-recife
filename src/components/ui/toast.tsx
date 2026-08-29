@@ -1,5 +1,6 @@
 "use client";
 
+import { nanoid } from "nanoid";
 import type React from "react";
 import { createContext, useCallback, useContext, useState } from "react";
 import { FiAlertCircle, FiCheckCircle, FiInfo, FiX } from "react-icons/fi";
@@ -43,7 +44,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
 	const toast = useCallback(
 		(message: string, variant: ToastVariant = "info") => {
-			const id = String(Date.now());
+			const id = nanoid();
 			setToasts((prev) => [...prev, { id, message, variant }]);
 			setTimeout(() => {
 				setToasts((prev) => prev.filter((t) => t.id !== id));
