@@ -62,7 +62,7 @@ describe("lib/redis", () => {
 	it("should deduplicate concurrent connection attempts", async () => {
 		process.env.REDIS_URL = "redis://localhost:6379";
 		const { createClient } = await import("redis");
-		let connectResolve: () => void;
+		let connectResolve: () => void = () => {};
 		const connectPromise = new Promise<void>((resolve) => {
 			connectResolve = resolve;
 		});
@@ -78,7 +78,7 @@ describe("lib/redis", () => {
 		const promise1 = getRedisClient();
 		const promise2 = getRedisClient();
 
-		connectResolve?.();
+		connectResolve();
 		const [res1, res2] = await Promise.all([promise1, promise2]);
 
 		expect(res1).toBe(mockClient);
@@ -89,7 +89,7 @@ describe("lib/redis", () => {
 	it("should test reconnectStrategy and connection error handling", async () => {
 		process.env.REDIS_URL = "redis://localhost:6379";
 		const { createClient } = await import("redis");
-		let reconnectFn: (retries: number) => number | false;
+		let reconnectFn: (retries: number) => number | false = () => false;
 
 		vi.mocked(createClient).mockImplementation((opts: any) => {
 			reconnectFn = opts.socket.reconnectStrategy;
