@@ -108,7 +108,7 @@ export default function AddressSearch({
 				query.trim().length >= 3 &&
 				results.length === 0 &&
 				!isLoading && (
-					<div className="absolute top-full mt-2 w-full border border-slate-200 p-4 bg-white rounded-2xl shadow-xl z-50">
+					<div className="absolute top-full mt-2 w-full border border-slate-200 p-4 bg-white rounded-2xl shadow-xl z-map-dropdown">
 						<p className="text-xs sm:text-sm text-slate-500 text-center font-medium">
 							Nenhuma rua ou avenida encontrada para &ldquo;{query}&rdquo;
 						</p>
@@ -127,7 +127,7 @@ interface ResultsListProps {
 
 function ResultsList({ results, onSelect }: ResultsListProps) {
 	return (
-		<div className="absolute top-full mt-2 w-full bg-white rounded-2xl shadow-xl border border-slate-200 z-50 p-2 space-y-1.5 overflow-hidden">
+		<div className="absolute top-full mt-2 w-full bg-white rounded-2xl shadow-xl border border-slate-200 z-map-dropdown p-2 space-y-1.5 overflow-hidden">
 			<div className="px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
 				<div className="flex items-center gap-1.5">
 					<span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
@@ -176,7 +176,7 @@ function ResultsList({ results, onSelect }: ResultsListProps) {
 
 function LoadingSkeleton() {
 	return (
-		<div className="absolute top-full mt-2 w-full bg-white rounded-2xl shadow-xl border border-slate-200 p-2.5 z-50 space-y-1.5 animate-pulse">
+		<div className="absolute top-full mt-2 w-full bg-white rounded-2xl shadow-xl border border-slate-200 p-2.5 z-map-dropdown space-y-1.5 animate-pulse">
 			<div className="px-3 py-2 bg-slate-50 rounded-xl flex items-center justify-between border border-slate-100">
 				<div className="h-2.5 bg-slate-200 rounded w-28" />
 				<div className="h-3.5 bg-slate-200 rounded-full w-12" />

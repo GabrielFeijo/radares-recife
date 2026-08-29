@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { FiCompass } from "react-icons/fi";
 import { Marker, Popup } from "react-leaflet";
 import type { RadarData } from "@/types";
+import { getSpeedBadgeInfo } from "@/utils/speed";
 import { getRadarDivIcon } from "./map-icons";
 import { PopupActions } from "./popup-actions";
 import { PopupGpsRow } from "./popup-gps-row";
@@ -15,52 +16,15 @@ interface RadarMarkerProps {
 	showLabel?: boolean;
 }
 
-interface SpeedBadgeInfo {
-	display: string;
-	unit: string;
-	textSize: string;
-}
-
-function getSpeedBadgeInfo(speed?: string): SpeedBadgeInfo {
-	if (!speed?.trim()) {
-		return {
-			display: "—",
-			unit: "",
-			textSize: "text-xs",
-		};
-	}
-
-	const raw = speed.trim();
-
-	const clean = raw
-		.replace(/km\s*\/\s*h/gi, "")
-		.replace(/kmh/gi, "")
-		.trim();
-
-	let textSize = "text-sm";
-	if (clean.length > 7) {
-		textSize = "text-[8.5px]";
-	} else if (clean.length > 4) {
-		textSize = "text-[9.5px]";
-	} else if (clean.length > 2) {
-		textSize = "text-xs";
-	}
-
-	return {
-		display: clean || "—",
-		unit: "km/h",
-		textSize,
-	};
-}
-
 export const RadarMarker: React.FC<RadarMarkerProps> = ({
 	radar,
 	showLabel = false,
 }) => {
-	const speedInfo = getSpeedBadgeInfo(radar.monitoredSpeed);
-
-	const icon = useMemo(
-		() => getRadarDivIcon(radar.monitoredSpeed, showLabel),
+	const { speedInfo, icon } = useMemo(
+		() => ({
+			speedInfo: getSpeedBadgeInfo(radar.monitoredSpeed),
+			icon: getRadarDivIcon(radar.monitoredSpeed, showLabel),
+		}),
 		[radar.monitoredSpeed, showLabel],
 	);
 
@@ -108,7 +72,7 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 								<span
 									className={`${speedInfo.textSize} font-black text-slate-900 leading-none tracking-tight text-center px-0.5`}
 								>
-									{speedInfo.display}
+									{speedInfo.value}
 								</span>
 								{speedInfo.unit && (
 									<span className="text-[6.5px] font-bold text-red-600 uppercase tracking-tight leading-none mt-0.5">

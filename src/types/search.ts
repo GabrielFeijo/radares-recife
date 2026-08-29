@@ -4,3 +4,9 @@ export interface SearchResult {
 	lat: string;
 	lon: string;
 }
+
+export interface SearchLocation {
+	lat: number;
+	lon: number;
+	address: string;
+}

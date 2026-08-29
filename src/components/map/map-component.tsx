@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import AddressSearch from "@/components/search/address-search";
@@ -10,8 +10,9 @@ import { useCameras } from "@/hooks/use-cameras";
 import { useGeolocation } from "@/hooks/use-geolocation";
 import { useMapControls } from "@/hooks/use-map-controls";
 import { useRadars } from "@/hooks/use-radars";
+import type { SearchLocation } from "@/types";
 import { CameraMarker } from "./camera-marker";
-import { MapController } from "./map-controller";
+import { MapController, type MapControllerHandle } from "./map-controller";
 import { MapControls } from "./map-controls";
 import { createCameraClusterIcon, createRadarClusterIcon } from "./map-icons";
 import { MapLegend } from "./map-legend";
@@ -22,12 +23,6 @@ import { SearchMarker } from "./search-marker";
 import { SpeedFilterPanel } from "./speed-filter-panel";
 import { UserLocationMarker } from "./user-location-marker";
 
-interface SearchLocation {
-	lat: number;
-	lon: number;
-	address: string;
-}
-
 function MapContent() {
 	const { data: radars = [], isLoading: radarsLoading } = useRadars();
 	const { data: cameras = [], isLoading: camerasLoading } = useCameras();
@@ -37,16 +32,11 @@ function MapContent() {
 	const [searchLocation, setSearchLocation] = useState<SearchLocation | null>(
 		null,
 	);
-	const [mapCenter, setMapCenter] = useState<[number, number]>(
-		MAP_DEFAULTS.center,
-	);
-	const [mapZoom, setMapZoom] = useState<number>(MAP_DEFAULTS.zoom);
-	const [flyTrigger, setFlyTrigger] = useState(0);
 
-	const flyTo = useCallback((lat: number, lon: number, newZoom: number) => {
-		setMapCenter([lat, lon]);
-		setMapZoom(newZoom);
-		setFlyTrigger((prev) => prev + 1);
+	const mapControllerRef = useRef<MapControllerHandle>(null);
+
+	const flyTo = useCallback((lat: number, lon: number, zoom: number) => {
+		mapControllerRef.current?.flyTo(lat, lon, zoom);
 	}, []);
 
 	const handleLocationSelect = useCallback(
@@ -66,8 +56,8 @@ function MapContent() {
 	}
 
 	return (
-		<div className="relative w-full h-full h-[100dvh] overflow-hidden bg-slate-100">
-			<div className="absolute top-[max(0.75rem,env(safe-area-inset-top))] left-3 right-3 sm:right-auto z-[999] sm:w-80 md:w-96">
+		<div className="relative w-full h-[100dvh] overflow-hidden bg-slate-100">
+			<div className="absolute top-[max(0.75rem,env(safe-area-inset-top))] left-3 right-3 sm:right-auto z-map-search sm:w-80 md:w-96">
 				<AddressSearch onLocationSelect={handleLocationSelect} />
 			</div>
 
@@ -93,13 +83,13 @@ function MapContent() {
 			/>
 
 			<MapContainer
-				center={mapCenter}
-				zoom={mapZoom}
+				center={MAP_DEFAULTS.center}
+				zoom={MAP_DEFAULTS.zoom}
 				style={{ height: "100%", width: "100%", backgroundColor: "#f8fafc" }}
 				scrollWheelZoom={true}
 				attributionControl={false}
 			>
-				<MapController center={mapCenter} zoom={mapZoom} trigger={flyTrigger} />
+				<MapController controllerRef={mapControllerRef} />
 
 				<TileLayer url={MAP_TILES.GOOGLE_MAPS.url} />
 

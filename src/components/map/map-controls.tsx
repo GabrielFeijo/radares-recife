@@ -21,7 +21,7 @@ export function MapControls({
 	onLocate,
 }: MapControlsProps) {
 	return (
-		<div className="absolute top-[max(4.25rem,calc(env(safe-area-inset-top)+3.5rem))] sm:top-[max(0.75rem,env(safe-area-inset-top))] right-3 z-[999] flex flex-wrap items-center gap-1.5 sm:gap-2">
+		<div className="absolute top-[max(4.25rem,calc(env(safe-area-inset-top)+3.5rem))] sm:top-[max(0.75rem,env(safe-area-inset-top))] right-3 z-map-ui flex flex-wrap items-center gap-1.5 sm:gap-2">
 			<MapControlButton
 				onClick={controls.toggleRadars}
 				isActive={controls.showRadars}

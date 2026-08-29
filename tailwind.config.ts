@@ -8,6 +8,12 @@ const config: Config = {
 	],
 	theme: {
 		extend: {
+			zIndex: {
+				'map-ui': '700',
+				'map-search': '710',
+				'map-dropdown': '720',
+				'map-toast': '730',
+			},
 			colors: {
 				obsidian: {
 					950: '#06090e',
@@ -41,9 +47,6 @@ const config: Config = {
 				'gradient-conic':
 					'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
 				'dark-glass': 'linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(6, 9, 14, 0.95) 100%)',
-			},
-			fontFamily: {
-				poppins: ['Poppins', 'sans-serif'],
 			},
 		},
 	},

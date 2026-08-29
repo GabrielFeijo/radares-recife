@@ -1,5 +1,6 @@
 "use client";
 
+import { nanoid } from "nanoid";
 import type React from "react";
 import { createContext, useCallback, useContext, useState } from "react";
 import { FiAlertCircle, FiCheckCircle, FiInfo, FiX } from "react-icons/fi";
@@ -43,7 +44,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
 	const toast = useCallback(
 		(message: string, variant: ToastVariant = "info") => {
-			const id = String(Date.now());
+			const id = nanoid();
 			setToasts((prev) => [...prev, { id, message, variant }]);
 			setTimeout(() => {
 				setToasts((prev) => prev.filter((t) => t.id !== id));
@@ -62,7 +63,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 			<div
 				aria-live="polite"
 				aria-atomic="false"
-				className="fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-3 right-3 sm:left-auto sm:right-6 z-[10000] flex flex-col gap-2 pointer-events-none max-w-sm w-auto sm:w-full"
+				className="fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] left-3 right-3 sm:left-auto sm:right-6 z-map-toast flex flex-col gap-2 pointer-events-none max-w-sm w-auto sm:w-full"
 			>
 				{toasts.map((t) => (
 					<div

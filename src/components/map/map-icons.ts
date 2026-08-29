@@ -1,4 +1,5 @@
 import L from "leaflet";
+import { parseSpeedParts } from "@/utils/speed";
 
 const RADAR_PIN_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="34" height="42" viewBox="0 0 40 48">
 	<defs>
@@ -25,34 +26,6 @@ const RADAR_PIN_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="34" height
 		<circle cx="20" cy="21" r="1.1" fill="#ffffff"/>
 	</g>
 </svg>`;
-
-export function parseSpeedParts(speed?: string): {
-	value: string;
-	unit: string;
-} {
-	if (!speed?.trim()) {
-		return { value: "Radar", unit: "" };
-	}
-
-	const raw = speed.trim();
-	const multiMatch = raw.match(/(\d+)\s*(?:km\/h|kmh)?\s*e\s*(\d+)/i);
-	if (multiMatch) {
-		return {
-			value: `${multiMatch[1]} / ${multiMatch[2]}`,
-			unit: "km/h",
-		};
-	}
-
-	const clean = raw
-		.replace(/km\s*\/\s*h/gi, "")
-		.replace(/kmh/gi, "")
-		.trim();
-
-	return {
-		value: clean || raw,
-		unit: "km/h",
-	};
-}
 
 const radarIconCache = new Map<string, L.DivIcon>();
 
