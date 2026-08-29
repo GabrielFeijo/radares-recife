@@ -20,10 +20,11 @@ export const RadarMarker: React.FC<RadarMarkerProps> = ({
 	radar,
 	showLabel = false,
 }) => {
-	const speedInfo = getSpeedBadgeInfo(radar.monitoredSpeed);
-
-	const icon = useMemo(
-		() => getRadarDivIcon(radar.monitoredSpeed, showLabel),
+	const { speedInfo, icon } = useMemo(
+		() => ({
+			speedInfo: getSpeedBadgeInfo(radar.monitoredSpeed),
+			icon: getRadarDivIcon(radar.monitoredSpeed, showLabel),
+		}),
 		[radar.monitoredSpeed, showLabel],
 	);
 

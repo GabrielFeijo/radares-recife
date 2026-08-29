@@ -1,6 +1,6 @@
 "use client";
 
-import { type Ref, useEffect, useImperativeHandle } from "react";
+import { type RefObject, useEffect, useImperativeHandle } from "react";
 import { useMap } from "react-leaflet";
 import { MAP_DEFAULTS } from "@/constants/map";
 
@@ -9,7 +9,7 @@ export interface MapControllerHandle {
 }
 
 interface MapControllerProps {
-	controllerRef: Ref<MapControllerHandle>;
+	controllerRef: RefObject<MapControllerHandle>;
 }
 
 export function MapController({ controllerRef }: MapControllerProps) {
